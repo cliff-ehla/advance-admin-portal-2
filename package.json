@@ -15,6 +15,7 @@
   "dependencies": {
     "@fontsource/fira-mono": "^4.5.0",
     "@lukeed/uuid": "^2.0.0",
+    "@popperjs/core": "^2.10.2",
     "cookie": "^0.4.1",
     "dayjs": "^1.10.7"
   }
