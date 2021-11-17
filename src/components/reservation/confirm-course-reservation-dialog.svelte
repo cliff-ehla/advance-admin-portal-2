@@ -83,7 +83,7 @@
 			syllabus: selected_course.syllabus,
 			syllabus_id: selected_course.syllabus_id,
 		})
-		goto('booking/reservation')
+		goto('/booking/reservation')
 		closeModal()
 		loading = false
 	}
