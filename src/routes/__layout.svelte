@@ -7,10 +7,12 @@
 	import {getUserInfo} from "../api/user-api";
 	import {fetchTeacherList} from "../store/org-api";
 	import {fetchStudentList} from "../store/org-api";
+	import {sentry} from "$lib/sentry";
 
 	export let segment;
 
 	onMount(() => {
+		sentry.init()
 		getUserInfo()
 		fetchTeacherList()
 		fetchStudentList()
