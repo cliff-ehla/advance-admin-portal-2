@@ -3,7 +3,7 @@
 	import TemplateTextBox from '../../components/ui-elements/template-text-box.svelte'
 	import dayjs from "dayjs";
 	import {tutor_store} from "../../store/tutor-store";
-	import utc from "dayjs/plugin/utc";
+	import utc from "dayjs/plugin/utc.js";
 	import {fetchStudentList} from "../../store/org-api";
 	import {onMount} from 'svelte'
 	import {course_lesson_tbc_selection} from "../../store/calendar-action-status-store";

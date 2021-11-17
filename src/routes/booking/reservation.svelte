@@ -2,7 +2,7 @@
 	import {listZoomReserved} from "../../api/zoom-api";
 	import {onMount} from 'svelte'
 	import dayjs from "dayjs";
-	import utc from "dayjs/plugin/utc";
+	import utc from "dayjs/plugin/utc.js";
 	dayjs.extend(utc)
 	import {confirmZoomReserved} from "../../api/zoom-api";
 

@@ -4,7 +4,7 @@
 	import {tutor_store} from "../../store/tutor-store";
 	import {createLeaveTime} from "../../api/tutor-api";
 	import dayjs from "dayjs";
-	import utc from "dayjs/plugin/utc"
+	import utc from "dayjs/plugin/utc.js"
 	dayjs.extend(utc)
 	import {getContext} from 'svelte'
 	const {closeModal} = getContext('simple-modal')

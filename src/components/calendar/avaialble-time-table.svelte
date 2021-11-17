@@ -6,7 +6,7 @@
 	import {tick, createEventDispatcher, getContext} from 'svelte'
 	import {convertUtcSlotToLocal, convertLocalSlotToUtc} from "./parse-time-slot";
 	import {setTutorAvailableTimeSlot, deleteTutorAvailableTimeSlot} from "../../api/tutor-api";
-	import utc from "dayjs/plugin/utc";
+	import utc from "dayjs/plugin/utc.js";
 	import EventDeleteMenu from './event-delete-menu.svelte'
 	const {openPopper, closePopper} = getContext('popper')
 	const {showNotification} = getContext('notification')

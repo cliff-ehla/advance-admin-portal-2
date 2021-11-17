@@ -4,7 +4,7 @@
 	import {tutor_store} from "../../store/tutor-store";
 	import {createZoomOption, addZoomOption} from "../../api/zoom-api";
 	import dayjs from "dayjs";
-	import utc from "dayjs/plugin/utc"
+	import utc from "dayjs/plugin/utc.js"
 	import StudentSelectionBox from '../../components/student/student-selection-box.svelte'
 	dayjs.extend(utc)
 	import {getContext} from 'svelte'
