@@ -1,7 +1,7 @@
 <script>
 	import {tutor_store} from "../../../store/tutor-store";
-	import {goto} from '$lib/navigation'
-	import {page} from '$lib/stores'
+	import {goto} from '$app/navigation'
+	import {page} from '$app/stores'
 	import dayjs from "dayjs";
 	import Dropdown from '../../../components/ui-elements/dropdown3.svelte'
 
