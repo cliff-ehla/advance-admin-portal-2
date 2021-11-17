@@ -7,7 +7,7 @@
 	import {action_status} from "../../store/calendar-action-status-store";
 	import {goto} from '$app/navigation'
 	import utc from "dayjs/plugin/utc.js";
-	import timezone from "dayjs/plugin/timezone";
+	import timezone from "dayjs/plugin/timezone.js";
 	import {course_start_hh_mm, course_end_hh_mm} from "../../store/calendar-action-status-store";
 	import {trial_lesson_retry_student_id} from "../../store/calendar-action-status-store";
 	import Dropdown from '../../components/ui-elements/dropdown3.svelte'
