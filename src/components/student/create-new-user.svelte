@@ -1,6 +1,6 @@
 <script>
 	import dayjs from "dayjs";
-	import utc from 'dayjs/plugin/utc'
+	import utc from 'dayjs/plugin/utc.js'
 	import {debounce} from 'debounce'
 	import {checkUsername} from "../../api/user-api";
 	import SelectionBox from '../ui-elements/selection-box.svelte'

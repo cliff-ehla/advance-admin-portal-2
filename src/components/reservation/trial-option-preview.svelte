@@ -1,6 +1,6 @@
 <script>
 	import dayjs from "dayjs";
-	import utc from 'dayjs/plugin/utc'
+	import utc from 'dayjs/plugin/utc.js'
 	import {tutor_store} from "../../store/tutor-store";
 	import Icon from '../ui-elements/icon.svelte'
 	import Dropdown from '../ui-elements/dropdown3.svelte'

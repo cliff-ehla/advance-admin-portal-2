@@ -8,7 +8,7 @@
 	let reserved_id = slot.reserved_id
 
 	import dayjs from "dayjs";
-	import utc from 'dayjs/plugin/utc'
+	import utc from 'dayjs/plugin/utc.js'
 	import {tutor_store} from "../../store/tutor-store";
 	import {student_store} from "../../store/student-store";
 	import {getContext} from 'svelte'
