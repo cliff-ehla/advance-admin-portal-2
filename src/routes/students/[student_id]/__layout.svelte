@@ -7,12 +7,12 @@
 	$: items = [
 		{
 			label: 'Tutor group',
-			href: `students/${$page.params.student_id}/tutor-group`,
+			href: `/students/${$page.params.student_id}/tutor-group`,
 			segment: 'tutor-group',
 		},
 		{
 			label: 'Notes',
-			href: `students/${$page.params.student_id}/note`,
+			href: `/students/${$page.params.student_id}/note`,
 			segment: 'notes',
 		}
 	]
