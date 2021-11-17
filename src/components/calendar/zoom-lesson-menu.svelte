@@ -32,7 +32,7 @@
 	let material_history
 	let student_notes
 	let student_lv
-	$: student_id = zoom.students[0].user_id
+	$: student_id = zoom.students[0] && zoom.students[0].user_id
 
 	onMount(async () => {
 		if (!student_store.length) {

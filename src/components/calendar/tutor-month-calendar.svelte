@@ -23,6 +23,7 @@
 	import {trial_lesson_retry_student_id} from "../../store/calendar-action-status-store";
 	import {student_store} from "../../store/student-store";
 	import StudentListDialog from '../student/student-list-dialog.svelte'
+	import {browser} from "$app/env";
 
 	const {openPopper} = getContext('popper')
 	const {openModal} = getContext('simple-modal')
@@ -74,7 +75,7 @@
 	}
 
 	const fetchData = async () => {
-		if (!process.browser) return
+		if (!browser) return
 		events = []
 		let start_time = dayjs(YYYY_MM, 'YYYY-MM').startOf('month').subtract(6, 'day').format('YYYY-MM-DD HH:mm:ss')
 		let end_time = dayjs(YYYY_MM, 'YYYY-MM').endOf('month').add(6, 'day').format('YYYY-MM-DD HH:mm:ss')
