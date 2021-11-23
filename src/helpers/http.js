@@ -1,9 +1,9 @@
 import {getCookie, deleteCookie} from "./cookie";
 
 let http = (() => {
-	const baseUrl = process.env.NODE_ENV === 'development' ? 'https://usermodel.ehlacademy.org/v1' : 'https://usermodel.ehlacademy.org/v1'
+	const baseUrl = import.meta.env.VITE_API_BASE + '/v1'
 	async function post (url, body) {
-		const token = getCookie('token') || '2329896.fc9bd669af87a69df951e8cd88cfe0a4e517e4de' // TODO
+		const token = getCookie('token')
 		const full_url = `${baseUrl}/${url}?encode=1&access-token=${token}`
 		const res = await fetch(full_url, {
 			method: 'POST',

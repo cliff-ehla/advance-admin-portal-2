@@ -3,9 +3,10 @@
 	import {goto} from '$app/navigation'
 	import {onMount} from 'svelte'
 	import {getCookie} from "../helpers/cookie";
+	let env = import.meta.env.VITE_ENV
 
-	let username = 'teacher.dennis'
-	let password = '123dennis'
+	let username = env === 'production' ? '' : 'queeniedevadmin'
+	let password = env === 'production' ? '' : 'q12345678'
 	let error = false
 
 	const onLogin = async () => {

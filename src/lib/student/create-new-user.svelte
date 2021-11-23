@@ -11,12 +11,12 @@
 
 	dayjs.extend(utc)
 
-	export let username
-	export let nickname
-	export let level
-	export let gender
-	export let parent_mobile
-	export let remark
+	export let username = undefined
+	export let nickname = undefined
+	export let level = undefined
+	export let gender = undefined
+	export let parent_mobile = undefined
+	export let remark = undefined
 	let PASSWORD = '12345678'
 	let parent_nickname
 
@@ -74,13 +74,14 @@
 			user_id: child.user_id,
 			gender,
 			level,
-			nickname
+			nickname,
+			username
 		})
 		loading = false
 	}
 </script>
 
-<div>
+<div class="w-96">
 	<div class="mt-4">
 		<div class="text-sm text-gray-400 mb-2">
 			<div class="flex">
