@@ -109,10 +109,10 @@
 		<Dropdown activator_active_style="bg-black bg-opacity-30" placement="right">
 			<div slot="activator" class="w-40 text-right px-4 py-2 overflow-ellipsis overflow-hidden whitespace-nowrap">{$user_store.username}</div>
 			<div class="bg-white shadow-lg rounded p-2 text-black min-w-xs">
-				<a href="logout" class="px-4 py-2 hover:bg-gray-200 hover:text-blue-500">Logout</a>
+				<a href="/logout" class="px-4 py-2 hover:bg-gray-200 hover:text-blue-500">Logout</a>
 			</div>
 		</Dropdown>
 	{:else}
-		<a href="login">Login</a>
+		<a href="/login">Login</a>
 	{/if}
 </div>

@@ -7,7 +7,9 @@ export const genBookedEventFromZoom = (zoom) => {
 		start: dayjs.utc(zoom.start_time).toDate(),
 		end: dayjs.utc(zoom.end_time).toDate(),
 		display: 'block',
-		backgroundColor: zoom.is_trial ? '#3E963D' : '#3357A7',
+		backgroundColor: zoom.big_classroom_type === 'SMALL' ? '#C342B7'
+				: zoom.big_classroom_type === 'BIG' ? '#9519C0'
+				: zoom.is_trial ? '#3E963D' : '#3357A7',
 		editable: false,
 		extendedProps: {...zoom, ...{type: 'book'}}
 	}
