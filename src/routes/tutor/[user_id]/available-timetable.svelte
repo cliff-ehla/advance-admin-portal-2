@@ -1,7 +1,7 @@
 <script>
 	import {onMount} from 'svelte'
 	import {fetchTutorAvailableTimeSlot} from "../../../api/tutor-api";
-	import TimeTableList from '../../../components/calendar/available-time-table-list.svelte'
+	import TimeTableList from '../../../lib/calendar/available-time-table-list.svelte'
 	import {page} from '$app/stores'
 	$: teacher_id = $page.params.user_id
 

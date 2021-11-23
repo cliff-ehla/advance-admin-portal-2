@@ -6,9 +6,9 @@
 	import {tutor_store} from "../../store/tutor-store";
 	import {createZoomReserve} from "../../api/zoom-api";
 	import {create_course_from_trial_store} from "../../store/create-course-from-trial-store";
-	import TemplateTextBox from '../../components/ui-elements/template-text-box.svelte'
-	import SelectionBox from '../../components/ui-elements/selection-box.svelte'
-	import SelectionUserWidget from '../../components/student/select-user-widget.svelte'
+	import TemplateTextBox from '../../lib/ui-elements/template-text-box.svelte'
+	import SelectionBox from '../../lib/ui-elements/selection-box.svelte'
+	import SelectionUserWidget from '../../lib/student/select-user-widget.svelte'
 	import {goto} from '$app/navigation'
 	import {getContext} from 'svelte'
 	import {student_store} from "../../store/student-store";

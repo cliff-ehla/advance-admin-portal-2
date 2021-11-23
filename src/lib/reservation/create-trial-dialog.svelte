@@ -1,6 +1,6 @@
 <script>
 	import SelectUserWidget from '../student/select-user-widget.svelte'
-	import TemplateTextBox from '../../components/ui-elements/template-text-box.svelte'
+	import TemplateTextBox from '../../lib/ui-elements/template-text-box.svelte'
 	import dayjs from "dayjs";
 	import {tutor_store} from "../../store/tutor-store";
 	import utc from "dayjs/plugin/utc.js";
@@ -15,7 +15,7 @@
 	import {action_status} from "../../store/calendar-action-status-store";
 	import {trial_lesson_retry_student_id} from "../../store/calendar-action-status-store";
 	import {student_store} from "../../store/student-store";
-	import MaterialSelectionList from '../../components/material/material-selection-list.svelte'
+	import MaterialSelectionList from '../../lib/material/material-selection-list.svelte'
 	import {course_title_options_store} from "../../store/course-title-options-store";
 
 	onMount(() => {

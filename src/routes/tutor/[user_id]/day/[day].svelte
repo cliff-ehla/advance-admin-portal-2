@@ -1,6 +1,6 @@
 <script>
 	import {page} from '$app/stores'
-	import TutorDayMultipleCalendar from '../../../../components/calendar/tutor-day-multiple-calendar.svelte'
+	import TutorDayMultipleCalendar from '../../../../lib/calendar/tutor-day-multiple-calendar.svelte'
 
 </script>
 

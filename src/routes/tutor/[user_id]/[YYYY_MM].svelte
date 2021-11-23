@@ -1,7 +1,7 @@
 <script>
 	import {goto} from '$app/navigation'
 	import {page} from '$app/stores'
-	import TutorMonthCalendar from '../../../components/calendar/tutor-month-calendar.svelte'
+	import TutorMonthCalendar from '../../../lib/calendar/tutor-month-calendar.svelte'
 
 	const onMonthChange = (e) => {
 		goto(`/tutor/${$page.params.user_id}/${e.detail}`)

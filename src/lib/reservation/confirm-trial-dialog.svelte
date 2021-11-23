@@ -15,7 +15,7 @@
 	const {closeModal} = getContext('simple-modal')
 	import {confirmZoomTrial} from "../../api/zoom-api";
 	import CreateNewUser from '../student/create-new-user.svelte'
-	import MaterialSelectionList from '../../components/material/material-selection-list.svelte'
+	import MaterialSelectionList from '../../lib/material/material-selection-list.svelte'
 
 	dayjs.extend(utc)
 

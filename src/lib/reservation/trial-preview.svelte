@@ -10,8 +10,8 @@
 	import timezone from "dayjs/plugin/timezone.js";
 	import {course_start_hh_mm, course_end_hh_mm} from "../../store/calendar-action-status-store";
 	import {trial_lesson_retry_student_id} from "../../store/calendar-action-status-store";
-	import Dropdown from '../../components/ui-elements/dropdown3.svelte'
-	import Icon from '../../components/ui-elements/icon.svelte'
+	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
+	import Icon from '../../lib/ui-elements/icon.svelte'
 	import {tutor_store} from "../../store/tutor-store";
 	import WhatsappDialog from './whatsapp-message-dialog.svelte'
 

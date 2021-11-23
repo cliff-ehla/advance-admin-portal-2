@@ -1,5 +1,5 @@
 <script>
-	import TutorWeekCalendar from '../../../components/calendar/tutor-week-calendar.svelte'
+	import TutorWeekCalendar from '../../../lib/calendar/tutor-week-calendar.svelte'
 	import {page} from '$app/stores'
 </script>
 

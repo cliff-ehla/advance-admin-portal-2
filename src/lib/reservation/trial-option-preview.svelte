@@ -10,7 +10,7 @@
 	import {goto} from '$app/navigation'
 	import {deleteZoomOption, listZoomReserve, lockZoomOption} from "../../api/zoom-api";
 	import {editOption} from "../../api/zoom-api";
-	import TextInputDialog from '../../components/ui-elements/text-input-dialog.svelte'
+	import TextInputDialog from '../../lib/ui-elements/text-input-dialog.svelte'
 	import {getContext} from 'svelte'
 	import ConfirmTrialDialog from "./confirm-trial-dialog.svelte";
 	import OptionDraftDialog from "./option-draft-dialog.svelte";

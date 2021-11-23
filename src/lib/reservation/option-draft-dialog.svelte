@@ -6,7 +6,7 @@
 	const {closeModal} = getContext('simple-modal')
 	import {level_options_store, gender_options_store} from "../../store/level-options";
 	import {course_title_options_store} from "../../store/course-title-options-store";
-	import TemplateTextBox from '../../components/ui-elements/template-text-box.svelte'
+	import TemplateTextBox from '../../lib/ui-elements/template-text-box.svelte'
 
 	export let s_nickname
 	export let course

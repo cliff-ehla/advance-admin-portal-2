@@ -4,7 +4,7 @@
 	export let wrapper_id
 	export let onSuccess = () => {}
 
-	import SelectionBox from '../../components/ui-elements/selection-box.svelte'
+	import SelectionBox from '../../lib/ui-elements/selection-box.svelte'
 	import {changeSyllabusCategory, listAllSyllabusCategory} from "../../api/syllabus-api";
 	import {onMount} from "svelte";
 	import {getContext} from 'svelte'

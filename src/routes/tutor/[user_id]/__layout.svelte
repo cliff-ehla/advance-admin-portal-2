@@ -3,7 +3,7 @@
 	import {goto} from '$app/navigation'
 	import {page} from '$app/stores'
 	import dayjs from "dayjs";
-	import Dropdown from '../../../components/ui-elements/dropdown3.svelte'
+	import Dropdown from '../../../lib/ui-elements/dropdown3.svelte'
 
 	export let segment
 

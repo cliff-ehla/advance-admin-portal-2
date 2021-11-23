@@ -3,9 +3,9 @@
 	import {getContext} from 'svelte'
 	const {closeModal} = getContext('simple-modal')
 	import {tutor_store} from "../../store/tutor-store";
-	import SelectionBox from '../../components/ui-elements/selection-box.svelte'
-	import Dropdown from '../../components/ui-elements/dropdown3.svelte'
-	import Icon from '../../components/ui-elements/icon.svelte'
+	import SelectionBox from '../../lib/ui-elements/selection-box.svelte'
+	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
+	import Icon from '../../lib/ui-elements/icon.svelte'
 	import {deleteStudentNote} from "../../api/student-note-api";
 
 	export let is_edit

@@ -1,8 +1,8 @@
 <script>
-	import Modal from '../components/app-shelf/modal.svelte'
-	import Popper from '../components/app-shelf/popper.svelte'
-	import Notification from '../components/app-shelf/notification.svelte'
-	import TopBar from '../components/app-shelf/top-bar.svelte'
+	import Modal from '../lib/app-shelf/modal.svelte'
+	import Popper from '../lib/app-shelf/popper.svelte'
+	import Notification from '../lib/app-shelf/notification.svelte'
+	import TopBar from '../lib/app-shelf/top-bar.svelte'
 	import {onMount} from "svelte";
 	import {getUserInfo} from "../api/user-api";
 	import {fetchTeacherList} from "../store/org-api";

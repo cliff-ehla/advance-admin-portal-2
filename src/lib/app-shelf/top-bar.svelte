@@ -1,6 +1,6 @@
 <script>
 	import dayjs from "dayjs";
-	import Dropdown from '../../components/ui-elements/dropdown3.svelte'
+	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
 	import {user_store} from "../../store/user-store";
 	import {tutor_store} from "../../store/tutor-store";
 

@@ -1,6 +1,6 @@
 <script>
-	import ConfirmTrialDialog from '../../components/reservation/confirm-trial-dialog.svelte'
-	import TrialOptionPreview from '../../components/reservation/trial-option-preview.svelte'
+	import ConfirmTrialDialog from '../../lib/reservation/confirm-trial-dialog.svelte'
+	import TrialOptionPreview from '../../lib/reservation/trial-option-preview.svelte'
 	import {listZoomReserve, deleteZoomReserve} from "../../api/zoom-api";
 	import {onMount, getContext} from 'svelte'
 	import {reservation_store} from "../../store/reservation-store";

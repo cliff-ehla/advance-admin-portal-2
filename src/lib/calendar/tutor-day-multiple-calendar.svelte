@@ -4,7 +4,7 @@
 	import {fetchTutorSchedule} from "../../api/admin-api";
 	import {convertToEvents} from "./phase-to-events";
 	import {eventContent} from "./shared-function/event-content";
-	import Icon from '../../components/ui-elements/icon.svelte'
+	import Icon from '../../lib/ui-elements/icon.svelte'
 	import ToggleViewMenu from './toggle-view-menu.svelte'
 	import {tutor_store} from "../../store/tutor-store";
 	import {CALENDAR_HEIGHT} from "./shared-function/calendar-height";

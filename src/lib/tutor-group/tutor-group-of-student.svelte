@@ -4,7 +4,7 @@
 	import {getTutorGroupByChildId} from "../../api/zoom-api";
 	import dayjs from "dayjs";
 	import utc from "dayjs/plugin/utc.js";
-	import Icon from '../../components/ui-elements/icon.svelte'
+	import Icon from '../../lib/ui-elements/icon.svelte'
 	import {getContext} from 'svelte'
 	import EditZoomCategoryDialog from './edit-zoom-category-dialog.svelte'
 	dayjs.extend(utc)

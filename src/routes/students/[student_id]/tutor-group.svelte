@@ -1,5 +1,5 @@
 <script>
-	import TutorGroupOfStudent from '../../../components/tutor-group/tutor-group-of-student.svelte'
+	import TutorGroupOfStudent from '../../../lib/tutor-group/tutor-group-of-student.svelte'
 	import {page} from '$app/stores'
 </script>
 

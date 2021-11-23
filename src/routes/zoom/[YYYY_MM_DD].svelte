@@ -2,9 +2,9 @@
 	import dayjs from "dayjs";
 	import {goto} from '$app/navigation'
 	import {page} from '$app/stores'
-	import MultipleTutorCalendar from '../../components/calendar/multiple-tutor-calendar.svelte'
-	import Datepicker from '../../components/ui-elements/date-picker/index.svelte'
-	import Icon from '../../components/ui-elements/icon.svelte'
+	import MultipleTutorCalendar from '../../lib/calendar/multiple-tutor-calendar.svelte'
+	import Datepicker from '../../lib/ui-elements/date-picker/index.svelte'
+	import Icon from '../../lib/ui-elements/icon.svelte'
 	$: YYYY_MM_DD = $page.params.YYYY_MM_DD
 
 	const onDateChange = (e) => {

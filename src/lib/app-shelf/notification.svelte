@@ -1,7 +1,7 @@
 <script>
 	import {fly} from 'svelte/transition'
 	import {setContext} from 'svelte'
-	import Icon from '../../components/ui-elements/icon.svelte'
+	import Icon from '../../lib/ui-elements/icon.svelte'
 	let shown = false
 	let msg = ''
 	let timer_id

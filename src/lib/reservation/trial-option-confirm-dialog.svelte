@@ -5,7 +5,7 @@
 	import {createZoomOption, addZoomOption} from "../../api/zoom-api";
 	import dayjs from "dayjs";
 	import utc from "dayjs/plugin/utc.js"
-	import StudentSelectionBox from '../../components/student/student-selection-box.svelte'
+	import StudentSelectionBox from '../../lib/student/student-selection-box.svelte'
 	dayjs.extend(utc)
 	import {getContext} from 'svelte'
 	const {closeModal} = getContext('simple-modal')

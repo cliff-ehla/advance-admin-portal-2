@@ -1,7 +1,7 @@
 <script>
-	import Icon from '../../components/ui-elements/icon.svelte'
-	import TimePicker from '../../components/ui-elements/time-picker-2.svelte'
-	import Dropdown from '../../components/ui-elements/dropdown3.svelte'
+	import Icon from '../../lib/ui-elements/icon.svelte'
+	import TimePicker from '../../lib/ui-elements/time-picker-2.svelte'
+	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
 	import {action_status} from "../../store/calendar-action-status-store";
 	import {reservation_selection_store} from "../../store/reservation-selection-store";
 	import {course_lesson_tbc_selection, edit_lesson_tbc_to_date, course_start_hh_mm, course_end_hh_mm} from "../../store/calendar-action-status-store";

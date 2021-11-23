@@ -1,5 +1,5 @@
 <script>
-	import TutorStatement from '../../../components/statement/index.svelte'
+	import TutorStatement from '../../../lib/statement/index.svelte'
 	import {fetchTutorSalary} from "../../../api/zoom-api";
 	import {page} from '$app/stores'
 

@@ -23,7 +23,7 @@
 	import {trial_lesson_retry_student_id} from "../../store/calendar-action-status-store";
 	import {student_store} from "../../store/student-store";
 	import StudentListDialog from '../student/student-list-dialog.svelte'
-	import Dropdown from '../../components/ui-elements/dropdown3.svelte'
+	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
 	import {browser} from "$app/env";
 
 	const {openPopper} = getContext('popper')

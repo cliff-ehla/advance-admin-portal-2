@@ -1,7 +1,7 @@
 <script>
-	import Dropdown from '../../components/ui-elements/dropdown3.svelte'
-	import Icon from '../../components/ui-elements/icon.svelte'
-	import Datepicker from '../../components/ui-elements/date-picker/calendar.svelte'
+	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
+	import Icon from '../../lib/ui-elements/icon.svelte'
+	import Datepicker from '../../lib/ui-elements/date-picker/calendar.svelte'
 	export let zoom = {}
 	export let selected = new Date()
 	export let onEdit = () => {}

@@ -1,7 +1,7 @@
 <script>
 	import {onMount} from 'svelte'
 	import {listZoomTrial} from "../../api/zoom-api";
-	import TrialPreview from '../../components/reservation/trial-preview.svelte'
+	import TrialPreview from '../../lib/reservation/trial-preview.svelte'
 	import dayjs from "dayjs";
 
 	let trial

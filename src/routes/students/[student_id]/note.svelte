@@ -3,7 +3,7 @@
 	import {getContext, onMount} from 'svelte'
 	import {listStudentNote} from "../../../api/student-note-api";
 	const {openModal} = getContext('simple-modal')
-	import CreateNodeDialog from '../../../components/note/create-note-dialog.svelte'
+	import CreateNodeDialog from '../../../lib/note/create-note-dialog.svelte'
 	import dayjs from "dayjs";
 	import {student_store} from "../../../store/student-store";
 
