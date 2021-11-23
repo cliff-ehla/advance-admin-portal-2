@@ -269,12 +269,16 @@
 					<Icon name="info" className="w-4"/>
 				</button>
 				<div class="bg-white shadow-lg border border-gray-300 p-4">
+					<div class="px-4 text-white rounded mb-1" style="background: #ED16BE">Unlimited class</div>
 					<div class="px-4 text-white rounded mb-1" style="background: #9519C0">Big class</div>
 					<div class="px-4 text-white rounded mb-1" style="background: #C342B7">Small class</div>
-					<div class="px-4 text-white rounded mb-1" style="background: #3357A7">1-on-1 reserved</div>
+					<div class="px-4 text-white rounded mb-1" style="background: #3357A7">1-on-1</div>
 					<div class="px-4 text-white rounded mb-1" style="background: #3E963D">1-on-1 Trial</div>
 					<div class="px-4 text-white rounded mb-1" style="background: #B5B5B5">1-on-1 Option</div>
-					<div class="px-4 text-white rounded" style="background: #D6C884">1-on-1 Reservation</div>
+					<div class="px-4 text-white rounded mb-1" style="background: red">1-on-1 Option Locked</div>
+					<div class="px-4 text-white rounded mb-1" style="background: #D6C884">1-on-1 Reservation</div>
+					<div class="px-4 text-white rounded mb-1" style="background: #b1e4b0">1-on-1 FF reserved</div>
+					<div class="px-4 text-white rounded" style="background: black">Tutor's Leave</div>
 				</div>
 			</Dropdown>
 			<button on:click={onShowStudentClick} class="border border-gray-300 w-10 h-10 flex items-center justify-center rounded hover:bg-gray-100 hover:text-blue-500">

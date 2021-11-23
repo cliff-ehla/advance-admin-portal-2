@@ -43,8 +43,12 @@ export const eventContent = (arg) => {
 		alert_el.style.paddingRight = '4px'
 
 		let title_el = document.createElement('i')
-		title_el.innerHTML = getStudentTitle(props)
-		title_el.classList.add('whitespace-nowrap')
+		if (props.big_classroom_type) {
+			title_el.innerHTML = props.big_classroom_type
+		} else {
+			title_el.innerHTML = getStudentTitle(props)
+			title_el.classList.add('whitespace-nowrap')
+		}
 
 		let time_el = genTimeEl(arg)
 
