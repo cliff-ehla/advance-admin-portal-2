@@ -89,28 +89,30 @@
 			<button slot="activator">Change Date</button>
 			<Datepicker {selected} on:datechange={e => {onChangeDate(e, 'edit_time')}}/>
 		</Dropdown>
-		<Dropdown on:show={onNoteDropdownOpen} caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
-			<button slot="activator">Reminder</button>
-			<div class="shadow-lg bg-white border border-gray-300 p-2 pb-12">
-				{#if student_notes}
-					{#if student_notes.length}
-						<div class="max-h-80 overflow-y-scroll">
-							{#each student_notes as note}
-								<div class="p-2">
-									<div class="text-xs text-gray-500">{dayjs(note.update_ts).format('DD MMM YYYY')}</div>
-									<div>{note.note}</div>
-								</div>
-							{/each}
-						</div>
+		{#if student_id}
+			<Dropdown on:show={onNoteDropdownOpen} caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
+				<button slot="activator">Reminder</button>
+				<div class="shadow-lg bg-white border border-gray-300 p-2 pb-12">
+					{#if student_notes}
+						{#if student_notes.length}
+							<div class="max-h-80 overflow-y-scroll">
+								{#each student_notes as note}
+									<div class="p-2">
+										<div class="text-xs text-gray-500">{dayjs(note.update_ts).format('DD MMM YYYY')}</div>
+										<div>{note.note}</div>
+									</div>
+								{/each}
+							</div>
+						{:else}
+							<div class="p-2">No note</div>
+						{/if}
+						<a class="block mt-2 text-blue-500 hover:text-blue-700 p-2 bg-gray-100 rounded m-1" href="/students/{student_id}/note">Create note</a>
 					{:else}
-						<div class="p-2">No note</div>
+						loading...
 					{/if}
-					<a class="block mt-2 text-blue-500 hover:text-blue-700 p-2 bg-gray-100 rounded m-1" href="/students/{student_id}/note">Create note</a>
-				{:else}
-					loading...
-				{/if}
-			</div>
-		</Dropdown>
+				</div>
+			</Dropdown>
+		{/if}
 		<Dropdown caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
 			<button slot="activator">Material(s)</button>
 			<div class="shadow-lg bg-white border border-gray-300 p-2">
@@ -148,6 +150,20 @@
 							</div>
 						</div>
 					</Dropdown>
+				</div>
+			</div>
+		</Dropdown>
+		<Dropdown caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
+			<button slot="activator">Students</button>
+			<div class="shadow-lg bg-white border border-gray-300 p-2 flex">
+				<div class="w-56">
+					{#if zoom.students.length}
+						{#each zoom.students as s}
+							<p>{s.nickname}</p>
+						{/each}
+					{:else}
+						<p>no students</p>
+					{/if}
 				</div>
 			</div>
 		</Dropdown>
