@@ -12,7 +12,7 @@
 	let loading
 
 	$: filtered_list = search_text ? $reservation_store.filter(r => r.phone.includes(search_text)) : $reservation_store
-	$: status = $page.query.status
+	$: status = $page.query.get('status')
 
 	$: list = $reservation_store.filter(item => {
 		if (status === 'not-confirm') {

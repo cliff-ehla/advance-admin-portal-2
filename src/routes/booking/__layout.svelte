@@ -1,7 +1,7 @@
 <script>
 	export let segment
 	import {page} from '$app/stores'
-	$: status = $page.query.status
+	$: status = $page.query.get('status')
 
 	let items = [
 		{
