@@ -328,6 +328,9 @@
 			{#if $action_status === 'create_leave'}
 				<p>Create Leave</p>
 			{/if}
+			{#if $action_status === 'create_big_class'}
+				<p class="font-bold">Create big/small class</p>
+			{/if}
 		</div>
 	{/if}
 	<div class="flex relative">
