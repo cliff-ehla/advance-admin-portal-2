@@ -16,6 +16,7 @@
 	import {syllabus_store} from "../../store/syllabus-store";
 	import {listSyllabus} from "../../api/syllabus-api";
 
+	$: teacher_id = $course_lesson_tbc_selection[0].teacher_id
 	$: teacherName = $course_lesson_tbc_selection.length ? tutor_store.getTutorName($course_lesson_tbc_selection[0].teacher_id) : ''
 	$: studentName = selected_student_id ? student_store.getStudentName(selected_student_id) : $create_course_from_trial_store ? $create_course_from_trial_store.students[0].nickname : undefined
 	let first_lesson = $course_lesson_tbc_selection[0]
@@ -141,7 +142,10 @@
 		</div>
 		<div class="flex-1">
 			<p class="text-xs text-gray-500">Teacher name</p>
-			<p class="font-bold">{teacherName || '[tutor name]'}</p>
+			<SelectionBox selected_value={teacher_id}
+			              label_key="nickname"
+			              value_key="user_id"
+			              options={$tutor_store}/>
 		</div>
 	</div>
 

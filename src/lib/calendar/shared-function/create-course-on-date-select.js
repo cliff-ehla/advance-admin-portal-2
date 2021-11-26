@@ -3,6 +3,7 @@ import {get} from 'svelte/store'
 import {getSelectedDateEvent} from "./get-today-event";
 import {genTempSelectEvent} from "../phase-to-events";
 import dayjs from "dayjs";
+import {sentry} from "$lib/sentry";
 
 export const createCourseOnDateSelect = (e, month_calendar, day_calendar, tutor_id) => {
 	let type = get(action_status)
@@ -29,6 +30,9 @@ export const createCourseOnDateSelect = (e, month_calendar, day_calendar, tutor_
 				end_date: end,
 				teacher_id: tutor_id
 			})
+			if (!tutor_id) {
+				sentry.log('Missing tutor id')
+			}
 		}
 	}
 }
