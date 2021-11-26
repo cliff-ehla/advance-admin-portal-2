@@ -11,6 +11,7 @@
 	import ConfirmOptionDialog from "../reservation/trial-option-confirm-dialog.svelte";
 	import ConfirmLeaveDialog from "../reservation/confirm-leave-dialog.svelte";
 	import CreateTrialDialog from "../reservation/create-trial-dialog.svelte";
+	import CreateBigClassDialog from "../reservation/create-big-class-dialog.svelte";
 	import dayjs from "dayjs";
 	import {editZoom, createZoom} from "../../api/zoom-api";
 	import {createEventDispatcher} from 'svelte'
@@ -63,6 +64,10 @@
 				borderRadius: '0.5em'
 			},
 		})
+	}
+
+	const onOpenCreateBigClassDialog = () => {
+		openModal(CreateBigClassDialog)
 	}
 
 	const onOpenConfirmLeaveDialog = () => {
@@ -173,6 +178,13 @@
 					<Icon name="right" className="w-4 ml-2"/>
 				</button>
 			{/if}
+			{#if $action_status === 'create_big_class'}
+				<p class="font-bold text-xs mb-1">Create big/small class</p>
+				<button on:click={onOpenCreateBigClassDialog} class="{$course_lesson_tbc_selection.length ? 'bg-yellow-500 hover:bg-yellow-700' : 'bg-gray-300'} pl-4 pr-2 py-1 rounded text-white flex items-center">
+					Confirm
+					<Icon name="right" className="w-4 ml-2"/>
+				</button>
+			{/if}
 			{#if $action_status === 'edit_time'}
 				<p class="font-bold text-xs mb-1">Edit: From {dayjs($edit_lesson_tbc_to_date.from_start_date).format('DD MMM h:mm a')}</p>
 				<button on:click={onConfirmEditTime} class="{$edit_lesson_tbc_to_date.to_start_date ? 'bg-yellow-500 hover:bg-yellow-700' : 'bg-gray-300'} pl-4 pr-2 py-1 rounded text-white flex items-center">
@@ -203,6 +215,9 @@
 				</div>
 				<div on:click={() => {action_status.set('create_trial_lesson')}} class="cursor-pointer px-4 py-2 hover:text-blue-500 hover:bg-gray-100">
 					Trial lesson
+				</div>
+				<div on:click={() => {action_status.set('create_big_class')}} class="cursor-pointer px-4 py-2 hover:text-blue-500 hover:bg-gray-100">
+					Create big/small class
 				</div>
 				<div on:click={onCourseClick} class="cursor-pointer px-4 py-2 hover:text-blue-500 hover:bg-gray-100">
 					Course

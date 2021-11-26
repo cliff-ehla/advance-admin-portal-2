@@ -56,7 +56,7 @@
 		{#if options.length}
 			{#each options as opt}
 				<div use:scrollTo={opt} on:click={onOptionClick(opt)} class="{opt == selected_option ? 'bg-gray-200 text-blue-500' : ''} py-2 flex items-center px-4 cursor-pointer hover:bg-gray-100 border-b border-gray-200">
-					{#if typeof opt === 'string'}
+					{#if simple_array}
 						<div>{opt}</div>
 					{:else}
 						{#if opt[image_key]}

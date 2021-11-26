@@ -8,7 +8,7 @@ import {genTempSelectEvent} from "../phase-to-events";
 export const onReservationSlotSelect = ({jsEvent, start, end}, openPopper, calendar, user_id, month_calendar) => {
 	let _action_status = get(action_status)
 
-	if (_action_status === 'create_option' || _action_status === 'create_trial_lesson') {
+	if (_action_status === 'create_option' || _action_status === 'create_trial_lesson' || _action_status === 'create_big_class') {
 		let _start_time = dayjs(start).format('HH:mm')
 		let _end_time = dayjs(end).format('HH:mm')
 		openPopper(jsEvent.target, FineTunePopup, {

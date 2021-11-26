@@ -1,7 +1,7 @@
 import {writable} from "svelte/store";
 import dayjs from "dayjs";
 
-export const action_status = writable('') // 'create_option' 'create_course' 'edit_time' 'create_trial_lesson' or ''
+export const action_status = writable('') // 'create_option' 'create_course' 'edit_time' 'create_trial_lesson' 'create_big_class' or ''
 export const course_start_hh_mm = writable('12:00')
 export const course_end_hh_mm = writable('12:30')
 export const trial_lesson_retry_student_id = writable('')
