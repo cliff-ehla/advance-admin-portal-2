@@ -8,12 +8,14 @@
 	let slot = $course_lesson_tbc_selection.length ? $course_lesson_tbc_selection[0] : {}
 	let selected_item_id
 	import {http} from "../../helpers/http";
+	import {category_list} from "$lib/store/category-list";
 
 	const {closeModal} = getContext('simple-modal')
 	let code_list = null
 	let selected_code_id
 	let selected_level
 	let selected_classroom_size
+	let selected_category
 	let loading
 	$: selected_code = code_list ? code_list.find(c => c.code_id === selected_code_id) : null
 	$: level_list = selected_code ? selected_code.course_levels : null
@@ -61,8 +63,7 @@
 		              selected_value={selected_code_id}
 		              on:input={e => {selected_code_id = e.detail}}
 		              label_key="sub_cat_hk"
-		              label_key_2="lang_type"
-		              subtitle_key="description_hk"
+		              subtitle_key="lang_type"
 		              value_key="code_id"/>
 	{/if}
 
@@ -86,7 +87,16 @@
 	              on:input={e => {selected_classroom_size = e.detail}}
 	              simple_array/>
 
-	<MaterialSelectionList max_height="500px" on:input={e => selected_item_id = e.detail.item_id}/>
+	<label class="text-gray-500 text-sm mb-1 mt-2 block">Material category</label>
+	<SelectionBox options={$category_list}
+	              placeholder="Material category"
+	              selected_value={selected_category}
+	              on:input={e => {selected_category = e.detail}}
+	              simple_array/>
+
+	{#if selected_category}
+		<MaterialSelectionList category={selected_category} max_height="500px" on:input={e => selected_item_id = e.detail.item_id}/>
+	{/if}
 
 	<button
 					disabled={disabled || loading}

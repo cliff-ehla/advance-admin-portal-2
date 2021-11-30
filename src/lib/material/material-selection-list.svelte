@@ -15,12 +15,18 @@
 	let selected_item_id
 	let preview_thumbs
 
-	onMount(async () => {
+	$: {
+		if (category) {
+			fetchData()
+		}
+	}
+
+	const fetchData = async () => {
 		const data = await getMaterialList(category)
 		items = data.unselected_items
 		filters = data.tag_ordering
 		selected_filter = filters[0]
-	})
+	}
 
 	const onSelectItem = async (item) => {
 		selected_item_id = item.id

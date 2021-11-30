@@ -15,20 +15,7 @@
 	import {fetchStudentList} from "../../store/org-api";
 	import {student_store} from "../../store/student-store";
 	import {onMount} from 'svelte'
-
-	let category_list = [
-		"Reading & Speaking",
-		"Reading comprehension (Exam)",
-		"Writing (Exam)",
-		"Cambridge YLE programme",
-		"UK curriculum",
-		"HK curriculum",
-		"Grammar usage",
-		"Creative writing",
-		"Storytelling",
-		"EHLA Storytelling",
-		"Interview"
-	]
+	import {category_list} from "$lib/store/category-list";
 
 	let material_history
 	let student_notes
@@ -130,7 +117,7 @@
 						<button slot="activator">Add Material</button>
 						<div class="shadow-lg bg-white border border-gray-300 p-2 flex">
 							<div class="w-56">
-								{#each category_list as item}
+								{#each $category_list as item}
 									<button on:click={() => onAddMaterial(item)} class="text-left block px-2 py-2 hover:text-blue-500 hover:bg-gray-100 w-64">{item}</button>
 								{/each}
 							</div>
