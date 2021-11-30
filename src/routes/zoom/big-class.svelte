@@ -1,9 +1,12 @@
 <script>
 	import {http} from "../../helpers/http";
 	import {tutor_store} from "../../store/tutor-store";
+	import BigClassLessonMenu from '$lib/calendar/big-class-leson-menu.svelte'
+	import {getContext} from 'svelte'
 	import dayjs from "dayjs";
 	import utc from 'dayjs/plugin/utc.js'
 	dayjs.extend(utc)
+	const {openPopper} = getContext('popper')
 
 	const init = async (node) => {
 		let {data} = await http.post('courseApi/list_registrable_classroom')
@@ -45,7 +48,8 @@
 				student_size: e.student_size,
 				cat: e.sub_cat_alter,
 				tutor_id: e.tutor_id,
-				start_date: e.start_date
+				start_date: e.start_date,
+				zoom_id: e.zoom_id
 			}
 			return {
 				start: e.start_date,
@@ -56,6 +60,13 @@
 		let cal = new FullCalendar.Calendar(node, {
 			initialView: 'dayGridMonth',
 			eventContent,
+			eventClick: async ({el, event}) => {
+				openPopper(el, BigClassLessonMenu, {
+					zoom_id: event.extendedProps.zoom_id
+				}, {
+					placement: "right"
+				})
+			},
 			events
 		})
 		cal.render()
