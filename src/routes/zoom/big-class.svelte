@@ -4,13 +4,8 @@
 	import BigClassLessonMenu from '$lib/calendar/big-class-leson-menu.svelte'
 	import {getContext} from 'svelte'
 	import dayjs from "dayjs";
-	import utc from 'dayjs/plugin/utc.js'
-	import timezone from 'dayjs/plugin/timezone.js'
 	import tippy from "tippy.js";
-	dayjs.extend(utc)
-	dayjs.extend(timezone)
 	const {openPopper} = getContext('popper')
-	console.log(dayjs.tz.guess())
 
 	const init = async (node) => {
 		let {data} = await http.post('courseApi/list_registrable_classroom')

@@ -16,7 +16,7 @@
 	import {syllabus_store} from "../../store/syllabus-store";
 	import {listSyllabus} from "../../api/syllabus-api";
 
-	$: teacher_id = $course_lesson_tbc_selection[0].teacher_id
+	$: teacher_id = $course_lesson_tbc_selection[0] && $course_lesson_tbc_selection[0].teacher_id
 	$: teacherName = $course_lesson_tbc_selection.length ? tutor_store.getTutorName($course_lesson_tbc_selection[0].teacher_id) : ''
 	$: studentName = selected_student_id ? student_store.getStudentName(selected_student_id) : $create_course_from_trial_store ? $create_course_from_trial_store.students[0].nickname : undefined
 	let first_lesson = $course_lesson_tbc_selection[0]
