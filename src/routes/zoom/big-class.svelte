@@ -5,8 +5,12 @@
 	import {getContext} from 'svelte'
 	import dayjs from "dayjs";
 	import utc from 'dayjs/plugin/utc.js'
+	import timezone from 'dayjs/plugin/timezone.js'
+	import tippy from "tippy.js";
 	dayjs.extend(utc)
+	dayjs.extend(timezone)
 	const {openPopper} = getContext('popper')
+	console.log(dayjs.tz.guess())
 
 	const init = async (node) => {
 		let {data} = await http.post('courseApi/list_registrable_classroom')
@@ -22,11 +26,14 @@
 			let content_bottom = document.createElement('div')
 			content_bottom.innerHTML = arg.event.extendedProps.cat
 			content_bottom.classList.add('text-xs', 'overflow-hidden', 'overflow-ellipsis', 'whitespace-nowrap')
+			tippy(content_bottom, {
+				content: arg.event.extendedProps.cat
+			})
 			let time_el = document.createElement('div')
-			time_el.innerHTML = dayjs.utc(arg.event.start).local().format('h:mma')
+			time_el.innerHTML = dayjs(arg.event.start).add(8, 'hour').format('h:mma')
 			let size_el = document.createElement('div')
 			let reg_user_cnt = arg.event.extendedProps.reg_user_cnt
-			let label_color = reg_user_cnt >= 3 ? 'bg-yellow-300' : reg_user_cnt == 2 ? 'bg-yellow-200' : reg_user_cnt == 1 ? 'bg-yellow-100' : 'bg-gray-100'
+			let label_color = reg_user_cnt >= 3 ? 'bg-yellow-300' : reg_user_cnt == 2 ? 'bg-yellow-200' : reg_user_cnt == 1 ? 'bg-yellow-100' : 'bg-red-200'
 			size_el.classList.add(label_color, 'px-1', 'rounded', 'ml-auto' , 'leading-tight')
 			size_el.innerHTML = `${arg.event.extendedProps.reg_user_cnt}/${arg.event.extendedProps.student_size}`
 			content_upper.appendChild(time_el)
@@ -36,6 +43,10 @@
 			let img_el = document.createElement('img')
 			img_el.src = tutor_store.getTutorProfilePic(arg.event.extendedProps.tutor_id)
 			img_el.classList.add('h-8', 'w-8', 'rounded-full')
+			img_el.title = arg.event.extendedProps.tutor_name
+			tippy(img_el, {
+				content: arg.event.extendedProps.tutor_name
+			})
 			wrapper.appendChild(img_el)
 			wrapper.appendChild(content)
 			return {
@@ -48,6 +59,7 @@
 				student_size: e.student_size,
 				cat: e.sub_cat_alter,
 				tutor_id: e.tutor_id,
+				tutor_name: e.tutor_name,
 				start_date: e.start_date,
 				zoom_id: e.zoom_id
 			}
@@ -61,6 +73,7 @@
 			initialView: 'dayGridMonth',
 			eventContent,
 			eventClick: async ({el, event}) => {
+				console.log(event.extendedProps.tutor_name)
 				openPopper(el, BigClassLessonMenu, {
 					zoom_id: event.extendedProps.zoom_id
 				}, {
