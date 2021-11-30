@@ -50,7 +50,17 @@
 		{
 			segment: 'zoom',
 			name: 'Calendar',
-			href: `/zoom/${dayjs().format('YYYY-MM-DD')}`
+			href: `/zoom/${dayjs().format('YYYY-MM-DD')}`,
+			children: [
+				{
+					label: 'Calendar',
+					href: `/zoom/${dayjs().format('YYYY-MM-DD')}`
+				},
+				{
+					label: 'Big class',
+					href: '/zoom/big-class'
+				}
+			]
 		},
 		{
 			segment: 'students',

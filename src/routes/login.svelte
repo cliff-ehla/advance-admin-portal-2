@@ -7,8 +7,8 @@
 	let base_url = import.meta.env.VITE_API_BASE
 	let local_production = base_url === 'https://usermodel.ehlacademy.org'
 
-	let username = env === 'production' ? '' : local_production ? 'ehla.admin' : 'queeniedevadmin'
-	let password = env === 'production' ? '' : local_production ? 'e12345678' : 'q12345678'
+	let username = env === 'production' ? '' : local_production ? 'cliff.admin' : 'queeniedevadmin'
+	let password = env === 'production' ? '' : local_production ? '12345678' : 'q12345678'
 	let error = false
 
 	const onLogin = async () => {

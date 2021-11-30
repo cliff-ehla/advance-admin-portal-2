@@ -8,9 +8,15 @@ const tutor_store = (() => {
 		return t && t.nickname
 	}
 
+	const getTutorProfilePic = (id) => {
+		let t = get(store).find(t => t.user_id == id)
+		return t && t.profile_pic
+	}
+
 	return {
 		subscribe: store.subscribe,
 		getTutorName,
+		getTutorProfilePic,
 		set: store.set
 	}
 })()
