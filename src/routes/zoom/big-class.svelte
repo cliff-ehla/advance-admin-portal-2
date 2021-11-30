@@ -29,10 +29,29 @@
 			let size_el = document.createElement('div')
 			let reg_user_cnt = arg.event.extendedProps.reg_user_cnt
 			let label_color = reg_user_cnt >= 3 ? 'bg-yellow-300' : reg_user_cnt == 2 ? 'bg-yellow-200' : reg_user_cnt == 1 ? 'bg-yellow-100' : 'bg-red-200'
-			size_el.classList.add(label_color, 'px-1', 'rounded', 'ml-auto' , 'leading-tight')
+			size_el.classList.add(label_color, 'px-1', 'rounded' , 'leading-tight', 'text-xs')
 			size_el.innerHTML = `${arg.event.extendedProps.reg_user_cnt}/${arg.event.extendedProps.student_size}`
+
+			let level_el = document.createElement('div')
+			level_el.classList.add('bg-gray-100', 'px-1', 'rounded', 'ml-auto' , 'leading-tight', 'overflow-hidden', 'text-xs', 'border', 'border-gray-300')
+			// level_el.style.maxWidth = '60px'
+			level_el.innerHTML = arg.event.extendedProps.level
+			tippy(level_el, {
+				content: arg.event.extendedProps.level
+			})
+
 			content_upper.appendChild(time_el)
+			content_upper.appendChild(level_el)
 			content_upper.appendChild(size_el)
+			if (arg.event.extendedProps.no_material) {
+				const icon_el = document.createElement('div')
+				icon_el.innerHTML = '!'
+				icon_el.classList.add('w-4', 'h-4', 'bg-red-500', 'text-white', 'flex', 'items-center', 'justify-center', 'font-bold', 'ml-0.5')
+				tippy(icon_el, {
+					content: 'No material'
+				})
+				content_upper.appendChild(icon_el)
+			}
 			content.appendChild(content_upper)
 			content.appendChild(content_bottom)
 			let img_el = document.createElement('img')
@@ -56,7 +75,9 @@
 				tutor_id: e.tutor_id,
 				tutor_name: e.tutor_name,
 				start_date: e.start_date,
-				zoom_id: e.zoom_id
+				zoom_id: e.zoom_id,
+				no_material: e.no_material,
+				level: e.rc_level
 			}
 			return {
 				start: e.start_date,
