@@ -11,6 +11,7 @@
 	import ToggleViewMenu from "./toggle-view-menu.svelte"
 	import Icon from "../ui-elements/icon.svelte"
 	import {tutor_store} from "../../store/tutor-store";
+	import {fetchZoomMaterial} from "../../api/zoom-api";
 
 	export let tutor_id
 
@@ -25,11 +26,27 @@
 	const fetchData = async () => {
 		let start_time = dayjs().subtract(1, 'month').format('YYYY-MM-DD') + ' 00:00:00'
 		let end_time = dayjs().add(3, 'months').format('YYYY-MM-DD') + ' 00:00:00'
-		let data = await fetchTutorSchedule({
+
+		let p1 = fetchTutorSchedule({
 			start_time,
 			end_time,
 			teacher_ids: [tutor_id]
 		})
+		let p2 = fetchZoomMaterial({
+			start_date: start_time,
+			end_date: end_time,
+			teacher_ids: [tutor_id]
+		})
+		let [data, data2] = await Promise.all([p1,p2])
+		data[0].zoom_time.forEach(z => {
+			data2.forEach(_z => {
+				if (z.zoom_id == _z.wrapper_id) {
+					z.days = _z.days
+					z.big_classroom_type = _z.big_classroom_type
+				}
+			})
+		})
+
 		events = convertToEvents(data[0])
 		renderCalendar()
 	}

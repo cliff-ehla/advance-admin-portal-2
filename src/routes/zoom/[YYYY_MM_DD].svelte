@@ -8,17 +8,17 @@
 	$: YYYY_MM_DD = $page.params.YYYY_MM_DD
 
 	const onDateChange = (e) => {
-		goto(`zoom/${dayjs(e.detail).format('YYYY-MM-DD')}`)
+		goto(`/zoom/${dayjs(e.detail).format('YYYY-MM-DD')}`)
 	}
 
 	const onPrev = () => {
 		let prev_date = dayjs(YYYY_MM_DD).subtract(1,'day').format('YYYY-MM-DD')
-		goto(`zoom/${prev_date}`)
+		goto(`/zoom/${prev_date}`)
 	}
 
 	const onNext = () => {
 		let next_date = dayjs(YYYY_MM_DD).add(1,'day').format('YYYY-MM-DD')
-		goto(`zoom/${next_date}`)
+		goto(`/zoom/${next_date}`)
 	}
 </script>
 

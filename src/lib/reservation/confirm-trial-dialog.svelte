@@ -33,12 +33,13 @@
 	let copy_text_el
 
 	const genMessage = () => {
-		let line_1 = tutor_store.getTutorName(slot.teacher_id)
-		let line_2 = dayjs(slot.end_date).diff(dayjs(slot.start_date), 'minute') + ' min Trial Lesson'
-		let line_3 = 'HKT: ' + dayjs.utc(slot.start_date).local().format('DD MMM (ddd)@h:mma') + '-' + dayjs.utc(slot.end_date).local().format('h:mma')
-		let line_4 = `Student ${nickname} (${gender})`
-		let line_5 = `${level}`
-		return line_1 + '\n' + line_2 + '\n' + line_3 + '\n' + line_4 + '\n' + line_5
+		let line_1 = dayjs(slot.end_date).diff(dayjs(slot.start_date), 'minute') + ' min Trial Lesson'
+		let line_2 = 'HKT: ' + dayjs.utc(slot.start_date).local().format('DD MMM (ddd)@h:mma') + '-' + dayjs.utc(slot.end_date).local().format('h:mma')
+		let line_3 = 'Teacher:' + tutor_store.getTutorName(slot.teacher_id)
+		let line_4 = `Student: ${nickname} (${gender.toUpperCase()})`
+		let line_5 = `Level: ${level.charAt(0).toUpperCase() + level.substring(1)}`
+		let line_6 = `Topic: ${reserve.material}`
+		return line_1 + '\n' + line_2 + '\n' + line_3 + '\n' + line_4 + '\n' + line_5+ '\n' + line_6
 	}
 
 	const onCreated = async ({detail}) => {
@@ -52,12 +53,12 @@
 	const confirmZoom = async () => {
 		loading = true
 		message = genMessage()
-		await confirmZoomTrial({
-			reserved_id,
-			student_id,
-			item_id: selected_item_id,
-			grouper_id
-		})
+		// await confirmZoomTrial({
+		// 	reserved_id,
+		// 	student_id,
+		// 	item_id: selected_item_id,
+		// 	grouper_id
+		// })
 		is_show_message = true
 		loading = false
 	}
@@ -88,7 +89,7 @@
 				<p>{dayjs.utc(slot.start_date).local().format('MMM DD (ddd)@ h:mma')} - {dayjs.utc(slot.end_date).local().format('h:mma')}</p>
 			</div>
 			<div>
-				{#if !student_id}
+				{#if false}
 					<CreateNewUser remark={general_message} {gender} {level} {nickname} parent_mobile={phone} on:created={onCreated}/>
 				{:else}
 					<div class="my-4">
