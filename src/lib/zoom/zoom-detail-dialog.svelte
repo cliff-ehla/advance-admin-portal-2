@@ -12,6 +12,7 @@
 	let wrapper_id = zoom.zoom_id
 	export let onConfirm = () => {}
 	export let onDelete = () => {}
+	import {http} from "../../helpers/http";
 
 	let clone = {...zoom}
 	if (!clone.trial_success_buy_time) {
@@ -47,6 +48,20 @@
 		setZoomCancel({
 			wrapper_id,
 			is_cancel: e.target.checked
+		})
+	}
+
+	const onStudentSickLeaveToggle = (e) => {
+		http.post('zoomApi/set_s_sick_leave', {
+			wrapper_id,
+			s_sick_leave: e.target.checked
+		})
+	}
+
+	const onTeacherSickLeaveToggle = (e) => {
+		http.post('zoomApi/set_t_sick_leave', {
+			wrapper_id,
+			s_sick_leave: e.target.checked
 		})
 	}
 
@@ -149,6 +164,16 @@
 		<p class="w-48">Is Cancel</p>
 		<input on:input={onIsCancelToggle} type="checkbox" bind:checked={clone.is_cancel}>
 	</div>
+
+	<div class="flex items-center mb-2 h-10">
+		<p class="w-48">Student sick leave</p>
+		<input on:input={onStudentSickLeaveToggle} type="checkbox" bind:checked={clone.s_sick_leave}>
+	</div>
+	<div class="flex items-center mb-2 h-10">
+		<p class="w-48">Teacher sick leave</p>
+		<input on:input={onTeacherSickLeaveToggle} type="checkbox" bind:checked={clone.t_sick_leave}>
+	</div>
+
 	<div class="flex items-center mb-2 h-10">
 		<p class="w-48">Student no show</p>
 		<input on:input={onStudentNoShowToggle} type="checkbox" bind:checked={clone.s_no_show}>
