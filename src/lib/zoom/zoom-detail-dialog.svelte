@@ -52,14 +52,14 @@
 	}
 
 	const onStudentSickLeaveToggle = (e) => {
-		http.post('zoomApi/set_s_sick_leave', {
+		http.post('zoomApi/set_student_sick_leave', {
 			wrapper_id,
 			s_sick_leave: e.target.checked
 		})
 	}
 
 	const onTeacherSickLeaveToggle = (e) => {
-		http.post('zoomApi/set_t_sick_leave', {
+		http.post('zoomApi/set_student_sick_leave', {
 			wrapper_id,
 			s_sick_leave: e.target.checked
 		})
