@@ -8,7 +8,10 @@
 	const {openPopper} = getContext('popper')
 
 	const init = async (node) => {
-		let {data} = await http.post('courseApi/list_registrable_classroom')
+		let {data} = await http.post('courseApi/list_registrable_classroom', {
+			start_date: dayjs().subtract(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
+			end_date: dayjs().add(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
+		})
 		let events = data.filter(d => !!d.start_date)
 		const eventContent = (arg) => {
 			let wrapper = document.createElement('div')
