@@ -1,6 +1,6 @@
 <script>
-	export let segment
 	import {page} from '$app/stores'
+	$: segment = $page.path.split('/').pop()
 	$: status = $page.query.get('status')
 
 	let items = [
