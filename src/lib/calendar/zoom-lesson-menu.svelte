@@ -16,6 +16,7 @@
 	import {student_store} from "../../store/student-store";
 	import {onMount} from 'svelte'
 	import {category_list} from "$lib/store/category-list";
+	console.log(zoom)
 
 	let material_history
 	let student_notes
@@ -147,7 +148,7 @@
 				<div class="w-56">
 					{#if zoom.students.length}
 						{#each zoom.students as s}
-							<p>{s.nickname}</p>
+							<p>{s.nickname} ({student_store.getStudentLevel(s.user_id)})</p>
 						{/each}
 					{:else}
 						<p>no students</p>
