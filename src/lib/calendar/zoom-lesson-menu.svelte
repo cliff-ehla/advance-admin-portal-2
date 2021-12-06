@@ -24,7 +24,7 @@
 	$: student_id = zoom.students[0] && zoom.students[0].user_id
 
 	onMount(async () => {
-		if (!student_store.length) {
+		if (!$student_store.length) {
 			await fetchStudentList()
 		}
 		student_lv = student_store.getStudentLevel(student_id)
