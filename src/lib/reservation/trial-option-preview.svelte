@@ -12,7 +12,7 @@
 	import {editOption} from "../../api/zoom-api";
 	import TextInputDialog from '../../lib/ui-elements/text-input-dialog.svelte'
 	import {getContext} from 'svelte'
-	import ConfirmTrialDialog from "./confirm-trial-dialog.svelte";
+	import ConfirmTrialDialog from "./create-trial-from-option-dialog.svelte";
 	import OptionDraftDialog from "./option-draft-dialog.svelte";
 	import {student_store} from "../../store/student-store";
 	import CopyMessageDialog from './copy-message-dialog.svelte'

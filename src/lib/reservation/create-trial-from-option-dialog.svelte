@@ -31,6 +31,8 @@
 	let is_show_message
 	let message
 	let copy_text_el
+	let lesson_fee
+	let app_fee
 
 	const genMessage = () => {
 		let line_1 = dayjs(slot.end_date).diff(dayjs(slot.start_date), 'minute') + ' min Trial Lesson'
@@ -53,12 +55,15 @@
 	const confirmZoom = async () => {
 		loading = true
 		message = genMessage()
-		// await confirmZoomTrial({
-		// 	reserved_id,
-		// 	student_id,
-		// 	item_id: selected_item_id,
-		// 	grouper_id
-		// })
+		await confirmZoomTrial({
+			reserved_id,
+			student_id,
+			item_id: selected_item_id,
+			grouper_id,
+			lesson_fee,
+			app_fee,
+			voucher_date: dayjs().format('YYYY-MM-DD')
+		})
 		is_show_message = true
 		loading = false
 	}
@@ -89,15 +94,23 @@
 				<p>{dayjs.utc(slot.start_date).local().format('MMM DD (ddd)@ h:mma')} - {dayjs.utc(slot.end_date).local().format('h:mma')}</p>
 			</div>
 			<div>
-				{#if false}
+
+				{#if !student_id}
 					<CreateNewUser remark={general_message} {gender} {level} {nickname} parent_mobile={phone} on:created={onCreated}/>
 				{:else}
+					<div class="my-4">
+						<div class="text-gray-500 text-sm mt-2">Lesson fee</div>
+						<input type="text" bind:value={lesson_fee} placeholder="Lesson fee" class="border border-gray-300 rounded px-4 py-1">
+						<div class="text-gray-500 text-sm mt-2">App fee</div>
+						<input type="text" bind:value={app_fee} placeholder="App fee" class="border border-gray-300 rounded px-4 py-1">
+					</div>
 					<div class="my-4">
 						<p class="font-bold my-2 text-red-500">Student id: {student_id}</p>
 						{#if reserve.material}
 							<p class="font-bold my-2">Material: {reserve.material}, Age: {reserve.age}</p>
 						{/if}
 					</div>
+
 					<MaterialSelectionList on:input={e => selected_item_id = e.detail.item_id}/>
 					<button class="rounded-full px-4 py-3 w-full bg-blue-500 text-white text-center" on:click={confirmZoom}>Confirm zoom lesson</button>
 				{/if}

@@ -81,6 +81,11 @@
 					href: '/tutor-group/renew'
 				}
 			]
+		},
+		{
+			segment: 'voucher',
+			name: 'Voucher',
+			href: '/voucher'
 		}
 	]
 </script>

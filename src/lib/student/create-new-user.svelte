@@ -81,59 +81,65 @@
 	}
 </script>
 
-<div class="w-96">
+<div class="w-full">
 	<div class="mt-4">
-		<div class="text-sm text-gray-400 mb-2">
-			<div class="flex">
-				<p class="mb-1">Child username</p>
-				<div class="ml-4">
-					{#if loading}
-						loading...
-					{:else if child_username_exist}
-						<p class="text-red-500">username exist :(</p>
-					{:else if !!username}
-						<p class="text-green-500">ok!</p>
-					{/if}
+		<div class="grid grid-cols-2 gap-4">
+			<div class="text-sm text-gray-400 mb-2">
+				<div class="flex">
+					<p class="mb-1">Child username</p>
+					<div class="ml-4">
+						{#if loading}
+							loading...
+						{:else if child_username_exist}
+							<p class="text-red-500">username exist :(</p>
+						{:else if !!username}
+							<p class="text-green-500">ok!</p>
+						{/if}
+					</div>
 				</div>
+				<input bind:value={username} on:input={callApi} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
 			</div>
-			<input bind:value={username} on:input={callApi} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
+			<div class="text-sm text-gray-400 mb-2">
+				<p class="mb-1">Child nickname</p>
+				<input bind:value={nickname} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
+			</div>
 		</div>
 
-		<div class="text-sm text-gray-400 mb-2">
-			<div class="flex">
-				<p class="mb-1">Parent username</p>
-				<div class="ml-4">
-					{#if loading}
-						loading...
-					{:else if parent_username_exist}
-						<p class="text-red-500">username exist :(</p>
-					{:else if !!parent_username}
-						<p class="text-green-500">ok!</p>
-					{/if}
+		<div class="grid grid-cols-2 gap-4">
+			<div class="text-sm text-gray-400 mb-2">
+				<div class="flex">
+					<p class="mb-1">Parent username</p>
+					<div class="ml-4">
+						{#if loading}
+							loading...
+						{:else if parent_username_exist}
+							<p class="text-red-500">username exist :(</p>
+						{:else if !!parent_username}
+							<p class="text-green-500">ok!</p>
+						{/if}
+					</div>
 				</div>
+				<input on:input={callApi} bind:value={parent_username} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
 			</div>
-			<input on:input={callApi} bind:value={parent_username} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
+			<div class="text-sm text-gray-400 mb-2">
+				<p class="mb-1">Parent Nickname</p>
+				<input bind:value={parent_nickname} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
+			</div>
 		</div>
 
-		<div class="text-sm text-gray-400 mb-2">
-			<p class="mb-1">Child nickname</p>
-			<input bind:value={nickname} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
-		</div>
-		<div class="text-sm text-gray-400 mb-2">
-			<p class="mb-1">Gender</p>
-			<SelectionBox options={gender_options} selected_value={gender} on:input={e => {gender = e.detail}}/>
-		</div>
-		<div class="text-sm text-gray-400 mb-2">
-			<p class="mb-1">Grade</p>
-			<SelectionBox options={$level_options_store} selected_value={level} on:input={e => {level = e.detail}}/>
+		<div class="grid grid-cols-2 gap-4">
+			<div class="text-sm text-gray-400 mb-2">
+				<p class="mb-1">Gender</p>
+				<SelectionBox options={gender_options} selected_value={gender} on:input={e => {gender = e.detail}}/>
+			</div>
+			<div class="text-sm text-gray-400 mb-2">
+				<p class="mb-1">Grade</p>
+				<SelectionBox options={$level_options_store} selected_value={level} on:input={e => {level = e.detail}}/>
+			</div>
 		</div>
 		<div class="text-sm text-gray-400 mb-2">
 			<p class="mb-1">Parent mobile no</p>
 			<input bind:value={parent_mobile} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
-		</div>
-		<div class="text-sm text-gray-400 mb-2">
-			<p class="mb-1">Parent Nickname</p>
-			<input bind:value={parent_nickname} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
 		</div>
 		<div class="text-sm text-gray-400 mb-2">
 			<p class="mb-1">Student note</p>

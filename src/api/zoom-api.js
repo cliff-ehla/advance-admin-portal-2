@@ -265,7 +265,7 @@ export async function editOption ({grouper_id, remark, phone}, _fetch) {
 	} catch (e) {}
 }
 
-export async function confirmZoomTrial ({reserved_id, student_id, grouper_id, item_id, tutor_group_title}, _fetch) {
+export async function confirmZoomTrial ({reserved_id, student_id, grouper_id, item_id, tutor_group_title, lesson_fee, app_fee, voucher_date}, _fetch) {
 	try {
 		await http.post('zoomApi/update_zoom_trial_option', {
 			student_id, grouper_id
@@ -273,7 +273,10 @@ export async function confirmZoomTrial ({reserved_id, student_id, grouper_id, it
 		const {data} = await http.post('zoomApi/confirm_zoom_trial_option', {
 			reserved_id,
 			item_id,
-			title: tutor_group_title
+			title: tutor_group_title,
+			lesson_fee,
+			app_fee,
+			voucher_date
 		}, _fetch)
 		return data
 	} catch (e) {}
