@@ -128,7 +128,7 @@
 		const genMessage = () => {
 			let line_1 = tutor_store.getTutorName(trial_lesson.teacher_id)
 			let line_2 = `${dayjs(trial_lesson.end_date).diff(dayjs(trial_lesson.start_date), 'minute')} min Trial Lesson`
-			let line_3 = `HKT: ${dayjs.utc(trial_lesson.start_date).local().format('MMM (ddd)@h:mma')} - ${dayjs.utc(trial_lesson.end_date).local().format('h:mma')}`
+			let line_3 = `HKT: ${dayjs.utc(trial_lesson.start_date).local().format('DD MMM (ddd)@h:mma')} - ${dayjs.utc(trial_lesson.end_date).local().format('h:mma')}`
 			let line_4 = `Student: ${trial_option.s_nickname}`
 			return line_1 + '\n' + line_2 + '\n' + line_3 + '\n' + line_4
 		}
