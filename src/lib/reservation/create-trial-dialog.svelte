@@ -19,7 +19,7 @@
 	import {course_title_options_store} from "../../store/course-title-options-store";
 
 	onMount(() => {
-		fetchStudentList()
+		if (!$student_store.length) fetchStudentList()
 	})
 
 	dayjs.extend(utc)
