@@ -1,4 +1,5 @@
 import {sentry} from "$lib/sentry";
+import {is_loading} from "$lib/store/is_loading";
 
 const http = (() => {
 	async function get (fetch, resource, query) {
@@ -9,8 +10,10 @@ const http = (() => {
 			}
 		}
 		try {
+			is_loading.set(true)
 			const res = await fetch('/api' + resource)
 			const {success, data, metadata, debug} = await res.json()
+			is_loading.set(false)
 			return {success, data, metadata, debug}
 		} catch (e) {
 			console.log(`fatal error: ${resource} this mostly happened when usermodel do not return a json body`, e)
@@ -21,6 +24,7 @@ const http = (() => {
 	async function post (fetch, resource, body = {}) {
 		// an empty object is necessary, otherwise result fatal error when not passing body params
 		try {
+			is_loading.set(true)
 			const res = await fetch('/api' + resource, {
 				method: 'POST',
 				headers: {
@@ -29,6 +33,7 @@ const http = (() => {
 				body: body && JSON.stringify(body)
 			})
 			const {success, data, metadata, debug} = await res.json()
+			is_loading.set(false)
 			return {success, data, metadata, debug}
 		} catch (e) {
 			console.log(`fatal error: ${resource} this mostly happened when usermodel do not return a json body`, e)
