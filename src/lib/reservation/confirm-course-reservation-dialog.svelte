@@ -16,7 +16,7 @@
 	import {syllabus_store} from "../../store/syllabus-store";
 	import {listSyllabus} from "../../api/syllabus-api";
 
-	$: teacher_id = $course_lesson_tbc_selection[0] && $course_lesson_tbc_selection[0].teacher_id
+	let teacher_id = $course_lesson_tbc_selection[0] && $course_lesson_tbc_selection[0].teacher_id
 	$: teacherName = $course_lesson_tbc_selection.length ? tutor_store.getTutorName($course_lesson_tbc_selection[0].teacher_id) : ''
 	$: studentName = selected_student_id ? student_store.getStudentName(selected_student_id) : $create_course_from_trial_store ? $create_course_from_trial_store.students[0].nickname : undefined
 	let first_lesson = $course_lesson_tbc_selection[0]
@@ -63,8 +63,6 @@
 		loading = true
 		copy_text_el.select()
 		document.execCommand("copy");
-		let is_error = $course_lesson_tbc_selection.some(s => !s.teacher_id)
-		if (is_error) return alert('error: teacher id is missing')
 		const zoom_reserved_utc = $course_lesson_tbc_selection.map(s => {
 			return {
 				start_date: dayjs(s.start_date).utc().format('YYYY-MM-DD HH:mm:ss'),
@@ -143,6 +141,7 @@
 		<div class="flex-1">
 			<p class="text-xs text-gray-500">Teacher name</p>
 			<SelectionBox selected_value={teacher_id}
+			              on:input={e => {teacher_id = e.detail}}
 			              label_key="nickname"
 			              value_key="user_id"
 			              options={$tutor_store}/>
