@@ -19,7 +19,6 @@
 	import CreateUserDialog from '$lib/student/create-new-user-dialog.svelte'
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import CreateTickerDialog from '$lib/ticker/create-ticker-dialog.svelte'
-	import {notifications} from "$lib/store/notification";
 
 	export let student_list = []
 
