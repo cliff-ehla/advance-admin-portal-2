@@ -1,4 +1,5 @@
 <script>
+	import '../styles/tailwind-output.css';
 	import Modal from '../lib/app-shelf/modal.svelte'
 	import Popper from '../lib/app-shelf/popper.svelte'
 	import Notification from '../lib/app-shelf/notification.svelte'
