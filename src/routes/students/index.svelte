@@ -1,3 +1,20 @@
+<script context="module">
+	import {http, onFail} from "$lib/http";
+
+	export const load = async ({fetch}) => {
+		const res = await http.get(fetch, '/adminApi/list_students_with_ticket_info')
+		console.log(123, res)
+		return true
+		// if (!success) return onFail(debug)
+		/*
+		return {
+			props: {
+				student_list: data
+			}
+		}*/
+	}
+</script>
+
 <script>
 	import {student_store} from "../../store/student-store";
 	import {fetchStudentList} from "../../store/org-api";
@@ -5,6 +22,9 @@
 	const {openModal} = getContext('simple-modal')
 	import CreateUserDialog from '$lib/student/create-new-user-dialog.svelte'
 	import Icon from '$lib/ui-elements/icon.svelte'
+
+	export let student_list
+	console.log(student_list)
 
 	const onAdd = () => {
 		openModal(CreateUserDialog, {
