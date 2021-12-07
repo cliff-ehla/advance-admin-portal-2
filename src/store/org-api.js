@@ -6,7 +6,6 @@ export async function fetchTeacherList () {
 	let {data} = await http.get('organizationApi/tutor_list', {
 		is_ehla: 1
 	})
-	console.log(data)
 	data.sort((a,b) => {
 		return a.nickname > b.nickname ? 1 : -1
 	})
