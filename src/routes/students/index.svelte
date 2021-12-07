@@ -13,7 +13,6 @@
 </script>
 
 <script>
-	import {fetchStudentList} from "../../store/org-api";
 	import {getContext} from 'svelte'
 	const {openModal} = getContext('simple-modal')
 	import CreateUserDialog from '$lib/student/create-new-user-dialog.svelte'
@@ -24,7 +23,10 @@
 
 	const onAdd = () => {
 		openModal(CreateUserDialog, {
-			onSuccess: fetchStudentList
+			onSuccess: async () => {
+				const {data} = await http.get(fetch, '/adminApi/list_students_with_ticket_info')
+				student_list = data
+			}
 		})
 	}
 
@@ -43,7 +45,7 @@
 <div class="p-4 bg-gray-50">
 	{#each student_list as s}
 		<div class="flex items-center mb-4">
-			<a href="/students/{s.student_id}/tutor-group" class="flex items-center px-2 py-1 leading-tight rounded-full border border-gray-400 hover:border-blue-500">
+			<a href="/students/{s.student_id}/tutor-group" class="flex items-center px-2 py-1 leading-tight rounded-full border border-gray-400 hover:border-blue-500 hover:bg-gray-200">
 				<img src="/student-icon.png" alt="student" class="w-8 h-8 rounded-full">
 				<div class="ml-2">
 					<p class="font-bold">{s.student_nickname}</p>
