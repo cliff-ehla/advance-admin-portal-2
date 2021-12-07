@@ -9,7 +9,6 @@
 	import {onMount} from "svelte";
 	import {getUserInfo} from "../api/user-api";
 	import {fetchTeacherList} from "../store/org-api";
-	import {fetchStudentList} from "../store/org-api";
 	import {sentry} from "$lib/sentry";
 	import {navigating} from "$app/stores";
 
@@ -19,7 +18,6 @@
 		sentry.init()
 		getUserInfo()
 		fetchTeacherList()
-		fetchStudentList()
 	})
 </script>
 
