@@ -2,29 +2,24 @@
 	import {http, onFail} from "$lib/http";
 
 	export const load = async ({fetch}) => {
-		const res = await http.get(fetch, '/adminApi/list_students_with_ticket_info')
-		console.log(123, res)
-		return true
-		// if (!success) return onFail(debug)
-		/*
+		const {data, success, debug} = await http.get(fetch, '/adminApi/list_students_with_ticket_info')
+		if (!success) return onFail(debug)
 		return {
 			props: {
 				student_list: data
 			}
-		}*/
+		}
 	}
 </script>
 
 <script>
-	import {student_store} from "../../store/student-store";
 	import {fetchStudentList} from "../../store/org-api";
 	import {getContext} from 'svelte'
 	const {openModal} = getContext('simple-modal')
 	import CreateUserDialog from '$lib/student/create-new-user-dialog.svelte'
 	import Icon from '$lib/ui-elements/icon.svelte'
 
-	export let student_list
-	console.log(student_list)
+	export let student_list = []
 
 	const onAdd = () => {
 		openModal(CreateUserDialog, {
@@ -34,14 +29,39 @@
 </script>
 
 <div class="p-4 bg-gray-50">
-	{#if $student_store}
-		{#each $student_store as s}
-			<a class="block p-4 bg-white mb-2 rounded shadow hover:text-blue-500" href="/students/{s.user_id}/tutor-group">
-				<p class="font-bold">{s.nickname} ({s.level})</p>
-				<p class="text-sm text-gray-500">{s.username} {s.user_id}</p>
+	{#each student_list as s}
+		<div class="flex items-center mb-4">
+			<a href="/students/{s.student_id}/tutor-group" class="flex items-center px-2 py-1 leading-tight rounded-full border border-gray-400 hover:border-blue-500">
+				<img src="/student-icon.png" alt="student" class="w-8 h-8 rounded-full">
+				<div class="ml-2">
+					<p class="font-bold">{s.student_nickname}</p>
+					<p class="text-xs text-gray-500">@{s.student_username} <span class="ml-1">ID:{s.student_id}</span></p>
+				</div>
 			</a>
-		{/each}
-	{/if}
+			<div class="h-0.5 bg-gray-400 w-8"></div>
+			<div>
+				<div class="flex items-center leading-tight rounded-full border border-gray-400 hover:border-blue-500">
+					<div class="flex items-center px-2 py-1">
+						<img src="/parent-icon.png" alt="parent" class="w-8 h-8 rounded-full">
+						<div class="ml-1">
+							<p class="font-bold">{s.parent_nickname}</p>
+							<p class="text-xs text-gray-500">@{s.parent_username}</p>
+						</div>
+					</div>
+					<div class="px-2 py-1 ml-2 border-l border-gray-400">
+						<div class="flex items-center">
+							<img src="/ticket.jpg" alt="ticket" class="w-6 h-6 rounded-full">
+							<p class="ml-1">{s.r_t_amt}張</p>
+							<button class="text-blue-500 border-gray-400 hover:bg-blue-500 hover:text-white border p-1 rounded-full ml-1">
+								<Icon name="add" className="w-3"/>
+							</button>
+						</div>
+						<p class="text-xs text-gray-500 mt-0.5">已用: {s.used_t_amt}, 總共: {s.tt_t_amt}</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	{/each}
 </div>
 
 <button class="fixed right-4 bottom-4 w-12 h-12 rounded-full flex items-center justify-center text-white bg-blue-500 hover:bg-blue-700"

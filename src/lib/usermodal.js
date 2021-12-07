@@ -1,7 +1,7 @@
 import {variables} from "$lib/env";
 const base = variables.api_base + '/v1'
 
-export async function usermodel (request, resource, data) {
+const usermodel = async (request, resource, data) => {
 	if (request.method === 'POST' && data) {
 		data = { params: data }
 	}
@@ -31,3 +31,5 @@ export async function usermodel (request, resource, data) {
 		body: await res.json()
 	}
 }
+
+export {usermodel}
