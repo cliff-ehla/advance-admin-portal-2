@@ -4,8 +4,8 @@ const http = (() => {
 	async function get (fetch, resource, query) {
 		if (query) {
 			for (const property in query) {
-				// TODO ? &
-				resource += `?${property}=${query[property]}`
+				let char = resource.includes('?') ? '&' : '?'
+				resource += `${char}${property}=${query[property]}`
 			}
 		}
 		try {
@@ -13,7 +13,7 @@ const http = (() => {
 			const {success, data, metadata, debug} = await res.json()
 			return {success, data, metadata, debug}
 		} catch (e) {
-
+			console.log(`fatal error: ${resource} this mostly happened when usermodel do not return a json body`, e)
 		}
 
 	}
