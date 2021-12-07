@@ -40,11 +40,12 @@ const http = (() => {
 				if (success)
 					notifications.success(notification)
 				else
-					notification.alert('哎！錯誤發生了')
+					notifications.alert('哎！錯誤發生了')
 			}
 			return {success, data, metadata, debug}
 		} catch (e) {
 			console.log(`fatal error: ${resource} this mostly happened when usermodel do not return a json body`, e)
+			notifications.alert('哎！今次PK了，後台GG')
 			return {
 				success: false,
 				data: false,

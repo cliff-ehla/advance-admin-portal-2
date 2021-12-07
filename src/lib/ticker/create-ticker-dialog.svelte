@@ -7,7 +7,7 @@
 	export let parent_id
 	export let parent_nickname
 	export let onSuccess = () => {}
-	let ticket_amt, lesson_fee, app_fee
+	let ticket_amt, lesson_fee, app_fee = 0
 
 	const onConfirm = async () => {
 		await http.post(fetch, '/courseApi/create_course_ticket', {

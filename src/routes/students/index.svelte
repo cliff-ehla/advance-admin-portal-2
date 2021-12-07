@@ -46,9 +46,13 @@
 	{#each student_list as s}
 		<div class="flex items-center mb-4">
 			<a href="/students/{s.student_id}/tutor-group" class="flex items-center px-2 py-1 leading-tight rounded-full border border-gray-400 hover:border-blue-500 hover:bg-gray-200">
-				<img src="/student-icon.png" alt="student" class="w-8 h-8 rounded-full">
+				{#if s.gender === 'm'}
+					<img src="/student-m-icon.png" alt="student" class="w-8 h-8 rounded-full">
+				{:else if s.gender === 'f'}
+					<img src="/student-f-icon.jpg" alt="student" class="w-8 h-8 rounded-full">
+				{/if}
 				<div class="ml-2">
-					<p class="font-bold">{s.student_nickname}</p>
+					<p class="font-bold flex items-center">{s.student_nickname} <span class="text-xs bg-gray-100 border border-gray-300 px-0.5 ml-1 text-gray-500">{s.level}</span></p>
 					<p class="text-xs text-gray-500">@{s.student_username} <span class="ml-1">ID:{s.student_id}</span></p>
 				</div>
 			</a>
