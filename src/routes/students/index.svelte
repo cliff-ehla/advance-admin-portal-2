@@ -19,6 +19,7 @@
 	import CreateUserDialog from '$lib/student/create-new-user-dialog.svelte'
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import CreateTickerDialog from '$lib/ticker/create-ticker-dialog.svelte'
+	import {notifications} from "$lib/store/notification";
 
 	export let student_list = []
 
@@ -30,7 +31,12 @@
 
 	const openCreateTickerDialog = (student) => {
 		openModal(CreateTickerDialog, {
-			parent_id: student.parent_id
+			parent_id: student.parent_id,
+			parent_nickname: student.parent_nickname,
+			onSuccess: ({ticket_amt}) => {
+				student.r_t_amt = Number(student.r_t_amt) + Number(ticket_amt)
+				student_list = student_list
+			}
 		})
 	}
 </script>

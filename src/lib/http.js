@@ -1,5 +1,6 @@
 import {sentry} from "$lib/sentry";
 import {is_loading} from "$lib/store/is_loading";
+import {notifications} from "$lib/store/notification";
 
 const http = (() => {
 	async function get (fetch, resource, query) {
@@ -21,7 +22,8 @@ const http = (() => {
 
 	}
 
-	async function post (fetch, resource, body = {}) {
+	async function post (fetch, resource, body = {}, config = {}) {
+		const {notification} = config
 		// an empty object is necessary, otherwise result fatal error when not passing body params
 		try {
 			is_loading.set(true)
@@ -34,6 +36,12 @@ const http = (() => {
 			})
 			const {success, data, metadata, debug} = await res.json()
 			is_loading.set(false)
+			if (!!notification) {
+				if (success)
+					notifications.success(notification)
+				else
+					notification.alert('哎！錯誤發生了')
+			}
 			return {success, data, metadata, debug}
 		} catch (e) {
 			console.log(`fatal error: ${resource} this mostly happened when usermodel do not return a json body`, e)

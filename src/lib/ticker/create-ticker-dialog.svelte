@@ -5,6 +5,8 @@
 	import Button from '$lib/ui-elements/button.svelte'
 
 	export let parent_id
+	export let parent_nickname
+	export let onSuccess = () => {}
 	let ticket_amt, lesson_fee, app_fee
 
 	const onConfirm = async () => {
@@ -12,8 +14,11 @@
 			payer_id: parent_id,
 			ticket_amt,
 			lesson_fee,
-			app_fee,
+			app_fee
+		}, {
+			notification: `成功添加Ticker x ${ticket_amt} 到 ${parent_nickname}`
 		})
+		onSuccess({ticket_amt})
 		closeModal()
 	}
 </script>
@@ -22,6 +27,6 @@
 <input class="input block mb-2" type="text" placeholder="App fee" bind:value={app_fee}/>
 <input class="input block mb-2" type="text" placeholder="Lesson fee" bind:value={lesson_fee}/>
 <input class="input block mb-2" type="text" placeholder="Ticker Amount" bind:value={ticket_amt}/>
-<div class="text-right">
+<div class="text-right mt-4">
 	<Button disabled={!(ticket_amt && lesson_fee)} on:click={onConfirm}>Confirm</Button>
 </div>
