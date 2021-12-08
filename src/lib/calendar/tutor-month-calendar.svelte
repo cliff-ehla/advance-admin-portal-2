@@ -63,10 +63,6 @@
 			})
 			if (is_exit_edit_mode) fetchData()
 		}
-
-		if ($action_status === 'create_option') {
-			fetchData()
-		}
 	}
 
 	$: {

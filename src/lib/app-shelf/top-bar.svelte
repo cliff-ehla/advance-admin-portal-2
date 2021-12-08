@@ -27,7 +27,7 @@
 			children: [
 				{
 					label: 'Trial option',
-					href: '/booking/trial-option?status=not-confirm'
+					href: '/booking/option'
 				},
 				{
 					label: 'Confirmed trial option',
