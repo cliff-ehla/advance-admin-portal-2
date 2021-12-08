@@ -43,8 +43,6 @@
 </script>
 
 <div class="p-4">
-	<h1 class="font-bold mb-4 text-lg">Voucher No: <b>TL20210903</b> (WIP)</h1>
-
 	<div class="mb-4">
 		<p class="mb-1">Nickname</p>
 		<input bind:value={s_nickname}
