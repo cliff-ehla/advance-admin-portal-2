@@ -8,7 +8,7 @@
 	import OptionDraftDialog from '$lib/reservation/option-draft-dialog.svelte'
 	import CreateTrialDialog from '$lib/option/create-trial-lesson.dialog.svelte'
 	import {getContext} from 'svelte'
-	const {openModal} = getContext('simple-modal')
+	const {openModal, closeModal} = getContext('simple-modal')
 
 	$: date_display = dayjs.utc(option.reserves[0].start_date).local().format('DD MMM (ddd)')
 	$: time_display = dayjs.utc(option.reserves[0].start_date).local().format('h:mma') + ' - ' + dayjs.utc(option.reserves[0].end_date).local().format('h:mma')
@@ -24,6 +24,8 @@
 			teacher_profile_pic: tutor_store.getTutorProfilePic(option.reserves[0].teacher_id),
 			date_display,
 			time_display
+		}, {
+			width: '900px'
 		})
 	}
 </script>

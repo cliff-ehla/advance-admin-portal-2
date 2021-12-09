@@ -2,6 +2,8 @@
 	import {http} from "$lib/http";
 	import Button from '$lib/ui-elements/button.svelte'
 	import MaterialSelectionList from '$lib/material/material-selection-list.svelte'
+	import {getContext} from 'svelte'
+	const {openModal, closeModal} = getContext('simple-modal')
 
 	export let reserved_id
 	export let student_name
@@ -29,7 +31,7 @@
 	}
 </script>
 
-<div class="flex items-center border-gray-300 border-b py-1 px-4">
+<div class="flex items-center border-gray-300 border-b pt-4 pb-2 px-4">
 	<div class="w-16 text-center overflow-hidden flex-shrink-0">
 		<img src={teacher_profile_pic} alt="student"
 		     class="rounded-full w-12 h-12 mx-auto border border-gray-500">
@@ -50,12 +52,12 @@
 	</div>
 </div>
 
-<div class="p-4 h-96 w-96">
+<div class="p-4" style="height: 680px">
 	{#if step === 1}
 		<label for="app-fee">App fee</label>
-		<input id="app-fee" class="input" type="text" placeholder="App fee">
+		<input id="app-fee" bind:value={app_fee} class="input" type="number" placeholder="App fee">
 		<label for="lesson-fee">Lesson fee</label>
-		<input id="lesson-fee" class="input" type="text" placeholder="Lesson fee">
+		<input id="lesson-fee" bind:value={lesson_fee} class="input" type="number" placeholder="Lesson fee">
 	{:else if step === 2}
 		<MaterialSelectionList/>
 	{:else if step === 3}
@@ -64,12 +66,14 @@
 </div>
 
 <div class="flex justify-between p-4">
-	<button class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1">取消</button>
 	{#if step === 1}
-		<Button button_class="flex-1 py-2 ml-4" on:click={() => {step = 2}}>下一步</Button>
+		<button on:click={closeModal} class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1">取消</button>
+		<Button disabled={!(typeof app_fee === 'number' && typeof lesson_fee === 'number')} button_class="flex-1 py-2 ml-4" on:click={() => {step = 2}}>下一步</Button>
 	{:else if step === 2}
+		<button on:click={() => {step = 1}} class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1">上一步</button>
 		<Button button_class="flex-1 py-2 ml-4" on:click={() => {step = 3}}>下一步</Button>
 	{:else if step === 3}
+		<button on:click={() => {step = 2}} class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1">上一步</button>
 		<Button button_class="flex-1 py-2 ml-4" on:click={onConfirm}>確定建立課堂</Button>
 	{/if}
 </div>
