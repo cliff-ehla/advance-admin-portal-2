@@ -39,11 +39,13 @@
 					notification: '時段已經確定'
 				})
 			},
-			onSuccess: async () => {
-				let {data} = await http.post(fetch, '/zoomApi/list_zoom_trial_option')
-				option_list = data
-			}
+			onSuccess: reloadData
 		})
+	}
+
+	const reloadData = async () => {
+		let {data} = await http.post(fetch, '/zoomApi/list_zoom_trial_option')
+		option_list = data
 	}
 </script>
 
@@ -97,7 +99,7 @@
 			<p class="font-bold mb-4">確定的時段</p>
 			<div class="grid gap-4">
 				{#each locked_list as option}
-					<ConfirmedOptionPreview {option}/>
+					<ConfirmedOptionPreview on:user_created={reloadData} {option}/>
 				{/each}
 			</div>
 		</div>

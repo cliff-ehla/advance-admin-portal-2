@@ -3,8 +3,9 @@
 	import utc from 'dayjs/plugin/utc.js'
 	import {debounce} from 'debounce'
 	import {checkUsername} from "../../api/user-api";
-	import SelectionBox from '../ui-elements/selection-box.svelte'
-	import {createNewStudent} from "../../api/admin-api";
+	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
+	import Button from '$lib/ui-elements/button.svelte'
+	import {http} from "$lib/http";
 	import {createEventDispatcher} from 'svelte'
 	const dispatch = createEventDispatcher()
 	import {level_options_store} from "../../store/level-options";
@@ -17,8 +18,8 @@
 	export let gender = undefined
 	export let parent_mobile = undefined
 	export let remark = undefined
+	export let parent_nickname = undefined
 	let PASSWORD = '12345678'
-	let parent_nickname
 
 	let gender_options = [
 		{
@@ -56,7 +57,7 @@
 	}, 500)
 
 	const onConfirm = async  () => {
-		const payload = {
+		let {data} = await http.post(fetch, '/adminApi/create_parent_student', {
 			student_username: username,
 			student_nickname: nickname,
 			student_password: PASSWORD,
@@ -67,17 +68,16 @@
 			level,
 			parent_mobile,
 			reminder: remark || ' '
-		}
-		loading = true
-		let {child} = await createNewStudent(payload)
+		}, {
+			notification: '成功創建用戶'
+		})
 		dispatch('created', {
-			user_id: child.user_id,
+			user_id: data.child.user_id,
 			gender,
 			level,
 			nickname,
 			username
 		})
-		loading = false
 	}
 </script>
 
@@ -146,7 +146,7 @@
 			<textarea class="px-2 py-4 w-full border border-gray-300 my-2" bind:value={remark} rows="2" placeholder="Remark (optional)"></textarea>
 		</div>
 	</div>
-	<div class="mt-4">
-		<button disabled={disabled || loading} on:click={onConfirm} class="{disabled || loading ? 'bg-gray-300 text-white' : 'bg-blue-500 text-white'} rounded-full px-4 py-3 w-full">Create new user</button>
+	<div>
+		<Button button_class="w-full py-2" disabled={disabled || loading} on:click={onConfirm}>建立用戶</Button>
 	</div>
 </div>

@@ -4,11 +4,11 @@
 	dayjs.extend(utc)
 	import {tutor_store} from "../../store/tutor-store";
 	import Icon from "$lib/ui-elements/icon.svelte";
-	import OptionDraftDialog from '$lib/reservation/option-draft-dialog.svelte'
+	import OptionDraftDialog from '$lib/option/option-draft-editor.svelte'
 	import CreateTrialDialog from '$lib/option/create-trial-lesson.dialog.svelte'
-	import {getContext} from 'svelte'
+	import {getContext, createEventDispatcher} from 'svelte'
 	import {goto} from "$app/navigation";
-
+	const dispatch = createEventDispatcher()
 	const {openModal, closeModal} = getContext('simple-modal')
 
 	export let option
@@ -16,7 +16,30 @@
 	$: time_display = dayjs.utc(option.reserves[0].start_date).local().format('h:mma') + ' - ' + dayjs.utc(option.reserves[0].end_date).local().format('h:mma')
 
 	const openDraftDialog = () => {
-		openModal(OptionDraftDialog)
+		let payload = {
+			grouper_id: option.grouper_id,
+			s_nickname: option.s_nickname,
+			course: option.course,
+			material: option.material,
+			age: option.age,
+			lv: option.lv,
+			gender: option.gender,
+			general_message: option.general_message,
+			parent_mobile: option.phone
+		}
+		openModal(OptionDraftDialog, {
+			...payload,
+			onSaveSuccess: (form) => {
+				option = {
+					...option,
+					...form
+				}
+			},
+			onCreateUserSuccess: () => {
+				console.log('user_created')
+				dispatch('user_created')
+			}
+		})
 	}
 
 	const openCreatDialog = () => {
@@ -37,6 +60,9 @@
 </script>
 
 <div class="border border-gray-300 rounded-lg bg-white">
+	{#if option.course}
+		<div class="text-center py-1 border-gray-300 border-b text-sm bg-blue-100 text-blue-500 font-bold">{option.course}</div>
+	{/if}
 	<div class="flex items-center justify-center mx-auto mt-4 mb-2">
 		<div on:click={() => {openDraftDialog(option)}} class="relative w-16 text-center overflow-hidden flex-shrink-0 p-1 rounded {!option.student_id ? 'border border-transparent hover:bg-blue-50 hover:shadow-lg hover:border-blue-300 cursor-pointer' : ''}">
 			<img src="{option.student_id ? '/student-f-icon.jpg' : option.s_nickname ? '/pre-user-icon.png' : '/phone-icon.png'}" alt="student"
@@ -70,7 +96,7 @@
 		</div>
 	</div>
 	<div class="border-t border-gray-300 text-xs mt-2 bg-gray-50 rounded-b-lg px-2 flex items-center py-0.5">
-		<p>{option.remark}</p>
+		<p>{option.general_message || option.remark}</p>
 		<div class="ml-auto"><button><Icon name="edit" className="w-2.5"/></button></div>
 	</div>
 </div>

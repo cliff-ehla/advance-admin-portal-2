@@ -53,9 +53,6 @@
   $: currentTransitionWindow = state.transitionWindow;
   $: width = state.width || 'auto'
   $: padding = state.padding || 0
-  $:{
-	  console.log(123,width)
-  }
 
   const toVoid = () => {};
   let onOpen = toVoid;
