@@ -11,15 +11,16 @@
 	export let reserved_id
 	export let student_name
 	export let teacher_name
+	export let gender
 	export let teacher_profile_pic
 	export let date_display
 	export let time_display
+	export let course_title
 	export let onSuccess = () => {}
 
 	let selected_item
 	let lesson_fee
 	let app_fee
-	let course_title
 	let step = 1
 	$: selected_item_id = selected_item ? selected_item.item_id : null
 
@@ -31,7 +32,7 @@
 			item_id: selected_item_id,
 			course_title
 		}, {
-			notification: '已經為學生建立了課堂'
+			notification: `已經為${student_name}建立了$${teacher_name}的課堂, 於${date_display}`
 		})
 		if (success) onSuccess()
 		closeModal()
@@ -47,7 +48,7 @@
 		</p>
 	</div>
 	<div class="w-16 text-center overflow-hidden flex-shrink-0 ml-4">
-		<img src="/student-f-icon.jpg" alt="student"
+		<img src="/student-{gender}-icon.png" alt="student"
 		     class="rounded-full w-12 h-12 mx-auto border border-gray-500">
 		<p class="font-bold text-center mt-1.5 text-xs whitespace-nowrap">
 			{student_name}

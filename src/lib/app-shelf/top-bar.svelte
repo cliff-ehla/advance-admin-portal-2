@@ -30,14 +30,6 @@
 					href: '/booking/option'
 				},
 				{
-					label: 'Confirmed trial option',
-					href: '/booking/trial-option?status=confirm'
-				},
-				{
-					label: 'Ready trial option',
-					href: '/booking/trial-option?status=ready'
-				},
-				{
 					label: 'Trial lessons',
 					href: '/booking/trial-lesson'
 				},

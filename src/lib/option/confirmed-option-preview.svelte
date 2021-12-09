@@ -47,11 +47,13 @@
 			student_name: option.student_nickname,
 			teacher_name: tutor_store.getTutorName(option.reserves[0].teacher_id),
 			teacher_profile_pic: tutor_store.getTutorProfilePic(option.reserves[0].teacher_id),
+			gender: option.gender,
+			course_title: option.course,
 			date_display,
 			time_display,
 			reserved_id: option.reserves[0].reserved_id,
 			onSuccess: () => {
-				goto(`/tutor/${option.reserves[0].teacher_id}`)
+				goto(`/tutor/${option.reserves[0].teacher_id}/${dayjs.utc(option.reserves[0].start_date).local().format('YYYY-MM')}`)
 			}
 		}, {
 			width: '900px'
@@ -65,7 +67,7 @@
 	{/if}
 	<div class="flex items-center justify-center mx-auto mt-4 mb-2">
 		<div on:click={() => {openDraftDialog(option)}} class="relative w-16 text-center overflow-hidden flex-shrink-0 p-1 rounded {!option.student_id ? 'border border-transparent hover:bg-blue-50 hover:shadow-lg hover:border-blue-300 cursor-pointer' : ''}">
-			<img src="{option.student_id ? '/student-f-icon.jpg' : option.s_nickname ? '/pre-user-icon.png' : '/phone-icon.png'}" alt="student"
+			<img src="{option.student_id ? `/student-${option.gender}-icon.png` : option.s_nickname ? '/pre-user-icon.png' : '/phone-icon.png'}" alt={option.s_nickname}
 			     class="rounded-full w-12 h-12 mx-auto border border-gray-500">
 			<p class="font-bold text-center mt-1.5 text-xs whitespace-nowrap">
 				{#if option.student_id}
@@ -79,7 +81,7 @@
 			</p>
 		</div>
 		<div class="ml-4 w-16 text-center overflow-hidden flex-shrink-0">
-			<img src="{tutor_store.getTutorProfilePic(option.reserves[0].teacher_id)}" alt="student"
+			<img src="{tutor_store.getTutorProfilePic(option.reserves[0].teacher_id)}" alt="{tutor_store.getTutorName(option.reserves[0].teacher_id)}"
 			     class="rounded-full w-12 h-12 mx-auto border border-gray-500">
 			<p class="font-bold text-center mt-1.5 text-xs whitespace-nowrap">
 				{tutor_store.getTutorName(option.reserves[0].teacher_id)}
