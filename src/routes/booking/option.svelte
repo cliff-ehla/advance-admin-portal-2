@@ -17,11 +17,28 @@
 	import utc from "dayjs/plugin/utc.js";
 	dayjs.extend(utc)
 	import {tutor_store} from "../../store/tutor-store";
+	import {dialog} from "$lib/store/dialog";
+	import Icon from "$lib/ui-elements/icon.svelte";
 
 	export let option_list
 
 	const lockOption = (slot) => {
-		console.log('slot', slot)
+		dialog.confirm({
+			title: '確定這個時段?',
+			message: `${dayjs.utc(slot.start_date).local().format('DD MMM (ddd)')}`,
+			onConfirm: () => {
+				return http.post(fetch, '/zoomApi/lock_zoom_trial_option', {
+					grouper_id: slot.grouper_id,
+					reserved_id: slot.reserved_id
+				}, {
+					notification: '時段已經確定'
+				})
+			},
+			onSuccess: async () => {
+				let {data} = await http.post(fetch, '/zoomApi/list_zoom_trial_option')
+				option_list = data
+			}
+		})
 	}
 </script>
 
@@ -52,12 +69,16 @@
 								<a href="/tutor/{slot.teacher_id}/{dayjs().format('YYYY-MM')}">
 									<img src={tutor_store.getTutorProfilePic(slot.teacher_id)} class="w-8 h-8 rounded-full" title={tutor_store.getTutorName(slot.teacher_id)}>
 								</a>
-								<div class="ml-2">
-									<span class="font-bold">{dayjs.utc(slot.start_date).local().format('DD MMM (ddd)')}</span>,
-									{dayjs.utc(slot.start_date).local().format('h:mma')} - {dayjs.utc(slot.end_date).local().format('h:mma')}
+								<div class="ml-2 leading-none">
+									<p class="font-bold leading-none">{dayjs.utc(slot.start_date).local().format('DD MMM (ddd)')}</p>
+									<p class="text-sm leading-none">{dayjs.utc(slot.start_date).local().format('h:mma')} - {dayjs.utc(slot.end_date).local().format('h:mma')}</p>
 								</div>
 								<div class="ml-auto">
-									<button on:click={() => lockOption(slot)} class="button-secondary w-12">確定</button>
+									{#if option.auto_delete_date}
+										<button on:click={() => lockOption(slot)} class="button-secondary w-12">確定</button>
+									{:else}
+										<Icon name="tick" className="text-green-500 w-4"/>
+									{/if}
 								</div>
 							</div>
 						{/each}

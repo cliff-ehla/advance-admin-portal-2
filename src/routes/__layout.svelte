@@ -5,6 +5,7 @@
 	import Notification from '../lib/app-shelf/notification.svelte'
 	import LoadingBar from '$lib/ui-elements/indeterminate-loading-bar.svelte'
 	import Toast from '../lib/app-shelf/toast.svelte'
+	import Dialog from '../lib/app-shelf/dialog.svelte'
 	import TopBar from '../lib/app-shelf/top-bar.svelte'
 	import {onMount} from "svelte";
 	import {getUserInfo} from "../api/user-api";
@@ -27,6 +28,7 @@
 	</div>
 {/if}
 <Toast/>
+<Dialog/>
 <Notification>
 	<Popper>
 		<Modal>
