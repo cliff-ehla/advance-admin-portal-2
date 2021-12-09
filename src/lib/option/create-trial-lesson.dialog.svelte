@@ -14,6 +14,7 @@
 	export let teacher_profile_pic
 	export let date_display
 	export let time_display
+	export let onSuccess = () => {}
 
 	let selected_item
 	let lesson_fee
@@ -22,8 +23,8 @@
 	let step = 1
 	$: selected_item_id = selected_item ? selected_item.item_id : null
 
-	const onConfirm = () => {
-		http.post(fetch, '/zoomApi/confirm_zoom_trial_option', {
+	const onConfirm = async () => {
+		const {success} = await http.post(fetch, '/zoomApi/confirm_zoom_trial_option', {
 			reserved_id,
 			app_fee,
 			lesson_fee,
@@ -32,6 +33,8 @@
 		}, {
 			notification: '已經為學生建立了課堂'
 		})
+		if (success) onSuccess()
+		closeModal()
 	}
 </script>
 

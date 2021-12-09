@@ -4,12 +4,14 @@
 	dayjs.extend(utc)
 	import {tutor_store} from "../../store/tutor-store";
 	import Icon from "$lib/ui-elements/icon.svelte";
-	export let option
 	import OptionDraftDialog from '$lib/reservation/option-draft-dialog.svelte'
 	import CreateTrialDialog from '$lib/option/create-trial-lesson.dialog.svelte'
 	import {getContext} from 'svelte'
+	import {goto} from "$app/navigation";
+
 	const {openModal, closeModal} = getContext('simple-modal')
 
+	export let option
 	$: date_display = dayjs.utc(option.reserves[0].start_date).local().format('DD MMM (ddd)')
 	$: time_display = dayjs.utc(option.reserves[0].start_date).local().format('h:mma') + ' - ' + dayjs.utc(option.reserves[0].end_date).local().format('h:mma')
 
@@ -23,7 +25,11 @@
 			teacher_name: tutor_store.getTutorName(option.reserves[0].teacher_id),
 			teacher_profile_pic: tutor_store.getTutorProfilePic(option.reserves[0].teacher_id),
 			date_display,
-			time_display
+			time_display,
+			reserved_id: option.reserves[0].reserved_id,
+			onSuccess: () => {
+				goto(`/tutor/${option.reserves[0].teacher_id}`)
+			}
 		}, {
 			width: '900px'
 		})
