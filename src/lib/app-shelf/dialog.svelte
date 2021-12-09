@@ -24,7 +24,7 @@
 			<p>{$dialog.message}</p>
 		</div>
 		<div class="flex justify-between p-4">
-			<button class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1" on:click={() => {dialog.close()}}>Cancel</button>
+			<button class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1" on:click={() => {dialog.close()}}>取消</button>
 			<Button button_class="flex-1 py-2 ml-4" on:click={onConfirm}>確定</Button>
 		</div>
 	</div>

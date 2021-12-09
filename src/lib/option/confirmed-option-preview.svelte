@@ -6,16 +6,25 @@
 	import Icon from "$lib/ui-elements/icon.svelte";
 	export let option
 	import OptionDraftDialog from '$lib/reservation/option-draft-dialog.svelte'
-	import CreateTrialDialog from '$lib/reservation/create-trial-dialog.svelte'
+	import CreateTrialDialog from '$lib/option/create-trial-lesson.dialog.svelte'
 	import {getContext} from 'svelte'
 	const {openModal} = getContext('simple-modal')
+
+	$: date_display = dayjs.utc(option.reserves[0].start_date).local().format('DD MMM (ddd)')
+	$: time_display = dayjs.utc(option.reserves[0].start_date).local().format('h:mma') + ' - ' + dayjs.utc(option.reserves[0].end_date).local().format('h:mma')
 
 	const openDraftDialog = () => {
 		openModal(OptionDraftDialog)
 	}
 
 	const openCreatDialog = () => {
-		openModal(CreateTrialDialog)
+		openModal(CreateTrialDialog, {
+			student_name: option.student_nickname,
+			teacher_name: tutor_store.getTutorName(option.reserves[0].teacher_id),
+			teacher_profile_pic: tutor_store.getTutorProfilePic(option.reserves[0].teacher_id),
+			date_display,
+			time_display
+		})
 	}
 </script>
 
@@ -45,8 +54,8 @@
 	</div>
 	<div class="px-2">
 		<div class="p-2 text-center leading-none border border-gray-300 rounded bg-blue-50 relative">
-			<p class="font-bold leading-none">{dayjs.utc(option.reserves[0].start_date).local().format('DD MMM (ddd)')}</p>
-			<p class="text-sm leading-none">{dayjs.utc(option.reserves[0].start_date).local().format('h:mma')} - {dayjs.utc(option.reserves[0].end_date).local().format('h:mma')}</p>
+			<p class="font-bold leading-none">{date_display}</p>
+			<p class="text-sm leading-none">{time_display}</p>
 			{#if option.student_id}
 				<button on:click={openCreatDialog} class="bg-blue-500 hover:bg-blue-700 text-white px-2 rounded absolute right-1 top-1 bottom-1">起堂</button>
 			{/if}
