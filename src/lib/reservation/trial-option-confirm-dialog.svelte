@@ -49,7 +49,7 @@
 		}
 		course_lesson_tbc_selection.reset()
 		action_status.set('')
-		goto('/booking/trial-option?status=not-confirm')
+		goto('/booking/option')
 		closeModal()
 	}
 </script>
@@ -86,12 +86,5 @@
 		<div class="mt-4">
 			<button on:click={onConfirm} disabled={!(tel || selected_student_id) || loading} class="{(tel || selected_student_id || loading) ? 'bg-blue-500 hover:bg-blue-600 text-white' : 'bg-gray-400 text-white'} p-4 w-full rounded-full">{loading ? 'Creating...' : 'Confirm'}</button>
 		</div>
-	</div>
-	<div class="w-72 p-4 border-l border-gray-300 bg-gray-100">
-		<p>Preview message</p>
-		<p>
-
-
-		</p>
 	</div>
 </div>

@@ -73,7 +73,7 @@
 								<div class="ml-2 w-full">
 									<p class="text-sm text-gray-700 border-b border-gray-300 mb-2">預約時段選擇:</p>
 									{#each option.reserves as slot}
-										<div class="flex items-center mb-1 text-sm">
+										<div class="flex items-center mb-2 text-sm">
 											<a href="/tutor/{slot.teacher_id}/{dayjs().format('YYYY-MM')}">
 												<img src={tutor_store.getTutorProfilePic(slot.teacher_id)} class="w-8 h-8 rounded-full" title={tutor_store.getTutorName(slot.teacher_id)}>
 											</a>
@@ -88,7 +88,6 @@
 									{/each}
 									<div class="text-xs mt-2">
 										<p>備忘: {option.general_message || option.remark} <button class="button-secondary">修改</button></p>
-										<p>建立者: {option.username}</p>
 									</div>
 								</div>
 							</div>
