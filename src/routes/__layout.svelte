@@ -1,3 +1,26 @@
+<script context="module">
+	import {http, onFail} from "$lib/http";
+	import {tutor_store} from "../store/tutor-store";
+	import {student_store} from "../store/student-store";
+
+	export const load = async ({fetch}) => {
+		const {data, success, debug} = await http.get(fetch, '/organizationApi/tutor_list')
+		if (!success) return onFail(debug)
+		tutor_store.set(data)
+
+		const res = await http.get(fetch, '/adminApi/list_students_with_ticket_info')
+		if (!res.success) return onFail(res.debug)
+		student_store.set(res.data)
+
+		return {
+			props: {
+				tutor_list: data,
+				student_list: res.data
+			}
+		}
+	}
+</script>
+
 <script>
 	import '../styles/tailwind-output.css';
 	import Modal from '../lib/app-shelf/modal.svelte'
@@ -9,7 +32,6 @@
 	import TopBar from '../lib/app-shelf/top-bar.svelte'
 	import {onMount} from "svelte";
 	import {getUserInfo} from "../api/user-api";
-	import {fetchTeacherList} from "../store/org-api";
 	import {sentry} from "$lib/sentry";
 	import {navigating} from "$app/stores";
 
@@ -18,7 +40,6 @@
 	onMount(() => {
 		sentry.init()
 		getUserInfo()
-		fetchTeacherList()
 	})
 </script>
 

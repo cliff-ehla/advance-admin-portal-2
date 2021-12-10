@@ -1,5 +1,4 @@
 <script>
-	import {fetchTeacherList} from "../../store/org-api";
 	import {onMount} from 'svelte'
 	import {tutor_store} from "../../store/tutor-store";
 	import dayjs from "dayjs";
@@ -7,7 +6,6 @@
 	let YYYY_MM
 
 	onMount(() => {
-		fetchTeacherList()
 		YYYY_MM = dayjs().format('YYYY-MM')
 	})
 </script>
