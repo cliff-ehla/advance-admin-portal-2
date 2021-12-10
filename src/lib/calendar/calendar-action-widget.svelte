@@ -3,7 +3,6 @@
 	import TimePicker from '../../lib/ui-elements/time-picker-2.svelte'
 	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
 	import {action_status} from "../../store/calendar-action-status-store";
-	import {reservation_selection_store} from "../../store/reservation-selection-store";
 	import {course_lesson_tbc_selection, edit_lesson_tbc_to_date, course_start_hh_mm, course_end_hh_mm} from "../../store/calendar-action-status-store";
 	import {getContext} from 'svelte'
 	const {openModal} = getContext('simple-modal')
@@ -11,10 +10,8 @@
 	import ConfirmOptionDialog from "../reservation/trial-option-confirm-dialog.svelte";
 	import ConfirmLeaveDialog from "../reservation/confirm-leave-dialog.svelte";
 	import CreateBigClassDialog from "../reservation/create-big-class-dialog.svelte";
-
 	import StudentSelectDialog from "$lib/student/student-select.svelte";
 	import CreateTrialLessonDialog from "$lib/option/create-trial-lesson.dialog.svelte";
-
 	import dayjs from "dayjs";
 	import {editZoom, createZoom} from "../../api/zoom-api";
 	import {createEventDispatcher} from 'svelte'
@@ -24,7 +21,6 @@
 
 	const onExit = () => {
 		course_lesson_tbc_selection.reset()
-		reservation_selection_store.set([])
 		edit_lesson_tbc_to_date.set({})
 		action_status.set('')
 	}
@@ -59,9 +55,13 @@
 		if (!$course_lesson_tbc_selection.length) return
 		openModal(StudentSelectDialog, {
 			onConfirm: (s) => {
-				console.log('cliff: ', s)
+				let reserve = $course_lesson_tbc_selection[0]
+				console.log('reserve', reserve)
 				openModal(CreateTrialLessonDialog, {
-
+					student_id: s.student_id,
+					teacher_id: reserve.teacher_id,
+					start_date: dayjs(reserve.start_date).utc().format('YYYY-MM-DD HH:mm:ss'),
+					end_date: dayjs(reserve.end_date).utc().format('YYYY-MM-DD HH:mm:ss')
 				}, {
 					width: '960px'
 				})

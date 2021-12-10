@@ -37,21 +37,18 @@
 				}
 			},
 			onCreateUserSuccess: () => {
-				console.log('user_created')
 				dispatch('user_created')
 			}
 		})
 	}
 
-	const openCreatDialog = () => {
+	const openCreateDialog = () => {
 		openModal(CreateTrialDialog, {
-			student_name: option.student_nickname,
-			teacher_name: tutor_store.getTutorName(option.reserves[0].teacher_id),
-			teacher_profile_pic: tutor_store.getTutorProfilePic(option.reserves[0].teacher_id),
-			gender: option.gender,
+			student_id: option.student_id,
+			teacher_id: option.reserves[0].teacher_id,
 			course_title: option.course,
-			date_display,
-			time_display,
+			start_date: option.reserves[0].start_date,
+			end_date: option.reserves[0].end_date,
 			reserved_id: option.reserves[0].reserved_id,
 			onSuccess: () => {
 				goto(`/tutor/${option.reserves[0].teacher_id}/${dayjs.utc(option.reserves[0].start_date).local().format('YYYY-MM')}`)
@@ -94,7 +91,7 @@
 			<p class="font-bold leading-none">{date_display}</p>
 			<p class="text-sm leading-none">{time_display}</p>
 			{#if option.student_id}
-				<button on:click={openCreatDialog} class="bg-blue-500 hover:bg-blue-700 text-white px-2 rounded absolute right-1 top-1 bottom-1">起堂</button>
+				<button on:click={openCreateDialog} class="bg-blue-500 hover:bg-blue-700 text-white px-2 rounded absolute right-1 top-1 bottom-1">起堂</button>
 			{/if}
 		</div>
 	</div>

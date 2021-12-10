@@ -9,7 +9,7 @@ const student_store = (() => {
 
 	const getStudentName = (id) => {
 		let t = getStudent(id)
-		return t && t.nickname
+		return t && t.student_nickname
 	}
 
 	const getStudentAvatar = (id) => {

@@ -11,7 +11,6 @@
 	import {tutor_store} from "../../store/tutor-store";
 	import {onEventClick} from "./shared-function/on-event-click";
 	import {onReservationSlotSelect} from "./shared-function/on-reservation-slot-select";
-	import {reservation_selection_store} from "../../store/reservation-selection-store";
 	import {course_lesson_tbc_selection, action_status, edit_lesson_tbc_to_date, editing_option} from "../../store/calendar-action-status-store";
 	import Widget from './calendar-action-widget.svelte'
 	import ToggleViewMenu from './toggle-view-menu.svelte'

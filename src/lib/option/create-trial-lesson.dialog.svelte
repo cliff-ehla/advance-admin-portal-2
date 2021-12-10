@@ -5,26 +5,44 @@
 	import MaterialSelectionList from '$lib/material/material-selection-list.svelte'
 	import {getContext} from 'svelte'
 	import {course_title_options_store} from "../../store/course-title-options-store";
+	import {student_store} from "../../store/student-store";
+	import {tutor_store} from "../../store/tutor-store";
+	import dayjs from "dayjs";
 
 	const {openModal, closeModal} = getContext('simple-modal')
 
-	export let reserved_id
-	export let student_name
-	export let teacher_name
-	export let gender
-	export let teacher_profile_pic
-	export let date_display
-	export let time_display
-	export let course_title
+	export let reserved_id = undefined
+	export let student_id
+	export let teacher_id
+	export let start_date // in utc
+	export let end_date // in utc
+	export let course_title = undefined
 	export let onSuccess = () => {}
 
+	let date_display = dayjs.utc(start_date).local().format('DD MMM YYYY')
+	let time_display = dayjs.utc(start_date).local().format('HH:mma') + ' - ' + dayjs.utc(end_date).local().format('HH:mma')
 	let selected_item
 	let lesson_fee
 	let app_fee
 	let step = 1
 	$: selected_item_id = selected_item ? selected_item.item_id : null
+	$: teacher_name = tutor_store.getTutorName(teacher_id)
+	$: teacher_profile_pic = tutor_store.getTutorProfilePic(teacher_id)
 
 	const onConfirm = async () => {
+		if (!reserved_id) { // if no reserved id is given, create the reserved id on the fly
+			const {data} = await http.post(fetch, '/zoomApi/create_zoom_trial_option', {
+				zoom_reserved: [{
+					start_date: dayjs(start_date).format('YYYY-MM-DD HH:mm:ss'),
+					end_date: dayjs(end_date).format('YYYY-MM-DD HH:mm:ss'),
+					teacher_id: teacher_id
+				}]
+			}, {
+				notification: '成功建立Option'
+			})
+			reserved_id = data.id
+			console.log('cliff: ', 'reserved_id', data, reserved_id)
+		}
 		const {success} = await http.post(fetch, '/zoomApi/confirm_zoom_trial_option', {
 			reserved_id,
 			app_fee,
@@ -32,7 +50,7 @@
 			item_id: selected_item_id,
 			course_title
 		}, {
-			notification: `已經為${student_name}建立了$${teacher_name}的課堂, 於${date_display}`
+			notification: `已經為${student_store.getStudentName(student_id)}建立了$${teacher_name}的課堂, 於${date_display}`
 		})
 		if (success) onSuccess()
 		closeModal()
@@ -48,10 +66,10 @@
 		</p>
 	</div>
 	<div class="w-16 text-center overflow-hidden flex-shrink-0 ml-4">
-		<img src="/student-{gender}-icon.png" alt="student"
+		<img src="{student_store.getStudentAvatar(student_id)}" alt="student"
 		     class="rounded-full w-12 h-12 mx-auto border border-gray-500">
 		<p class="font-bold text-center mt-1.5 text-xs whitespace-nowrap">
-			{student_name}
+			{student_store.getStudentName(student_id)}
 		</p>
 	</div>
 	<div class="ml-4">

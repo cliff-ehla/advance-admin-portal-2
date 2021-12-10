@@ -40,7 +40,7 @@ const http = (() => {
 				if (success)
 					notifications.success(notification)
 				else
-					notifications.alert('哎！錯誤發生了')
+					notifications.alert('哎！錯誤發生了: ' + debug.debug_msg)
 			}
 			return {success, data, metadata, debug}
 		} catch (e) {
