@@ -56,7 +56,6 @@
 		openModal(StudentSelectDialog, {
 			onConfirm: (s) => {
 				let reserve = $course_lesson_tbc_selection[0]
-				console.log('reserve', reserve)
 				openModal(CreateTrialLessonDialog, {
 					student_id: s.student_id,
 					teacher_id: reserve.teacher_id,

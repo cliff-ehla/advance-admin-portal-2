@@ -40,8 +40,13 @@
 			}, {
 				notification: '成功建立Option'
 			})
-			reserved_id = data.id
-			console.log('cliff: ', 'reserved_id', data, reserved_id)
+			await http.post(fetch, '/zoomApi/update_zoom_trial_option', {
+				student_id,
+				grouper_id: data.id
+			}, {
+				notification: '已把學生加入到Option'
+			})
+			reserved_id = data.reserveds[0].id
 		}
 		const {success} = await http.post(fetch, '/zoomApi/confirm_zoom_trial_option', {
 			reserved_id,
