@@ -3,6 +3,7 @@
 	import utc from "dayjs/plugin/utc.js";
 	dayjs.extend(utc)
 	import {tutor_store} from "../../store/tutor-store";
+	import {student_store} from "../../store/student-store";
 	import Icon from "$lib/ui-elements/icon.svelte";
 	import OptionDraftDialog from '$lib/option/option-draft-editor.svelte'
 	import CreateTrialDialog from '$lib/option/create-trial-lesson.dialog.svelte'
@@ -67,7 +68,7 @@
 	{/if}
 	<div class="flex items-center justify-center mx-auto mt-4 mb-2">
 		<div on:click={() => {openDraftDialog(option)}} class="relative w-16 text-center overflow-hidden flex-shrink-0 p-1 rounded {!option.student_id ? 'border border-transparent hover:bg-blue-50 hover:shadow-lg hover:border-blue-300 cursor-pointer' : ''}">
-			<img src="{option.student_id ? `/student-${option.gender}-icon.png` : option.s_nickname ? '/pre-user-icon.png' : '/phone-icon.png'}" alt={option.s_nickname}
+			<img src="{option.student_id ? student_store.getStudentAvatar(option.student_id) : option.s_nickname ? '/pre-user-icon.png' : '/phone-icon.png'}" alt={option.s_nickname}
 			     class="rounded-full w-12 h-12 mx-auto border border-gray-500">
 			<p class="font-bold text-center mt-1.5 text-xs whitespace-nowrap">
 				{#if option.student_id}

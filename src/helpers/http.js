@@ -4,8 +4,6 @@ let http = (() => {
 	const baseUrl = import.meta.env.VITE_API_BASE + '/v1'
 	async function post (url, body) {
 		const token = getCookie('access_token')
-		const user_info = getCookie('user_info')
-		console.log('http', token, user_info)
 		const full_url = `${baseUrl}/${url}?encode=1&access-token=${token}`
 		const res = await fetch(full_url, {
 			method: 'POST',
