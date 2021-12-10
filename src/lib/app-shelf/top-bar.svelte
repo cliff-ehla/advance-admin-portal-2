@@ -3,6 +3,7 @@
 	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
 	import {user_store} from "../../store/user-store";
 	import {tutor_store} from "../../store/tutor-store";
+	export let user_info
 
 	$: first_teacher_id = $tutor_store && $tutor_store[0] && $tutor_store[0].user_id
 
@@ -112,14 +113,10 @@
 			{/if}
 		{/each}
 	</div>
-	{#if $user_store}
-		<Dropdown activator_active_style="bg-black bg-opacity-30" placement="right">
-			<div slot="activator" class="w-40 text-right px-4 py-2 overflow-ellipsis overflow-hidden whitespace-nowrap">{$user_store.username}</div>
-			<div class="bg-white shadow-lg rounded p-2 text-black min-w-xs">
-				<a href="/logout" class="px-4 py-2 hover:bg-gray-200 hover:text-blue-500">Logout</a>
-			</div>
-		</Dropdown>
-	{:else}
-		<a href="/login">Login</a>
-	{/if}
+	<Dropdown activator_active_style="bg-black bg-opacity-30" placement="right">
+		<div slot="activator" class="w-40 text-right px-4 py-2 overflow-ellipsis overflow-hidden whitespace-nowrap">{user_info.username}</div>
+		<div class="bg-white shadow-lg rounded p-2 text-black min-w-xs">
+			<a href="/logout" class="px-4 py-2 hover:bg-gray-200 hover:text-blue-500">Logout</a>
+		</div>
+	</Dropdown>
 </div>

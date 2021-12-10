@@ -1,10 +1,13 @@
 <script>
 	import {onMount} from 'svelte'
-	import {logout} from "../api/user-api";
-	import {goto} from '$app/navigation'
+	import {goto} from "$app/navigation"
+	import {getStores} from "$app/stores";
+	import {http} from "$lib/http";
+	const {session} = getStores()
 
-	onMount(async () => {
-		await logout()
-		goto('login')
+	onMount(() => {
+		http.post(fetch, '/user/logout')
+		session.set({})
+		goto('/login')
 	})
 </script>

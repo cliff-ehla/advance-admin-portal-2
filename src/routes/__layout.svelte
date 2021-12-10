@@ -1,21 +1,37 @@
 <script context="module">
-	import {http, onFail} from "$lib/http";
+	import {http} from "$lib/http";
 	import {tutor_store} from "../store/tutor-store";
 	import {student_store} from "../store/student-store";
 
-	export const load = async ({fetch}) => {
-		const {data, success, debug} = await http.get(fetch, '/organizationApi/tutor_list')
-		if (!success) return onFail(debug)
-		tutor_store.set(data)
-
-		const res = await http.get(fetch, '/adminApi/list_students_with_ticket_info')
-		if (!res.success) return onFail(res.debug)
-		student_store.set(res.data)
-
-		return {
-			props: {
-				tutor_list: data,
-				student_list: res.data
+	export const load = async ({fetch, session, page}) => {
+		if (session.user_info) {
+			const {data, success, debug} = await http.get(fetch, '/organizationApi/tutor_list')
+			if (success) {
+				tutor_store.set(data)
+			}
+			const res = await http.get(fetch, '/adminApi/list_students_with_ticket_info')
+			if (res.success) {
+				student_store.set(res.data)
+				return {
+					props: {
+						tutor_list: data,
+						student_list: res.data,
+						user_info: session.user_info
+					}
+				}
+			} else {
+				return {
+					status: 500
+				}
+			}
+		} else {
+			if (page.path !== '/login') {
+				return {
+					status: 302,
+					redirect: '/login'
+				}
+			} else {
+				return true
 			}
 		}
 	}
@@ -31,15 +47,13 @@
 	import Dialog from '../lib/app-shelf/dialog.svelte'
 	import TopBar from '../lib/app-shelf/top-bar.svelte'
 	import {onMount} from "svelte";
-	import {getUserInfo} from "../api/user-api";
 	import {sentry} from "$lib/sentry";
 	import {navigating} from "$app/stores";
 
-	export let segment;
+	export let user_info
 
 	onMount(() => {
 		sentry.init()
-		getUserInfo()
 	})
 </script>
 
@@ -53,7 +67,9 @@
 <Notification>
 	<Popper>
 		<Modal>
-			<TopBar {segment}/>
+			{#if user_info}
+				<TopBar {user_info}/>
+			{/if}
 			<slot></slot>
 		</Modal>
 	</Popper>
