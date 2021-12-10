@@ -24,7 +24,7 @@
 		{
 			segment: 'booking',
 			name: 'Booking',
-			href: '/booking/trial-option?status=not-confirm',
+			href: '/booking/option',
 			children: [
 				{
 					label: 'Trial option',
