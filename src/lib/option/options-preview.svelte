@@ -7,10 +7,28 @@
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import {goto} from "$app/navigation";
 	import {action_status, editing_option} from "../../store/calendar-action-status-store";
+	import TextInputDialog from '$lib/ui-elements/text-input-dialog.svelte'
+	import {getContext} from 'svelte'
+	const {openModal, closeModal} = getContext('simple-modal')
 
 	const dispatch = createEventDispatcher()
 
 	export let option
+
+	const onEditRemark = () => {
+		openModal(TextInputDialog, {
+			text: option.remark,
+			onConfirm: async (text) => {
+				await http.post(fetch, '/zoomApi/update_zoom_trial_option', {
+					grouper_id: option.grouper_id,
+					remark: text
+				})
+				dispatch('reload')
+			}
+		}, {
+			padding: '1em'
+		})
+	}
 
 	const lockOption = (slot) => {
 		dialog.confirm({
@@ -92,8 +110,13 @@
 					</div>
 				</div>
 			{/each}
-			<div class="text-xs mt-2">
-				<p>備忘: {option.general_message || option.remark} <button class="button-secondary">修改</button></p>
+			<div class="text-xs mt-2 flex items-center">
+				{#if option.remark.trim()}
+					<p>{option.remark}</p>
+					<button on:click={onEditRemark} class="ml-2 hover:text-blue-500"><Icon name="edit" className="w-3"/></button>
+				{:else}
+					<button on:click={onEditRemark} class="text-gray-400 bg-gray-100 hover:border-blue-500 hover:text-blue-500 border px-2 py-0.5">建立note</button>
+				{/if}
 			</div>
 		</div>
 	</div>

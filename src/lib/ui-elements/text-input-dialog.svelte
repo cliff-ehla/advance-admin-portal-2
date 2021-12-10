@@ -3,7 +3,7 @@
 	const {closeModal} = getContext('simple-modal')
 
 	export let text
-	export let placeholder = 'Input text...'
+	export let placeholder = '請輸入信息'
 	export let onConfirm = () => {}
 
 	const onConfirmClick = () => {
