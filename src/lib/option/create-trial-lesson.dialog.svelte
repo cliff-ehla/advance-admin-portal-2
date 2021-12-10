@@ -3,6 +3,7 @@
 	import Button from '$lib/ui-elements/button.svelte'
 	import TemplateTextBox from '$lib/ui-elements/template-text-box.svelte'
 	import MaterialSelectionList from '$lib/material/material-selection-list.svelte'
+	import CopyMessageTextBox from '$lib/option/copy-message-textbox.svelte'
 	import {getContext} from 'svelte'
 	import {course_title_options_store} from "../../store/course-title-options-store";
 	import {student_store} from "../../store/student-store";
@@ -99,8 +100,9 @@
 		<div class="flex items-center">
 			<img src={selected_item.thumbnail_path} alt="img" class="w-40 rounded">
 			<div class="ml-8">
-				<p class="font-bold">Course title: {course_title}</p>
-				<p>App fee: HKD{app_fee}</p>
+				<p class="font-bold mb-4">總結</p>
+				<CopyMessageTextBox {course_title} {end_date} {start_date} {student_id} {teacher_id}/>
+				<p class="mt-2">App fee: HKD{app_fee}</p>
 				<p>Lesson fee: HKD{lesson_fee}</p>
 			</div>
 		</div>

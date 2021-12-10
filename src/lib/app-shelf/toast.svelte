@@ -9,7 +9,7 @@
 	};
 </script>
 
-<div class="fixed bottom-0 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center">
+<div class="fixed bottom-0 left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center" style="z-index: 9999">
 	{#each $notifications as notification (notification.id)}
 		<div
 						animate:flip

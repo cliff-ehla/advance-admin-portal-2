@@ -12,6 +12,11 @@ const student_store = (() => {
 		return t && t.student_nickname
 	}
 
+	const getGender = (id) => {
+		let t = getStudent(id)
+		return t && t.gender
+	}
+
 	const getStudentAvatar = (id) => {
 		let t = getStudent(id)
 		let gender = t && t.gender
@@ -20,7 +25,7 @@ const student_store = (() => {
 
 	const getStudentLevel = (id) => {
 		let t = getStudent(id)
-		return t && t.level
+		return t && t.level.charAt(0).toUpperCase() + t.level.substring(1)
 	}
 
 	return {
@@ -29,6 +34,7 @@ const student_store = (() => {
 		getStudentName,
 		getStudentLevel,
 		getStudentAvatar,
+		getGender,
 		set: store.set
 	}
 })()
