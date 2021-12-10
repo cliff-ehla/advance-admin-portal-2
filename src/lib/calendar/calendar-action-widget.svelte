@@ -10,8 +10,11 @@
 	import ConfirmCourseReservationDialog from '../reservation/confirm-course-reservation-dialog.svelte'
 	import ConfirmOptionDialog from "../reservation/trial-option-confirm-dialog.svelte";
 	import ConfirmLeaveDialog from "../reservation/confirm-leave-dialog.svelte";
-	import CreateTrialDialog from "../reservation/create-trial-dialog.svelte";
 	import CreateBigClassDialog from "../reservation/create-big-class-dialog.svelte";
+
+	import StudentSelectDialog from "$lib/student/student-select.svelte";
+	import CreateTrialLessonDialog from "$lib/option/create-trial-lesson.dialog.svelte";
+
 	import dayjs from "dayjs";
 	import {editZoom, createZoom} from "../../api/zoom-api";
 	import {createEventDispatcher} from 'svelte'
@@ -54,15 +57,18 @@
 
 	const onOpenTrialLessonConfirmDialog = () => {
 		if (!$course_lesson_tbc_selection.length) return
-		openModal(CreateTrialDialog, {}, {
-			styleWindow: {
-				width: '680px',
-				borderRadius: '0.5em'
-			},
-			styleContent: {
-				padding: 0,
-				borderRadius: '0.5em'
-			},
+		openModal(StudentSelectDialog, {
+			onConfirm: (s) => {
+				console.log('cliff: ', s)
+				openModal(CreateTrialLessonDialog, {
+
+				}, {
+					width: '960px'
+				})
+			}
+		}, {
+			width: '500px',
+			padding: '1em'
 		})
 	}
 
