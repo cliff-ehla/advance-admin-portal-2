@@ -99,7 +99,7 @@
 				<p class="font-bold mb-4">確定的時段</p>
 				<div class="grid gap-4">
 					{#each locked_list as option}
-						<ConfirmedOptionPreview on:user_created={reloadData} {option}/>
+						<ConfirmedOptionPreview on:reload={reloadData} {option}/>
 					{/each}
 				</div>
 			</div>

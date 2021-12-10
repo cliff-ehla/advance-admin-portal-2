@@ -9,6 +9,8 @@
 	import CreateTrialDialog from '$lib/option/create-trial-lesson.dialog.svelte'
 	import {getContext, createEventDispatcher} from 'svelte'
 	import {goto} from "$app/navigation";
+	import {dialog} from "$lib/store/dialog";
+	import {http} from "$lib/http";
 	const dispatch = createEventDispatcher()
 	const {openModal, closeModal} = getContext('simple-modal')
 
@@ -37,7 +39,7 @@
 				}
 			},
 			onCreateUserSuccess: () => {
-				dispatch('user_created')
+				dispatch('reload')
 			}
 		})
 	}
@@ -57,13 +59,28 @@
 			width: '900px'
 		})
 	}
+
+	const onDeleteGrouper = () => {
+		dialog.confirm({
+			message: '你要Delete嗎？',
+			onConfirm: () => {
+				return http.post(fetch, '/zoomApi/delete_zoom_reserved_grouper', {
+					reserved_grouper_id: option.grouper_id
+				})
+			},
+			onSuccess: () => {
+				dispatch('reload')
+			}
+		})
+	}
 </script>
 
 <div class="border border-gray-300 rounded-lg bg-white">
 	{#if option.course}
 		<div class="text-center py-1 border-gray-300 border-b text-sm bg-blue-100 text-blue-500 font-bold">{option.course}</div>
 	{/if}
-	<div class="flex items-center justify-center mx-auto mt-4 mb-2">
+	<div class="flex items-center justify-center mx-auto pt-4 pb-2 relative">
+		<button on:click={onDeleteGrouper} class="absolute right-2 top-2 hover:text-red-500"><Icon className="w-3" name="close"/></button>
 		<div on:click={() => {openDraftDialog(option)}} class="relative w-16 text-center overflow-hidden flex-shrink-0 p-1 rounded {!option.student_id ? 'border border-transparent hover:bg-blue-50 hover:shadow-lg hover:border-blue-300 cursor-pointer' : ''}">
 			<img src="{option.student_id ? student_store.getStudentAvatar(option.student_id) : option.s_nickname ? '/pre-user-icon.png' : '/phone-icon.png'}" alt={option.s_nickname}
 			     class="rounded-full w-12 h-12 mx-auto border border-gray-500">
