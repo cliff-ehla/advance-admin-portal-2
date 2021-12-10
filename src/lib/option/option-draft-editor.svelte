@@ -39,6 +39,7 @@
 		}, {
 			notification: '已把剛創建的學生加入到課堂中'
 		})
+		http.get(fetch, '/adminApi/list_students_with_ticket_info')
 		closeModal()
 		onCreateUserSuccess()
 	}

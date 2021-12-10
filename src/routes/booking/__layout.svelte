@@ -5,7 +5,7 @@
 
 	let items = [
 		{
-			label: 'Trial Options',
+			label: '試堂Option',
 			href: '/booking/option',
 			segment: 'option'
 		},

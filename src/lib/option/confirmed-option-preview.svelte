@@ -77,11 +77,11 @@
 
 <div class="border border-gray-300 rounded-lg bg-white">
 	{#if option.course}
-		<div class="text-center py-1 border-gray-300 border-b text-sm bg-blue-100 text-blue-500 font-bold">{option.course}</div>
+		<div class="text-center py-1 border-gray-300 border-b text-sm bg-blue-100 text-blue-500 font-bold px-2">{option.course}</div>
 	{/if}
 	<div class="flex items-center justify-center mx-auto pt-4 pb-2 relative">
 		<button on:click={onDeleteGrouper} class="absolute right-2 top-2 hover:text-red-500"><Icon className="w-3" name="close"/></button>
-		<div on:click={() => {openDraftDialog()}} class="relative w-16 text-center overflow-hidden flex-shrink-0 p-1 rounded {!option.student_id ? 'border border-transparent hover:bg-blue-50 hover:shadow-lg hover:border-blue-300 cursor-pointer' : ''}">
+		<div on:click={() => {openDraftDialog()}} class="relative w-24 text-center overflow-hidden flex-shrink-0 p-1 rounded {!option.student_id ? 'border border-transparent hover:bg-blue-50 hover:shadow-lg hover:border-blue-300 cursor-pointer' : ''}">
 			<img src="{option.student_id ? student_store.getStudentAvatar(option.student_id) : option.s_nickname ? '/pre-user-icon.png' : '/phone-icon.png'}" alt={option.s_nickname}
 			     class="rounded-full w-12 h-12 mx-auto border border-gray-500">
 			<p class="font-bold text-center mt-1.5 text-xs whitespace-nowrap">
@@ -95,7 +95,8 @@
 				{/if}
 			</p>
 		</div>
-		<div class="ml-4 w-16 text-center overflow-hidden flex-shrink-0">
+		<div class="h-0.5 bg-gray-400 w-6 -mx-1"></div>
+		<div class="w-24 text-center overflow-hidden flex-shrink-0">
 			<img src="{tutor_store.getTutorProfilePic(option.reserves[0].teacher_id)}" alt="{tutor_store.getTutorName(option.reserves[0].teacher_id)}"
 			     class="rounded-full w-12 h-12 mx-auto border border-gray-500">
 			<p class="font-bold text-center mt-1.5 text-xs whitespace-nowrap">
@@ -115,7 +116,9 @@
 	{#if option.general_message || option.remark.trim()}
 		<div class="border-t border-gray-300 text-xs bg-gray-50 rounded-b-lg px-2 flex items-center py-0.5">
 			<p>{option.general_message || option.remark}</p>
-			<div class="ml-2"><button class="hover:text-blue-500" on:click={() => {openDraftDialog()}}><Icon name="edit" className="w-2.5"/></button></div>
+			{#if !option.student_id}
+				<div class="ml-2"><button class="hover:text-blue-500" on:click={() => {openDraftDialog()}}><Icon name="edit" className="w-2.5"/></button></div>
+			{/if}
 		</div>
 	{/if}
 </div>

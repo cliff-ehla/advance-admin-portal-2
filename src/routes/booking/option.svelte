@@ -22,7 +22,7 @@
 
 	export let option_list
 	$: not_yet_locked_list = option_list.filter(item => !!item.auto_delete_date)
-	$: locked_list = option_list.filter(item => !item.auto_delete_date && !item.student_id)
+	$: locked_list = option_list.filter(item => !item.auto_delete_date && !item.student_id).sort((a,b) => a.start_date > b.start_date ? -1 : 1)
 	$: ready_list = option_list.filter(item => !!item.student_id)
 
 	const reloadData = async () => {
