@@ -3,7 +3,9 @@ import {getCookie, deleteCookie} from "./cookie";
 let http = (() => {
 	const baseUrl = import.meta.env.VITE_API_BASE + '/v1'
 	async function post (url, body) {
-		const token = getCookie('token')
+		const token = getCookie('access_token')
+		const user_info = getCookie('user_info')
+		console.log('http', token, user_info)
 		const full_url = `${baseUrl}/${url}?encode=1&access-token=${token}`
 		const res = await fetch(full_url, {
 			method: 'POST',
@@ -47,9 +49,9 @@ let http = (() => {
 	}
 
 	const on404 = () => {
-		deleteCookie('token')
-		let is_login_page = location.href.includes('login')
-		if (!is_login_page) location.href = '/'
+		deleteCookie('access_token')
+		// let is_login_page = location.href.includes('login')
+		// if (!is_login_page) location.href = '/'
 	}
 
 	return {

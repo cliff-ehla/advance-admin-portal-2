@@ -11,7 +11,7 @@ export const post = async (req) => {
 		let user = res.body.data[0]
 		let _cookie = cookie.serialize('access_token', user.user_session.access_token, {
 			path: '/',
-			httpOnly: true
+			httpOnly: false // TODO: the old http client is using browser cookie
 		});
 		let user_info = {
 			nickname: user.nickname,
@@ -20,7 +20,7 @@ export const post = async (req) => {
 		}
 		let user_info_cookie = cookie.serialize('user_info', JSON.stringify(user_info), {
 			path: '/',
-			httpOnly: true
+			httpOnly: false // TODO: the old http client is using browser cookie
 		})
 
 		return {
