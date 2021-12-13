@@ -7,6 +7,9 @@
 		if (session.user_info) {
 			const {data, success, debug} = await http.get(fetch, '/organizationApi/tutor_list')
 			if (success) {
+				data.sort((a,b) => {
+					return a.nickname > b.nickname ? 1 : -1
+				})
 				tutor_store.set(data)
 			}
 			const res = await http.get(fetch, '/adminApi/list_students_with_ticket_info')
