@@ -98,8 +98,10 @@
 		<MaterialSelectionList max_height="600px" on:input={e => selected_item = e.detail}/>
 	{:else if step === 3}
 		<div class="flex items-center">
-			<img src={selected_item.thumbnail_path} alt="img" class="w-40 rounded">
-			<div class="ml-8">
+			{#if selected_item}
+				<img src={selected_item.thumbnail_path} alt="img" class="w-40 rounded">
+			{/if}
+			<div class:ml-8={selected_item}>
 				<p class="font-bold mb-4">總結</p>
 				<CopyMessageTextBox {course_title} {end_date} {start_date} {student_id} {teacher_id}/>
 				<p class="mt-2">App fee: HKD{app_fee}</p>
@@ -115,7 +117,7 @@
 		<Button disabled={!(typeof app_fee === 'number' && typeof lesson_fee === 'number' && course_title)} button_class="flex-1 py-2 ml-4" on:click={() => {step = 2}}>下一步</Button>
 	{:else if step === 2}
 		<button on:click={() => {step = 1}} class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1">上一步</button>
-		<Button disabled={!selected_item_id} button_class="flex-1 py-2 ml-4" on:click={() => {step = 3}}>下一步</Button>
+		<Button button_class="flex-1 py-2 ml-4" on:click={() => {step = 3}}>下一步</Button>
 	{:else if step === 3}
 		<button on:click={() => {step = 2}} class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1">上一步</button>
 		<Button button_class="flex-1 py-2 ml-4" on:click={onConfirm}>確定建立課堂</Button>

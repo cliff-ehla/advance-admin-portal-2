@@ -1,7 +1,5 @@
 <script>
 	import {student_store} from "../../store/student-store";
-	import Icon from '../ui-elements/icon.svelte'
-	import {fetchStudentList} from "../../store/org-api";
 	import Button from '$lib/ui-elements/button.svelte'
 	import {getContext} from 'svelte'
 	const {openModal, closeModal} = getContext('simple-modal')
@@ -21,11 +19,6 @@
 		<p class="font-bold text-blue-500">
 			{student.student_nickname || '(no student selected)'}
 		</p>
-	</div>
-	<div class="ml-auto mr-10">
-		<button on:click={fetchStudentList}>
-			<Icon name="refresh" className="w-4"/>
-		</button>
 	</div>
 </div>
 
