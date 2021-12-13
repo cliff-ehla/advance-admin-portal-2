@@ -6,7 +6,7 @@
 	import {course_lesson_tbc_selection, edit_lesson_tbc_to_date, course_start_hh_mm, course_end_hh_mm} from "../../store/calendar-action-status-store";
 	import {getContext} from 'svelte'
 	const {openModal} = getContext('simple-modal')
-	import ConfirmCourseReservationDialog from '../reservation/confirm-course-reservation-dialog.svelte'
+	import ConfirmCourseReservationDialog from '../reservation/create-course-dialog.svelte'
 	import ConfirmOptionDialog from "../reservation/trial-option-confirm-dialog.svelte";
 	import ConfirmLeaveDialog from "../reservation/confirm-leave-dialog.svelte";
 	import CreateBigClassDialog from "../reservation/create-big-class-dialog.svelte";
@@ -30,9 +30,9 @@
 			openModal(ConfirmCourseReservationDialog, {}, {
 				styleWindow: {
 					borderRadius: '0.5em',
-					padding: 0,
 					height: 'calc(100vh - 100px)'
-				}
+				},
+				padding: '1em'
 			})
 		}
 	}

@@ -25,7 +25,7 @@ let http = (() => {
 	}
 
 	async function get (url, query) {
-		const token = getCookie('token')
+		const token = getCookie('access_token')
 		let full_url = `${baseUrl}/${url}?encode=1&access-token=${token}`
 		if (query) {
 			let query_string = ''
