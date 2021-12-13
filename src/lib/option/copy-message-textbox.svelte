@@ -7,6 +7,7 @@
 	export let course_title, end_date, start_date, student_id, teacher_id
 
 	let msg = genMessage()
+	console.log(msg)
 	let copy_text_el
 
 	function genMessage () {

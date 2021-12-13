@@ -23,6 +23,7 @@
 	import {page} from "$app/stores";
 
 	export let record_list
+	console.log(JSON.stringify(record_list[0]))
 	$: year = $page.params.yyyy
 	$: month = $page.params.mm
 
@@ -52,9 +53,16 @@
 <tr>
 	<th class="text-left">Voucher No</th>
 	<th>Date</th>
-	<th>User</th>
+	<th>Parent</th>
+	<th>Students</th>
+	<th>Teacher</th>
+	<th>Title</th>
+	<th>Min</th>
+	<th>Lesson count</th>
 	<th>Lesson fee</th>
 	<th>App fee</th>
+	<th>Total fee</th>
+	<th>Detail</th>
 </tr>
 {#if record_list.length}
 	{#each record_list as r}
@@ -62,8 +70,23 @@
 			<td class="text-left">{r.voucher_number}</td>
 			<td>{dayjs(r.v_date).format('DD MMM YYYY (ddd)')}</td>
 			<td>{r.payer_nickname}</td>
-			<td>{r.lesson_fee}</td>
-			<td>{r.app_fee}</td>
+			<td>
+				<p class="text-gray-400">(student)</p>
+			</td>
+			<td>
+				<p class="text-gray-400">(teacher)</p>
+			</td>
+			<td>{r.v_type}</td>
+			<td>
+				<p class="text-gray-400">(30 min)</p>
+			</td>
+			<td>
+				<p class="text-gray-400">(10)</p>
+			</td>
+			<td>${r.lesson_fee}</td>
+			<td>${r.app_fee}</td>
+			<td>${r.app_fee + r.lesson_fee}</td>
+			<td><button class="button-secondary">Detail</button></td>
 		</tr>
 	{/each}
 {:else}
@@ -72,6 +95,6 @@
 
 <style>
 	td, th {
-			@apply p-4 border-b border-gray-200;
+			@apply p-2 border-b border-gray-200 text-left text-sm;
 	}
 </style>
