@@ -15,8 +15,7 @@
               label_key="student_nickname"
               label_key_2="level"
               subtitle_key="student_username"
-              value_key="user_id"
+              value_key="student_id"
               placeholder="Select student">
-
 </SelectionBox>
 
