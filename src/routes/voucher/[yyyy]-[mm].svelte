@@ -60,7 +60,7 @@
 	{#each record_list as r}
 		<tr>
 			<td class="text-left">{r.voucher_number}</td>
-			<td>{dayjs(r.v_date).format('DD MMM YYYY')}</td>
+			<td>{dayjs(r.v_date).format('DD MMM YYYY (ddd)')}</td>
 			<td>{r.payer_nickname}</td>
 			<td>{r.lesson_fee}</td>
 			<td>{r.app_fee}</td>
