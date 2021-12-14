@@ -57,7 +57,7 @@
 	<th>Students</th>
 	<th>Teacher</th>
 	<th>Title</th>
-	<th>Min</th>
+	<th>Lesson Duration</th>
 	<th>Lesson count</th>
 	<th>Lesson fee</th>
 	<th>App fee</th>
@@ -88,10 +88,14 @@
 				{/if}
 			</td>
 			<td>
-				<p class="text-gray-400">(30 min)</p>
+				{#if r.lesson_duration}
+					{r.lesson_duration}min
+				{/if}
 			</td>
 			<td>
-				<p class="text-gray-400">(10)</p>
+				{#if r.lesson_count}
+					{r.lesson_count}
+				{/if}
 			</td>
 			<td>${r.lesson_fee}</td>
 			<td>${r.app_fee}</td>
