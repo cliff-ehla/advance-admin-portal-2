@@ -2,6 +2,7 @@
 	export let student_id
 
 	import {getTutorGroupByChildId} from "../../api/zoom-api";
+	import {student_store} from "../../store/student-store.js";
 	import dayjs from "dayjs";
 	import utc from "dayjs/plugin/utc.js";
 	import Icon from '../../lib/ui-elements/icon.svelte'
@@ -39,7 +40,9 @@
 		<div class="m-2 rounded border border-gray-300">
 			<div class="p-4 bg-gray-100">
 				<p class="font-bold">{tg.title}</p>
-				<p class="text-gray-400 text-xs">{tg.tutor_group_id}</p>
+				<p>Student: {student_store.getStudentName(student_id)}</p>
+				<p class="text-gray-400 text-xs">Tutor Group ID: {tg.tutor_group_id}</p>
+				<p class="text-gray-400 text-xs">Is renewal: {tg.is_renewal}</p>
 			</div>
 			<div class="p-4">
 				{#each tg.zooms as z}

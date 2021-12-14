@@ -57,21 +57,29 @@
 				teacher_id
 			}
 		})
-		await http.post(fetch, '/zoomApi/create_zoom_real_reserved', {
+		const {data} = await http.post(fetch, '/zoomApi/create_zoom_real_reserved', {
 			student_id,
-			app_fee,
-			lesson_fee,
 			title: course_title,
 			related_trial_zoom_id: $create_course_from_trial_store.wrapper_id,
 			zoom_reserved: zoom_reserved_utc,
 			syllabus: selected_course.syllabus,
 			syllabus_id: selected_course.syllabus_id,
-			is_renewal,
 			confirm_summary: message
+		}, {
+			notification: '成功'
 		})
+		await http.post(fetch, '/zoomApi/confirm_zoom_real_reserved', {
+			app_fee,
+			lesson_fee,
+			is_renewal,
+			grouper_id: data.grouper_id
+		}, {
+			notification: '已經建立課堂'
+		})
+		await goto(`/students/${student_id}`)
+
 		action_status.set('')
 		course_lesson_tbc_selection.reset()
-		await goto('/booking/reservation')
 		closeModal()
 	}
 
