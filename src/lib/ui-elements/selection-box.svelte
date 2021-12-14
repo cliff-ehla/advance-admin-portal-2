@@ -37,7 +37,7 @@
 	}
 </script>
 
-<Dropdown full_width {caveat_visible} open_on_hover={false} offset={0} placement="bottom-start" activator_style="bg-white border border-gray-300 rounded px-4 py-3 w-full">
+<Dropdown full_width {caveat_visible} open_on_hover={false} offset={0} placement="bottom-start" activator_style="bg-white border border-gray-300 rounded px-4 py-2 w-full">
 	<div use:setWidth slot="activator" class="flex items-center whitespace-nowrap w-full" class:opacity-40={!selected_label} class:cursor-not-allowed={disabled}>
 		{#if selected_label}
 			{#if simple_array}
@@ -46,10 +46,10 @@
 				{#if selected_option[image_key]}
 					<img src={selected_option[image_key]} alt="hi" class="w-8 h-8 rounded-full mr-2 flex-shrink-0">
 				{/if}
-				<div class="leading-none">{selected_label}</div>
+				<div class="leading-tight">{selected_label}</div>
 			{/if}
 		{:else}
-			{placeholder}
+			<p class="text-sm">{placeholder}</p>
 		{/if}
 	</div>
 	<div style="width: {dropdown_menu_width}px" class="p-2 bg-white shadow-lg border border-gray-300 rounded max-h-80 overflow-y-scroll">

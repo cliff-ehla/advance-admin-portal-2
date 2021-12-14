@@ -6,8 +6,8 @@
 
 	export let course_title, end_date, start_date, student_id, teacher_id
 
-	let msg = genMessage()
-	console.log(msg)
+	export let msg = genMessage()
+	export let rows = 8
 	let copy_text_el
 
 	function genMessage () {
@@ -27,7 +27,7 @@
 	}
 </script>
 
-<div class="relative flex border border-gray-300 rounded">
-	<textarea bind:this={copy_text_el} class="p-4" name="copy" cols="30" rows="7" value={msg}></textarea>
-	<button class="bg-gray-100 cc px-1 text-sm border-l border-gray-300 hover:bg-blue-50" on:click={onConfirmMessageClick}>複製</button>
+<div class="flex border border-gray-300 rounded">
+	<textarea bind:this={copy_text_el} class="p-4 w-full" name="copy" cols="30" {rows} value={msg}></textarea>
+	<button class="flex-shrink-0 bg-gray-100 cc px-1 text-sm border-l border-gray-300 hover:bg-blue-50" on:click={onConfirmMessageClick}>複製</button>
 </div>

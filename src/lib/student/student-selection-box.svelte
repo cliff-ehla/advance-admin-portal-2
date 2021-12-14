@@ -5,9 +5,9 @@
 	export let selected_value
 </script>
 
-<div class="flex justify-between items-center mb-2">
-	<p class="text-sm text-gray-400">Student ({selected_value})</p>
-</div>
+<!--<div class="flex justify-between items-center mb-2">-->
+<!--	<p class="text-sm text-gray-400">Student ({selected_value})</p>-->
+<!--</div>-->
 
 <SelectionBox {selected_value}
               options={$student_store}

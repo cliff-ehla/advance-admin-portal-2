@@ -15,6 +15,8 @@
 				const {data} = await http.get(fetch, '/adminApi/list_students_with_ticket_info')
 				student_list = data
 			}
+		}, {
+			padding: '1em'
 		})
 	}
 
