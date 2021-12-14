@@ -26,9 +26,15 @@
 	let lesson_fee
 	let app_fee
 	let step = 1
+	let confirm_summary
 	$: selected_item_id = selected_item ? selected_item.item_id : null
 	$: teacher_name = tutor_store.getTutorName(teacher_id)
 	$: teacher_profile_pic = tutor_store.getTutorProfilePic(teacher_id)
+	$: {
+		if (step === 3) {
+			confirm_summary = genMessage()
+		}
+	}
 
 	const onConfirm = async () => {
 		if (!reserved_id) { // if no reserved id is given, create the reserved id on the fly
@@ -54,12 +60,23 @@
 			app_fee,
 			lesson_fee,
 			item_id: selected_item_id,
-			course_title
+			course_title,
+			confirm_summary
 		}, {
 			notification: `已經為${student_store.getStudentName(student_id)}建立了$${teacher_name}的課堂, 於${date_display}`
 		})
 		if (success) onSuccess()
 		closeModal()
+	}
+
+	function genMessage () {
+		let line_1 = dayjs(end_date).diff(dayjs(start_date), 'minute') + ' min Trial Lesson'
+		let line_2 = 'HKT: ' + dayjs.utc(start_date).local().format('DD MMM (ddd)@h:mma') + '-' + dayjs.utc(end_date).local().format('h:mma')
+		let line_3 = 'Teacher:' + tutor_store.getTutorName(teacher_id)
+		let line_4 = `Student: ${student_store.getStudentName(student_id)} (${student_store.getGender(student_id)})`
+		let line_5 = `Level: ${student_store.getStudentLevel(student_id)}`
+		let line_6 = `Topic: ${course_title}`
+		return line_1 + '\n' + line_2 + '\n' + line_3 + '\n' + line_4 + '\n' + line_5+ '\n' + line_6
 	}
 </script>
 
@@ -103,7 +120,7 @@
 			{/if}
 			<div class:ml-8={selected_item}>
 				<p class="font-bold mb-4">總結</p>
-				<CopyMessageTextBox {course_title} {end_date} {start_date} {student_id} {teacher_id}/>
+				<CopyMessageTextBox msg={confirm_summary}/>
 				<p class="mt-2">App fee: HKD{app_fee}</p>
 				<p>Lesson fee: HKD{lesson_fee}</p>
 			</div>

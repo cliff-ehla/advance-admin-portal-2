@@ -32,6 +32,7 @@
 	let student_id // TODO: create course from trial
 	let loading
 	let message
+	let message_note = genMessage2()
 	let app_fee = 0, lesson_fee = 0
 	let is_renewal
 	let step = 1
@@ -63,8 +64,7 @@
 			related_trial_zoom_id: $create_course_from_trial_store.wrapper_id,
 			zoom_reserved: zoom_reserved_utc,
 			syllabus: selected_course.syllabus,
-			syllabus_id: selected_course.syllabus_id,
-			confirm_summary: message
+			syllabus_id: selected_course.syllabus_id
 		}, {
 			notification: '成功'
 		})
@@ -72,7 +72,8 @@
 			app_fee,
 			lesson_fee,
 			is_renewal,
-			grouper_id: data.grouper_id
+			grouper_id: data.grouper_id,
+			confirm_summary: message
 		}, {
 			notification: '已經建立課堂'
 		})
@@ -92,6 +93,16 @@
 		let lines = $course_lesson_tbc_selection.map(lesson => {
 			return `${dayjs(lesson.start_date).format('MMM DD (ddd) hh:mma')} - ${dayjs(lesson.end_date).format('hh:mma')}`
 		})
+
+		let msg = l_0 + '\n' + '\n' + l_1 + '\n' + l_2 + '\n' + l_3 +'\n' + l_x + '\n' + '\n'
+		lines.forEach(l => {
+			msg += l + '\n'
+		})
+
+		return msg
+	}
+
+	function genMessage2 () {
 		let l_4 = '【請假安排】學生請假需要提早至少24小時通知。如果課堂當天病假，需要提供醫生紙。我們會和家長以及老師在一起商討及確定補課時間。當天請假不能獲得補課，因為老師時間已經預留咗出來，已經不可能讓給其他學生，這樣非常浪費資源。敬請理解，謝謝。😊'
 		let l_5 = '備註：'
 		let l_6 = '1. 每一期(16堂以內)報名，學生病假(需提供醫生證明)加事假補課次數上限：3次'
@@ -101,12 +112,7 @@
 		let l_10 = 'Remark:'
 		let l_11 = '1. The maximum no. of sick leave (doctor\'s certificate required) plus personal leave make-up lessons: 3'
 		let l_12 = '2. If there is no sick leave, the upper limit of the no. of make-up lessons for personal leave is 2.'
-		let msg = l_0 + '\n' + '\n' + l_1 + '\n' + l_2 + '\n' + l_3 +'\n' + l_x + '\n' + '\n'
-		lines.forEach(l => {
-			msg += l + '\n'
-		})
-		msg = msg + '\n' + l_4 + '\n' + l_5 + '\n' + l_6 + '\n' + l_7 + '\n' + '\n' + l_8 + '\n' + l_9 + '\n' + l_10 + '\n' + l_11 + '\n' + l_12
-		return msg
+		return l_4 + '\n' + l_5 + '\n' + l_6 + '\n' + l_7 + '\n' + '\n' + l_8 + '\n' + l_9 + '\n' + l_10 + '\n' + l_11 + '\n' + l_12
 	}
 
 	const onLevelSelected = (lv, s) => {
@@ -179,7 +185,8 @@
 		</div>
 	{:else if step === 2}
 		<p class="mb-4">課堂總結：</p>
-		<CopyMessageTextBox msg={message} rows={16}/>
+		<CopyMessageTextBox msg={message} rows={10}/>
+		<CopyMessageTextBox msg={message_note} rows={5}/>
 	{/if}
 	
 	<div class="flex justify-between mt-4">

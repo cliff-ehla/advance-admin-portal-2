@@ -8,6 +8,7 @@ export const post = (req) => {
 		title: req.body.title,
 		lesson_fee: req.body.lesson_fee,
 		app_fee: req.body.app_fee,
+		confirm_summary: req.body.confirm_summary,
 		voucher_date: dayjs().format('YYYY-MM-DD')
 	})
 }

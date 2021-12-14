@@ -19,11 +19,13 @@
 
 <script>
 	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
+	import CopyMessageTextBox from '$lib/option/copy-message-textbox.svelte'
 	import {goto} from "$app/navigation";
 	import {page} from "$app/stores";
+	import {getContext} from 'svelte'
+	const {openModal, closeModal} = getContext('simple-modal')
 
 	export let record_list
-	console.log(record_list)
 	$: year = $page.params.yyyy
 	$: month = $page.params.mm
 
@@ -50,7 +52,7 @@
 	</div>
 </div>
 
-<tr>
+<tr class="sticky top-0 bg-white">
 	<th class="text-left">Voucher No</th>
 	<th>Date</th>
 	<th>Parent</th>
@@ -72,7 +74,9 @@
 			<td>{r.payer_nickname}</td>
 			<td>
 				{#if r.student_nickname}
-					{r.student_nickname}
+					<a class="text-blue-500" href="/students/{r.student_id}">
+						{r.student_nickname}
+					</a>
 				{/if}
 			</td>
 			<td>
@@ -100,7 +104,11 @@
 			<td>${r.lesson_fee}</td>
 			<td>${r.app_fee}</td>
 			<td>${r.app_fee + r.lesson_fee}</td>
-			<td><button class="button-secondary">Detail</button></td>
+			<td>
+				{#if r.confirm_summary}
+					<button on:click={() => {openModal(CopyMessageTextBox, {msg: r.confirm_summary}, {padding: '1em'})}} class="button-secondary">Detail</button>
+				{/if}
+			</td>
 		</tr>
 	{/each}
 {:else}
