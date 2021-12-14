@@ -23,7 +23,7 @@
 	import {page} from "$app/stores";
 
 	export let record_list
-	console.log(JSON.stringify(record_list[0]))
+	console.log(record_list)
 	$: year = $page.params.yyyy
 	$: month = $page.params.mm
 
@@ -71,12 +71,22 @@
 			<td>{dayjs(r.v_date).format('DD MMM YYYY (ddd)')}</td>
 			<td>{r.payer_nickname}</td>
 			<td>
-				<p class="text-gray-400">(student)</p>
+				{#if r.student_nickname}
+					{r.student_nickname}
+				{/if}
 			</td>
 			<td>
-				<p class="text-gray-400">(teacher)</p>
+				{#if r.teacher_nickname}
+					{r.teacher_nickname}
+				{/if}
 			</td>
-			<td>{r.v_type}</td>
+			<td>
+				{#if r.v_type === 'ONEONONE'}
+					{r.course_type}
+				{:else}
+					{r.v_type}
+				{/if}
+			</td>
 			<td>
 				<p class="text-gray-400">(30 min)</p>
 			</td>
