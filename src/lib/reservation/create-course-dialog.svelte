@@ -8,7 +8,7 @@
 	import {create_course_from_trial_store} from "../../store/create-course-from-trial-store";
 	import TemplateTextBox from '../../lib/ui-elements/template-text-box.svelte'
 	import SelectionBox from '../../lib/ui-elements/selection-box.svelte'
-	import Button from '$lib/ui-elements/Button.svelte'
+	import Button from '$lib/ui-elements/button.svelte'
 	import StudentSelectionBox from '../../lib/student/student-selection-box.svelte'
 	import CopyMessageTextBox from '$lib/option/copy-message-textbox.svelte'
 	import {goto} from '$app/navigation'
