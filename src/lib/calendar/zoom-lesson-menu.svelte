@@ -14,6 +14,7 @@
 	import {listStudentNote} from "../../api/student-note-api";
 	import {student_store} from "../../store/student-store";
 	import {category_list} from "$lib/store/category-list";
+	import {level_mapper} from "$lib/store/level-mapper.js";
 
 	const is_big_class = !!zoom.rc_type
 	let material_history
@@ -54,7 +55,8 @@
 			<p class="text-xs text-gray-400 text-center mb-1">ID:{zoom.tutor_group_id}</p>
 			<div class="bg-blue-50 border-blue-500 border-2 px-4 py-1 text-center rounded-sm">
 				<p class="font-bold">{zoom.description_code_short_id}</p>
-				<p class="text-xs text-gray-500">{zoom.rc_level}</p>
+				<p class="text-xs text-gray-500">{level_mapper.getFullName(zoom.description_code_short_id)}</p>
+				<p class="text-xs text-gray-500">Lv: {zoom.rc_level}</p>
 			</div>
 		</div>
 	{:else}
