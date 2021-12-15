@@ -28,6 +28,30 @@ const student_store = (() => {
 		return t && t.level.charAt(0).toUpperCase() + t.level.substring(1)
 	}
 
+	const getLessonDemand = () => {
+		let result = []
+		get(store).forEach(s => {
+			if (s.r_t_amt > 0) {
+				const level = s.level
+				const obj = result.find(r => r.level === level)
+				if (obj) {
+					obj.user_count++
+					obj.lesson_demand += Math.min(s.r_t_amt, 8)
+				} else {
+					result.push({
+						level,
+						user_count: 1,
+						lesson_demand: += Math.min(s.r_t_amt, 8)
+					})
+				}
+			}
+		})
+		result = result.sort((a,b) => {
+			return a.level > b.level ? 1 : -1
+		})
+		return result
+	}
+
 	return {
 		subscribe: store.subscribe,
 		getStudent,
@@ -35,6 +59,7 @@ const student_store = (() => {
 		getStudentLevel,
 		getStudentAvatar,
 		getGender,
+		getLessonDemand,
 		set: store.set
 	}
 })()
