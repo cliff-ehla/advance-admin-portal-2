@@ -12,23 +12,13 @@
 	import {listZoom} from "../../api/zoom-api";
 	import dayjs from 'dayjs'
 	import {listStudentNote} from "../../api/student-note-api";
-	import {fetchStudentList} from "../../store/org-api";
 	import {student_store} from "../../store/student-store";
-	import {onMount} from 'svelte'
 	import {category_list} from "$lib/store/category-list";
-	console.log(zoom)
 
+	const is_big_class = !!zoom.rc_type
 	let material_history
 	let student_notes
-	let student_lv
 	$: student_id = zoom.students[0] && zoom.students[0].user_id
-
-	onMount(async () => {
-		if (!$student_store.length) {
-			await fetchStudentList()
-		}
-		student_lv = student_store.getStudentLevel(student_id)
-	})
 
 	const onRemoveClick = (day_id) => {
 		let new_days = days.filter(d => d.day_id !== day_id)
@@ -58,27 +48,37 @@
 </script>
 
 <div class="shadow-lg border border-gray-300 rounded bg-white text-sm text-left">
-	<div class="bg-blue-100 text-blue-500 font-bold text-xs p-2">
-		<p class="mb-2">{zoom.title} ({zoom.tutor_group_id})</p>
-		<div class="flex items-center">
-			<Icon name="avatar" className="w-4 mr-2"/>
-			<p>{zoom.students.map(s => s.nickname).join(',')}</p>
-			{#if student_lv}
-				<p class="ml-1">({student_lv})</p>
-			{/if}
+
+	{#if is_big_class}
+		<div class="px-4 pt-4">
+			<div class="bg-blue-50 border-blue-500 border-2 px-4 py-1 text-center rounded-sm">
+				<p class="font-bold">{zoom.description_code_short_id}</p>
+				<p class="text-xs text-gray-500">{zoom.rc_level}</p>
+			</div>
 		</div>
-	</div>
+	{:else}
+		<div class="bg-blue-100 text-blue-500 font-bold text-xs p-2">
+			<p class="mb-2">{zoom.title} ({zoom.tutor_group_id})</p>
+			<div class="flex items-center">
+				<Icon name="avatar" className="w-4 mr-2"/>
+				<p>{zoom.students.map(s => s.nickname).join(',')}</p>
+			</div>
+		</div>
+	{/if}
+
 	<div class="p-2">
-		<button on:click={onEdit} class="text-left block w-full px-2 py-2 hover:text-blue-500 hover:bg-gray-100 mb-2">Edit status</button>
-		<Dropdown caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
-			<button slot="activator">Add zoom to tutor group</button>
-			<Datepicker {selected} on:datechange={e => {onChangeDate(e, 'add_zoom_to_tutor_group')}}/>
-		</Dropdown>
+		{#if !is_big_class}
+			<button on:click={onEdit} class="text-left block w-full px-2 py-2 hover:text-blue-500 hover:bg-gray-100 mb-2">Edit status</button>
+			<Dropdown caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
+				<button slot="activator">Add zoom to tutor group</button>
+				<Datepicker {selected} on:datechange={e => {onChangeDate(e, 'add_zoom_to_tutor_group')}}/>
+			</Dropdown>
+		{/if}
 		<Dropdown caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
 			<button slot="activator">Change Date</button>
 			<Datepicker {selected} on:datechange={e => {onChangeDate(e, 'edit_time')}}/>
 		</Dropdown>
-		{#if student_id}
+		{#if student_id && !is_big_class}
 			<Dropdown on:show={onNoteDropdownOpen} caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
 				<button slot="activator">Reminder</button>
 				<div class="shadow-lg bg-white border border-gray-300 p-2 pb-12">
@@ -148,7 +148,7 @@
 				<div class="w-56">
 					{#if zoom.students.length}
 						{#each zoom.students as s}
-							<p>{s.nickname} ({student_store.getStudentLevel(s.user_id)})</p>
+							<a href="/students/{s.user_id}" class="hover:text-blue-500 block p-2">{s.nickname} ({student_store.getStudentLevel(s.user_id)})</a>
 						{/each}
 					{:else}
 						<p>no students</p>

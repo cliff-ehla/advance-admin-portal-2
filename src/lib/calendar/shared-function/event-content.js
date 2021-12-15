@@ -46,7 +46,7 @@ export const eventContent = (arg) => {
 
 		let title_el = document.createElement('i')
 		if (props.big_classroom_type) {
-			title_el.innerHTML = props.big_classroom_type
+			title_el.innerHTML = props.description_code_short_id
 		} else {
 			title_el.innerHTML = getStudentTitle(props)
 			title_el.classList.add('whitespace-nowrap')
