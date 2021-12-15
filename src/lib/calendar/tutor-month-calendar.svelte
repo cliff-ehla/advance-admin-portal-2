@@ -246,11 +246,12 @@
 
 {#if events}
 	<div class="flex items-center h-16">
-		<div class="flex-1 flex items-center justify-between px-8">
+		<div class="flex-1 flex items-center justify-between px-2">
 			<button class="transform rotate-180 w-12 h-12 hover:bg-blue-500 hover:text-white rounded-full bg-gray-100 border border-gray-300 flex items-center justify-center" on:click={onPrevMonth}>
 				<Icon className="w-4" name="right"/>
 			</button>
 			<div class="flex-1 flex items-center justify-center" style="font-size: 1.6em">
+				<img src={tutor_store.getTutorProfilePic(tutor_id)} alt={tutor_name} class="w-12 h-12 rounded-full mr-2">
 				<p class="font-bold leading-none">{tutor_name}</p>
 				<p class="ml-2 leading-none">{dayjs(YYYY_MM).format('MMMM YYYY')}</p>
 			</div>

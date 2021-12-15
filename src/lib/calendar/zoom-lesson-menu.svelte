@@ -51,6 +51,7 @@
 
 	{#if is_big_class}
 		<div class="px-4 pt-4">
+			<p class="text-xs text-gray-400 text-center mb-1">ID:{zoom.tutor_group_id}</p>
 			<div class="bg-blue-50 border-blue-500 border-2 px-4 py-1 text-center rounded-sm">
 				<p class="font-bold">{zoom.description_code_short_id}</p>
 				<p class="text-xs text-gray-500">{zoom.rc_level}</p>
@@ -67,8 +68,8 @@
 	{/if}
 
 	<div class="p-2">
+		<button on:click={onEdit} class="text-left block w-full px-2 py-2 hover:text-blue-500 hover:bg-gray-100 mb-2">Edit status</button>
 		{#if !is_big_class}
-			<button on:click={onEdit} class="text-left block w-full px-2 py-2 hover:text-blue-500 hover:bg-gray-100 mb-2">Edit status</button>
 			<Dropdown caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
 				<button slot="activator">Add zoom to tutor group</button>
 				<Datepicker {selected} on:datechange={e => {onChangeDate(e, 'add_zoom_to_tutor_group')}}/>
