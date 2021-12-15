@@ -68,6 +68,21 @@
 		let tutor_id = option.reserves[0].teacher_id
 		goto(`/tutor/${tutor_id}/${dayjs().format('YYYY-MM')}`)
 	}
+
+	const onDeleteSlot = async (slot) => {
+		dialog.confirm({
+			message: 'Delete 這個時段？',
+			onConfirm: () => {
+				return http.post(fetch, '/zoomApi/delete_zoom_trial_option_detail', {
+					grouper_id: slot.grouper_id,
+					reserved_id: slot.reserved_id
+				})
+			},
+			onSuccess: () => {
+				dispatch('reload')
+			}
+		})
+	}
 </script>
 
 <div class="border border-gray-300 rounded-lg bg-white">
@@ -105,8 +120,11 @@
 						<p class="font-bold leading-none">{dayjs.utc(slot.start_date).local().format('DD MMM (ddd)')}</p>
 						<p class="text-sm leading-none">{dayjs.utc(slot.start_date).local().format('h:mma')} - {dayjs.utc(slot.end_date).local().format('h:mma')}</p>
 					</div>
-					<div class="ml-auto">
+					<div class="ml-auto flex items-center">
 						<button on:click={() => lockOption(slot)} class="button-secondary w-12">確定</button>
+						<button on:click={() => onDeleteSlot(slot)} class="ml-1 hover:text-red-500">
+							<Icon className="w-3" name="close"/>
+						</button>
 					</div>
 				</div>
 			{/each}
