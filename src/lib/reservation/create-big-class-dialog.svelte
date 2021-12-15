@@ -100,6 +100,6 @@
 
 	<button
 					disabled={disabled || loading}
-					class="{disabled || loading ? 'bg-gray-300 text-white' : 'bg-blue-500 hover:bg-blue-700 text-white'} rounded-full px-4 py-3 w-full"
+					class="{disabled || loading ? 'bg-gray-300 text-white' : 'bg-blue-500 hover:bg-blue-700 text-white'} rounded-full mt-4 px-4 py-3 w-full"
 					on:click={onCreate}>Create</button>
 </div>

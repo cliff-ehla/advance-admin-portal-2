@@ -68,7 +68,9 @@
 	}
 
 	const onOpenCreateBigClassDialog = () => {
-		openModal(CreateBigClassDialog)
+		openModal(CreateBigClassDialog, {}, {
+			padding: '1em'
+		})
 	}
 
 	const onOpenConfirmLeaveDialog = () => {
