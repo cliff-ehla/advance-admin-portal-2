@@ -137,10 +137,40 @@
 			}
 		})
 	}
+
+	const initStudentTrialPie = node => {
+		new Chart(node, {
+			type: 'pie',
+			data: {
+				labels: ['大戶', '細戶'],
+				datasets: [
+					{
+						data: [summary.many_ticker_user_count, summary.few_ticker_user_count],
+						backgroundColor: [colors.blue, colors.red]
+					}
+				]
+			}
+		})
+	}
+
+	const initStudentYearPie = node => {
+		new Chart(node, {
+			type: 'pie',
+			data: {
+				labels: demand.map(d => d.level),
+				datasets: [
+					{
+						data: demand.map(d => d.user_count),
+						backgroundColor: [colors.blue, colors.red, colors.green, colors.orange, colors.blue, colors.red, colors.green, colors.orange, colors.blue]
+					}
+				]
+			}
+		})
+	}
 </script>
 
 <div class="p-8 max-w-screen-lg">
-	<div class="mb-4 grid grid-cols-3 gap-4">
+	<div class="mb-8 grid grid-cols-3 gap-4">
 		<div>
 			<p>學生總數</p>
 			<p style="font-size: 4em" class="font-bold leading-none">{summary.total_students}</p>
@@ -152,6 +182,17 @@
 		<div>
 			<p>Seat總數</p>
 			<p style="font-size: 4em" class="font-bold leading-none">{total_seat}</p>
+		</div>
+	</div>
+
+	<div class="mb-4 grid grid-cols-2">
+		<div>
+			<p class="text-xl font-bold text-center">學生大細戶分佈</p>
+			<canvas use:initStudentTrialPie/>
+		</div>
+		<div>
+			<p class="text-xl font-bold text-center">學生年級分佈</p>
+			<canvas use:initStudentYearPie/>
 		</div>
 	</div>
 
