@@ -41,7 +41,7 @@ const student_store = (() => {
 					result.push({
 						level,
 						user_count: 1,
-						lesson_demand: += Math.min(s.r_t_amt, 8)
+						lesson_demand: Math.min(s.r_t_amt, 8)
 					})
 				}
 			}

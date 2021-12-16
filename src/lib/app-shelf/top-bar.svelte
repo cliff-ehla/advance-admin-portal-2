@@ -59,7 +59,17 @@
 		{
 			segment: 'students',
 			name: 'Students',
-			href: '/students'
+			href: '/students',
+			children: [
+				{
+					label: 'Dashboard',
+					href: '/students/dashboard'
+				},
+				{
+					label: 'All students',
+					href: '/students'
+				}
+			]
 		},
 		{
 			segment: 'tutor-group',
