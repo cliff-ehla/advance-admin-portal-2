@@ -19,7 +19,7 @@
 </script>
 
 <script>
-	import {student_store} from "../../store/student-store.js";
+	import {student_store} from "../store/student-store.js";
 	const demand = student_store.getLessonDemand()
 	const summary = student_store.getSummary()
 
@@ -227,12 +227,14 @@
 			</div>
 			<div class="w-full">
 				<p class="text-xl font-bold text-center">課堂報名Status</p>
+				<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
 				<canvas use:initLessonStatusChart/>
 			</div>
 		</div>
 
 		<div class="mb-4 bg-white border border-gray-300 p-8 rounded">
 			<p class="text-xl font-bold text-center">課堂供求狀況</p>
+			<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
 			<canvas use:init/>
 		</div>
 

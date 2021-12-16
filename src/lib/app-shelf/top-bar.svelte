@@ -95,7 +95,7 @@
 </script>
 
 <div class="bg-blue-900 h-12 flex items-center text-white">
-	<a href="/" class="w-40 ml-4">EHLA</a>
+	<a href="/dashboard" class="w-40 ml-4">EHLA</a>
 	<div class="flex-1 items-center flex justify-center">
 		{#each menu_items as item}
 			{#if item.children}
