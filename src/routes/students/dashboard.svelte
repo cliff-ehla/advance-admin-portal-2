@@ -5,8 +5,8 @@
 
 	export const load = async ({page, fetch}) => {
 		const {data, success, debug} = await http.post(fetch, '/courseApi/list_registrable_classroom', {
-			start_date: dayjs().subtract(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
-			end_date: dayjs().add(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
+			start_date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
+			end_date: dayjs().add(2, 'month').format('YYYY-MM-DD HH:mm:ss'),
 		})
 		if (!success) return onFail(debug)
 		big_class_store.set(data)
@@ -22,9 +22,6 @@
 <script>
 	import {student_store} from "../../store/student-store.js";
 	const demand = student_store.getLessonDemand()
-	import pkg from 'chart.js';
-	const { Chart, BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } = pkg;
-	Chart.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend)
 
 	export let big_class_list
 	console.log(demand.map(d => d.user_count))

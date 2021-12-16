@@ -6,13 +6,21 @@ const create_big_class_store = () => {
 	const getLevelStat = () => {
 		const result = big_class_mapper.all_levels.map(lv => ({
 			level: lv,
-			lesson_count: 0
+			lesson_count: 0,
+			native_lesson_count: 0,
+			bilingual_lesson_count: 0
 		}))
 		get(store).forEach(classroom => {
+			console.log(classroom)
 			const levels = big_class_mapper.getLevels(classroom.rc_level)
 			levels.forEach(lv => {
 				const obj = result.find(i => i.level === lv)
 				obj.lesson_count++
+				if (classroom.is_native_teacher) {
+					obj.native_lesson_count ++
+				} else {
+					obj.bilingual_lesson_count ++
+				}
 			})
 		})
 		return result
