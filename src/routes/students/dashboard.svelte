@@ -1,9 +1,29 @@
+<script context="module">
+	import {http, onFail} from "$lib/http";
+	import dayjs from "dayjs";
+
+	export const load = async ({page, fetch}) => {
+		const {data, success, debug} = await http.post(fetch, '/courseApi/list_registrable_classroom', {
+			start_date: dayjs().subtract(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
+			end_date: dayjs().add(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
+		})
+		if (!success) return onFail(debug)
+		return {
+			props: {
+				big_class_list: data
+			}
+		}
+	}
+</script>
+
 <script>
 	import {student_store} from "../../store/student-store.js";
 	const demand = student_store.getLessonDemand()
-
 	import {Chart, BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip} from 'chart.js'
 	Chart.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip)
+
+	export let big_class_list
+	console.log(big_class_list)
 
 	const data = {
 		labels: demand.map(d => d.level),
