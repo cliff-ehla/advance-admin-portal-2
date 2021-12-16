@@ -34,12 +34,11 @@
 	const start_date = dayjs().format('DD MMM YYYY')
 	const end_date = dayjs().add(2, 'month').format('DD MMM YYYY')
 	const level_stat = big_class_store.getLevelStat()
-	const total_lessons = level_stat.reduce((a, b) => {
+	const lesson_status_summary = big_class_store.getStatusSummary()
+	const total_lessons = lesson_status_summary.reduce((a, b) => {
 		return b.lesson_count + a
 	}, 0)
-	const total_seat = level_stat.reduce((a, b) => {
-		return b.reg_seat + b.vacant_seat + a
-	}, 0)
+	const booking_status = big_class_store.getBookingStatus()
 
 	const initVacancyChart = node => {
 		new Chart(node, {
@@ -167,47 +166,87 @@
 			}
 		})
 	}
+
+	const initLessonStatusChart = node => {
+		new Chart(node, {
+			type: 'pie',
+			data: {
+				labels: lesson_status_summary.map(d => d.label),
+				datasets: [
+					{
+						data: lesson_status_summary.map(d => d.lesson_count),
+						backgroundColor: [colors.blue, colors.red, colors.green, colors.orange]
+					}
+				]
+			}
+		})
+	}
 </script>
 
-<div class="p-8 max-w-screen-lg">
-	<div class="mb-8 grid grid-cols-3 gap-4">
-		<div>
-			<p>學生總數</p>
-			<p style="font-size: 4em" class="font-bold leading-none">{summary.total_students}</p>
+<div class="bg-gray-100">
+	<h1 class="mb-2 pt-6 px-4 leading-none" style="font-size: 2em">大細班課Dashboard</h1>
+	<div class="p-4 max-w-screen-xl">
+		<div class="mb-8 flex w-full bg-white p-8 rounded border border-gray-300">
+			<div class="w-28">
+				<p>學生總數</p>
+				<p style="font-size: 4em" class="font-light leading-none">{summary.total_students}</p>
+				<div class="mb-8"></div>
+				<p>試用學生數</p>
+				<p style="font-size: 4em" class="font-light leading-none">{summary.few_ticker_user_count}</p>
+			</div>
+			<div class="flex-1 flex w-full">
+				<div class="flex-1">
+					<p class="text-xl font-bold text-center">學生大細戶分佈</p>
+					<canvas use:initStudentTrialPie/>
+				</div>
+				<div class="flex-1">
+					<p class="text-xl font-bold text-center">學生年級分佈</p>
+					<canvas use:initStudentYearPie/>
+				</div>
+			</div>
 		</div>
-		<div>
-			<p>課堂總數</p>
-			<p style="font-size: 4em" class="font-bold leading-none">{total_lessons}</p>
-		</div>
-		<div>
-			<p>Seat總數</p>
-			<p style="font-size: 4em" class="font-bold leading-none">{total_seat}</p>
-		</div>
-	</div>
 
-	<div class="mb-4 grid grid-cols-2">
-		<div>
-			<p class="text-xl font-bold text-center">學生大細戶分佈</p>
-			<canvas use:initStudentTrialPie/>
+		<div class="mb-8 flex bg-white p-8 border border-gray-300 rounded">
+			<div class="w-28">
+				<div class="mb-8">
+					<p>課堂總數</p>
+					<p style="font-size: 4em" class="font-light leading-none">{total_lessons}</p>
+				</div>
+				<div class="mb-8">
+					<p>Seat總數</p>
+					<p style="font-size: 4em" class="font-light leading-none">{booking_status.total_seat}</p>
+				</div>
+				<div class="mb-8">
+					<p>已book堂數</p>
+					<p style="font-size: 4em" class="font-light leading-none">{booking_status.reg_seat}</p>
+				</div>
+				<div class="mb-8">
+					<p>空置率</p>
+					<p style="font-size: 4em" class="font-light leading-none">{booking_status.vacancy_date}%</p>
+				</div>
+			</div>
+			<div class="w-full">
+				<p class="text-xl font-bold text-center">課堂報名Status</p>
+				<canvas use:initLessonStatusChart/>
+			</div>
 		</div>
-		<div>
-			<p class="text-xl font-bold text-center">學生年級分佈</p>
-			<canvas use:initStudentYearPie/>
-		</div>
-	</div>
 
-	<div class="mb-4">
-		<p class="text-xl font-bold text-center">課堂供求狀況</p>
-		<canvas use:init/>
-	</div>
-	<div class="mb-4">
-		<p class="text-xl font-bold text-center">課堂空置狀況</p>
-		<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
-		<canvas use:initVacancyChart/>
-	</div>
-	<div class="mb-4">
-		<p class="text-xl font-bold text-center">外敎與雙語課堂比例</p>
-		<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
-		<canvas use:initLanguageChart/>
+		<div class="mb-4 bg-white border border-gray-300 p-8 rounded">
+			<p class="text-xl font-bold text-center">課堂供求狀況</p>
+			<canvas use:init/>
+		</div>
+
+		<div class="grid grid-cols-2 bg-white border border-gray-300 p-8 rounded">
+			<div class="mb-4">
+				<p class="text-xl font-bold text-center">課堂空置狀況</p>
+				<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
+				<canvas use:initVacancyChart/>
+			</div>
+			<div class="mb-4">
+				<p class="text-xl font-bold text-center">外敎與雙語課堂比例</p>
+				<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
+				<canvas use:initLanguageChart/>
+			</div>
+		</div>
 	</div>
 </div>

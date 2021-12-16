@@ -44,10 +44,66 @@ const create_big_class_store = () => {
 		})
 		return result
 	}
+
+	const getStatusSummary = () => {
+		const result = [
+			{
+				label: '無人報',
+				lesson_count: 0
+			},
+			{
+				label: '得一個人報',
+				lesson_count: 0
+			},
+			{
+				label: '2-3人',
+				lesson_count: 0
+			},
+			{
+				label: '滿員',
+				lesson_count: 0
+			}
+		]
+		get(store).forEach(classroom => {
+			const reg_seat = Number(classroom.reg_user_cnt)
+			const vacant_seat = Math.min(classroom.student_size, 10) - reg_seat
+			if (reg_seat === 0) {
+				result[0].lesson_count ++
+			} else if (reg_seat === 1) {
+				result[1].lesson_count ++
+			} else if (reg_seat === vacant_seat) {
+				result[3].lesson_count++
+			} else {
+				result[2].lesson_count++
+			}
+		})
+		return result
+	}
+
+	const getBookingStatus = () => {
+		let vacant_seat = 0
+		let reg_seat = 0
+		get(store).forEach(classroom => {
+			const _reg_seat = Number(classroom.reg_user_cnt)
+			const _vacant_seat = Math.min(classroom.student_size, 20) - _reg_seat
+			vacant_seat += _vacant_seat
+			reg_seat += _reg_seat
+		})
+		const total_seat = vacant_seat + reg_seat
+		return {
+			total_seat,
+			vacant_seat,
+			reg_seat,
+			vacancy_date: Math.round(vacant_seat / total_seat * 100)
+		}
+	}
+
 	return {
 		subscribe: store.subscribe,
 		set: store.set,
-		getLevelStat
+		getLevelStat,
+		getStatusSummary,
+		getBookingStatus
 	}
 }
 
