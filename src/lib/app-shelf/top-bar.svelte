@@ -63,7 +63,7 @@
 			children: [
 				{
 					label: 'Dashboard',
-					href: '/students/dashboard'
+					href: '/dashboard'
 				},
 				{
 					label: 'All students',

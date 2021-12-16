@@ -20,8 +20,10 @@
 
 <script>
 	import {student_store} from "../store/student-store.js";
+	import tippy from "tippy.js";
 	const demand = student_store.getLessonDemand()
 	const summary = student_store.getSummary()
+	import Icon from '$lib/ui-elements/icon.svelte'
 
 
 	export let big_class_list
@@ -160,7 +162,9 @@
 				datasets: [
 					{
 						data: demand.map(d => d.user_count),
-						backgroundColor: [colors.blue, colors.red, colors.green, colors.orange, colors.blue, colors.red, colors.green, colors.orange, colors.blue]
+						backgroundColor: ['#AAD5FB', '#77BFFF', '#49A1EF',
+							'#ACE4E4', '#75CBCB', '#0FC3C3',
+						'#FCCFA1', '#EBAA69', '#F28B21']
 					}
 				]
 			}
@@ -181,6 +185,12 @@
 			}
 		})
 	}
+
+	const tooltip = node => {
+		tippy(node, {
+			content: '細戶即Ticket數少於6張'
+		})
+	}
 </script>
 
 <div class="bg-gray-100">
@@ -196,7 +206,10 @@
 			</div>
 			<div class="flex-1 flex w-full">
 				<div class="flex-1">
-					<p class="text-xl font-bold text-center">學生大細戶分佈</p>
+					<div class="flex items-center justify-center">
+						<p class="text-xl font-bold text-center">學生大細戶分佈</p>
+						<span class="w-6 h-6 cc rounded border border-gray-400 ml-2" use:tooltip><Icon name="info" className="w-4"/></span>
+					</div>
 					<canvas use:initStudentTrialPie/>
 				</div>
 				<div class="flex-1">

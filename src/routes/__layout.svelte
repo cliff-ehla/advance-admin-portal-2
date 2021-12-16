@@ -23,8 +23,13 @@
 					}
 				}
 			} else {
-				return {
-					status: 500
+				if (res.debug.err_code === 401 && page.path !== '/login') {
+					return {
+						status: 302,
+						redirect: '/login'
+					}
+				} else {
+					return true
 				}
 			}
 		} else {
