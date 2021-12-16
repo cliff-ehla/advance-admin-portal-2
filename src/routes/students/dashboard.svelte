@@ -10,7 +10,6 @@
 		})
 		if (!success) return onFail(debug)
 		big_class_store.set(data)
-		console.log(big_class_store.getLevelStat())
 		return {
 			props: {
 				big_class_list: data
@@ -22,9 +21,10 @@
 <script>
 	import {student_store} from "../../store/student-store.js";
 	const demand = student_store.getLessonDemand()
+	const summary = student_store.getSummary()
+
 
 	export let big_class_list
-	console.log(demand.map(d => d.user_count))
 	const colors = {
 		blue: 'rgba(54, 162, 235, 0.6)',
 		red: 'rgba(255, 99, 132, 0.6)',
@@ -33,6 +33,13 @@
 	}
 	const start_date = dayjs().format('DD MMM YYYY')
 	const end_date = dayjs().add(2, 'month').format('DD MMM YYYY')
+	const level_stat = big_class_store.getLevelStat()
+	const total_lessons = level_stat.reduce((a, b) => {
+		return b.lesson_count + a
+	}, 0)
+	const total_seat = level_stat.reduce((a, b) => {
+		return b.reg_seat + b.vacant_seat + a
+	}, 0)
 
 	const initVacancyChart = node => {
 		new Chart(node, {
@@ -41,13 +48,13 @@
 				labels: demand.map(d => d.level),
 				datasets: [
 					{
-						data: big_class_store.getLevelStat().map(d => d.reg_seat),
+						data: level_stat.map(d => d.reg_seat),
 						label: 'Registered Seat',
 						stack: 'stack 1',
 						backgroundColor: colors.green
 					},
 					{
-						data: big_class_store.getLevelStat().map(d => d.vacant_seat),
+						data: level_stat.map(d => d.vacant_seat),
 						label: 'Vacant Seat',
 						stack: 'stack 1',
 						backgroundColor: colors.orange
@@ -64,13 +71,13 @@
 				labels: demand.map(d => d.level),
 				datasets: [
 					{
-						data: big_class_store.getLevelStat().map(d => d.native_lesson_count),
+						data: level_stat.map(d => d.native_lesson_count),
 						label: 'Native',
 						stack: 'stack 1',
 						backgroundColor: colors.green
 					},
 					{
-						data: big_class_store.getLevelStat().map(d => d.bilingual_lesson_count),
+						data: level_stat.map(d => d.bilingual_lesson_count),
 						label: 'Bilingual Seat',
 						stack: 'stack 1',
 						backgroundColor: colors.orange
@@ -104,25 +111,25 @@
 					},
 					{
 						label: "無人報",
-						data: big_class_store.getLevelStat().map(obj => obj.empty_lesson_count),
+						data: level_stat.map(obj => obj.empty_lesson_count),
 						backgroundColor: colors.red,
 						stack: 'Stack 1',
 					},
 					{
 						label: "得一個人",
-						data: big_class_store.getLevelStat().map(obj => obj.only_one_ppl_lesson_count),
+						data: level_stat.map(obj => obj.only_one_ppl_lesson_count),
 						backgroundColor: colors.orange,
 						stack: 'Stack 1',
 					},
 					{
 						label: "2-3人",
-						data: big_class_store.getLevelStat().map(obj => obj.enough_ppl_lesson_count),
+						data: level_stat.map(obj => obj.enough_ppl_lesson_count),
 						backgroundColor: colors.blue,
 						stack: 'Stack 1',
 					},
 					{
 						label: "滿員",
-						data: big_class_store.getLevelStat().map(obj => obj.only_one_ppl_lesson_count),
+						data: level_stat.map(obj => obj.only_one_ppl_lesson_count),
 						backgroundColor: colors.green,
 						stack: 'Stack 1',
 					}
@@ -132,8 +139,22 @@
 	}
 </script>
 
-
 <div class="p-8 max-w-screen-lg">
+	<div class="mb-4 grid grid-cols-3 gap-4">
+		<div>
+			<p>學生總數</p>
+			<p style="font-size: 4em" class="font-bold leading-none">{summary.total_students}</p>
+		</div>
+		<div>
+			<p>課堂總數</p>
+			<p style="font-size: 4em" class="font-bold leading-none">{total_lessons}</p>
+		</div>
+		<div>
+			<p>Seat總數</p>
+			<p style="font-size: 4em" class="font-bold leading-none">{total_seat}</p>
+		</div>
+	</div>
+
 	<div class="mb-4">
 		<p class="text-xl font-bold text-center">課堂供求狀況</p>
 		<canvas use:init/>

@@ -56,6 +56,26 @@ const student_store = (() => {
 		return result
 	}
 
+	const getSummary = () => {
+		const result = {
+			total_students: 0,
+			many_ticker_user_count: 0,
+			few_ticker_user_count: 0
+		}
+
+		get(store).forEach(s => {
+			if (s.r_t_amt > 0) {
+				result.total_students++
+				if (s.r_t_amt > 6) {
+					result.many_ticker_user_count++
+				} else {
+					result.few_ticker_user_count++
+				}
+			}
+		})
+		return result
+	}
+
 	return {
 		subscribe: store.subscribe,
 		getStudent,
@@ -64,6 +84,7 @@ const student_store = (() => {
 		getStudentAvatar,
 		getGender,
 		getLessonDemand,
+		getSummary,
 		set: store.set
 	}
 })()
