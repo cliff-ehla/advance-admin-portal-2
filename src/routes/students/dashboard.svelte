@@ -22,36 +22,30 @@
 <script>
 	import {student_store} from "../../store/student-store.js";
 	const demand = student_store.getLessonDemand()
-	import {Chart, BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip} from 'chart.js'
-	Chart.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip)
+	import {Chart, BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend} from 'chart.js'
+	Chart.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend)
 
 	export let big_class_list
+	console.log(demand.map(d => d.user_count))
 
 	const data = {
 		labels: demand.map(d => d.level),
-		datasets: [{
-			label: "Number of student with tickets",
-			data: demand.map(d => d.user_count),
-			backgroundColor: [
-				'rgba(255, 99, 132, 0.2)',
-				'rgba(255, 159, 64, 0.2)',
-				'rgba(255, 205, 86, 0.2)',
-				'rgba(75, 192, 192, 0.2)',
-				'rgba(54, 162, 235, 0.2)',
-				'rgba(153, 102, 255, 0.2)',
-				'rgba(201, 203, 207, 0.2)'
-			],
-			borderColor: [
-				'rgb(255, 99, 132)',
-				'rgb(255, 159, 64)',
-				'rgb(255, 205, 86)',
-				'rgb(75, 192, 192)',
-				'rgb(54, 162, 235)',
-				'rgb(153, 102, 255)',
-				'rgb(201, 203, 207)'
-			],
-			borderWidth: 1
-		}]
+		datasets: [
+			{
+				label: "Student demand",
+				data: demand.map(d => d.lesson_demand),
+				backgroundColor: 'rgba(255, 99, 132, 0.2)',
+				borderColor: 'rgb(255, 99, 132)',
+				borderWidth: 1
+			},
+			{
+				label: "Classroom supply",
+				data: big_class_store.getLevelStat().map(obj => obj.lesson_count),
+				backgroundColor: 'rgba(255, 159, 64, 0.2)',
+				borderColor: 'rgb(255, 159, 64)',
+				borderWidth: 1
+			}
+		]
 	};
 
 	const init = node => {

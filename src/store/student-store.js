@@ -1,4 +1,5 @@
 import {writable, get} from "svelte/store";
+import {big_class_mapper} from "$lib/store/big-class-mapper.js";
 
 const student_store = (() => {
 	const store = writable([])
@@ -29,12 +30,17 @@ const student_store = (() => {
 	}
 
 	const getLessonDemand = () => {
-		let result = []
+		let result = big_class_mapper.all_levels.map(lv => ({
+			level: lv,
+			user_count: 0,
+			lesson_demand: 0
+		}))
 		get(store).forEach(s => {
 			if (s.r_t_amt > 0) {
 				const level = s.level
 				const obj = result.find(r => r.level === level)
 				if (obj) {
+					console.log('???', obj)
 					obj.user_count++
 					obj.lesson_demand += Math.min(s.r_t_amt, 8)
 				} else {
