@@ -8,10 +8,12 @@ const create_big_class_store = () => {
 			level: lv,
 			lesson_count: 0,
 			native_lesson_count: 0,
-			bilingual_lesson_count: 0
+			bilingual_lesson_count: 0,
+			reg_seat: 0,
+			vacant_seat: 0
 		}))
 		get(store).forEach(classroom => {
-			console.log(classroom)
+			// console.log(classroom)
 			const levels = big_class_mapper.getLevels(classroom.rc_level)
 			levels.forEach(lv => {
 				const obj = result.find(i => i.level === lv)
@@ -21,6 +23,8 @@ const create_big_class_store = () => {
 				} else {
 					obj.bilingual_lesson_count ++
 				}
+				obj.reg_seat = obj.reg_seat + Number(classroom.reg_user_cnt)
+				obj.vacant_seat = obj.vacant_seat + (Math.min(classroom.student_size, 10) - Number(classroom.reg_user_cnt))
 			})
 		})
 		return result
