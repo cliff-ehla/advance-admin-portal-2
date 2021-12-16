@@ -22,7 +22,8 @@
 <script>
 	import {student_store} from "../../store/student-store.js";
 	const demand = student_store.getLessonDemand()
-	import {Chart, BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend} from 'chart.js'
+	import pkg from 'chart.js';
+	const { Chart, BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend } = pkg;
 	Chart.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip, Legend)
 
 	export let big_class_list
