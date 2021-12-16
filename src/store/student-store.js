@@ -39,17 +39,8 @@ const student_store = (() => {
 			if (s.r_t_amt > 0) {
 				const level = s.level
 				const obj = result.find(r => r.level === level)
-				if (obj) {
-					console.log('???', obj)
-					obj.user_count++
-					obj.lesson_demand += Math.min(s.r_t_amt, 8)
-				} else {
-					result.push({
-						level,
-						user_count: 1,
-						lesson_demand: Math.min(s.r_t_amt, 8)
-					})
-				}
+				obj.user_count++
+				obj.lesson_demand += Math.min(s.r_t_amt, 8)
 			}
 		})
 		result = result.sort((a,b) => {
