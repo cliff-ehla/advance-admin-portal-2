@@ -28,15 +28,17 @@ export const createLevelMapper = () => {
 		"p4-to-p5-exam-prep": ['p4', 'p5'],
 		"p4-to-p6-exam-prep": ['p4', 'p5', 'p6'],
 	})
+	const all_levels = ['k1', 'k2', 'k3', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 'na']
 	const getCourseCategoryFullName = (short_code) => {
 		return get(course_code_store)[short_code] || 'No full name'
 	}
-	const getLevels = (level_tag) => {
-		return get(level_map_store)[level_tag] || ['no']
+	const getLevels = (rc_level) => {
+		return get(level_map_store)[rc_level] || ['na']
 	}
 	return {
 		getCourseCategoryFullName,
-		getLevels
+		getLevels,
+		all_levels
 	}
 }
 export const big_class_mapper = createLevelMapper()

@@ -1,6 +1,7 @@
 <script context="module">
 	import {http, onFail} from "$lib/http";
 	import dayjs from "dayjs";
+	import {big_class_store} from "$lib/store/big-class-store.js";
 
 	export const load = async ({page, fetch}) => {
 		const {data, success, debug} = await http.post(fetch, '/courseApi/list_registrable_classroom', {
@@ -8,6 +9,8 @@
 			end_date: dayjs().add(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
 		})
 		if (!success) return onFail(debug)
+		big_class_store.set(data)
+		console.log(big_class_store.getLevelStat())
 		return {
 			props: {
 				big_class_list: data
@@ -23,7 +26,6 @@
 	Chart.register(BarController, BarElement, CategoryScale, LinearScale, Title, Tooltip)
 
 	export let big_class_list
-	console.log(big_class_list)
 
 	const data = {
 		labels: demand.map(d => d.level),
