@@ -31,6 +31,8 @@
 		green: 'rgba(75, 192, 192, 0.6)',
 		orange: 'rgba(255, 159, 64, 0.6)'
 	}
+	const start_date = dayjs().format('DD MMM YYYY')
+	const end_date = dayjs().add(2, 'month').format('DD MMM YYYY')
 
 	const initVacancyChart = node => {
 		new Chart(node, {
@@ -55,6 +57,29 @@
 		})
 	}
 
+	const initLanguageChart = node => {
+		new Chart(node, {
+			type: 'bar',
+			data: {
+				labels: demand.map(d => d.level),
+				datasets: [
+					{
+						data: big_class_store.getLevelStat().map(d => d.native_lesson_count),
+						label: 'Native',
+						stack: 'stack 1',
+						backgroundColor: colors.green
+					},
+					{
+						data: big_class_store.getLevelStat().map(d => d.bilingual_lesson_count),
+						label: 'Bilingual Seat',
+						stack: 'stack 1',
+						backgroundColor: colors.orange
+					}
+				]
+			}
+		})
+	}
+
 	const init = node => {
 		new Chart(node, {
 			type: 'bar',
@@ -62,27 +87,43 @@
 				labels: demand.map(d => d.level),
 				datasets: [
 					{
-						label: "Student demand",
-						data: demand.map(d => d.lesson_demand),
-						backgroundColor: 'rgba(54, 162, 235, 0.2)',
-						borderColor: 'rgb(54, 162, 235)',
+						label: "小戶人數",
+						data: demand.map(d => d.few_ticker_user_count),
+						backgroundColor: 'rgba(255, 99, 132, 0.2)',
+						borderColor: 'rgba(255, 99, 132, 1)',
 						borderWidth: 1,
 						stack: 'Stack 0',
 					},
 					{
-						label: "Native Classroom supply",
-						data: big_class_store.getLevelStat().map(obj => obj.native_lesson_count),
-						backgroundColor: 'rgba(255, 159, 64, 0.2)',
-						borderColor: 'rgb(255, 159, 64)',
+						label: "大戶人數",
+						data: demand.map(d => d.many_ticker_user_count),
+						backgroundColor: 'rgba(75, 192, 192, 0.2)',
+						borderColor: 'rgba(75, 192, 192, 1)',
 						borderWidth: 1,
+						stack: 'Stack 0',
+					},
+					{
+						label: "無人報",
+						data: big_class_store.getLevelStat().map(obj => obj.empty_lesson_count),
+						backgroundColor: colors.red,
 						stack: 'Stack 1',
 					},
 					{
-						label: "Bilingual Classroom supply",
-						data: big_class_store.getLevelStat().map(obj => obj.bilingual_lesson_count),
-						backgroundColor: 'rgba(255, 99, 132, 0.2)',
-						borderColor: 'rgb(255, 99, 132)',
-						borderWidth: 1,
+						label: "得一個人",
+						data: big_class_store.getLevelStat().map(obj => obj.only_one_ppl_lesson_count),
+						backgroundColor: colors.orange,
+						stack: 'Stack 1',
+					},
+					{
+						label: "2-3人",
+						data: big_class_store.getLevelStat().map(obj => obj.enough_ppl_lesson_count),
+						backgroundColor: colors.blue,
+						stack: 'Stack 1',
+					},
+					{
+						label: "滿員",
+						data: big_class_store.getLevelStat().map(obj => obj.only_one_ppl_lesson_count),
+						backgroundColor: colors.green,
 						stack: 'Stack 1',
 					}
 				]
@@ -99,6 +140,12 @@
 	</div>
 	<div class="mb-4">
 		<p class="text-xl font-bold text-center">課堂空置狀況</p>
+		<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
 		<canvas use:initVacancyChart/>
+	</div>
+	<div class="mb-4">
+		<p class="text-xl font-bold text-center">外敎與雙語課堂比例</p>
+		<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
+		<canvas use:initLanguageChart/>
 	</div>
 </div>

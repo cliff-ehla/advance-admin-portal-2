@@ -33,6 +33,8 @@ const student_store = (() => {
 		let result = big_class_mapper.all_levels.map(lv => ({
 			level: lv,
 			user_count: 0,
+			few_ticker_user_count: 0,
+			many_ticker_user_count: 0,
 			lesson_demand: 0
 		}))
 		get(store).forEach(s => {
@@ -41,6 +43,11 @@ const student_store = (() => {
 				const obj = result.find(r => r.level === level)
 				obj.user_count++
 				obj.lesson_demand += Math.min(s.r_t_amt, 8)
+				if (s.r_t_amt > 6) {
+					obj.many_ticker_user_count++
+				} else {
+					obj.few_ticker_user_count++
+				}
 			}
 		})
 		result = result.sort((a,b) => {

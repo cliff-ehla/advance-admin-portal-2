@@ -9,6 +9,10 @@ const create_big_class_store = () => {
 			lesson_count: 0,
 			native_lesson_count: 0,
 			bilingual_lesson_count: 0,
+			full_house_lesson_count: 0,
+			enough_ppl_lesson_count: 0,
+			only_one_ppl_lesson_count: 0,
+			empty_lesson_count: 0,
 			reg_seat: 0,
 			vacant_seat: 0
 		}))
@@ -23,8 +27,19 @@ const create_big_class_store = () => {
 				} else {
 					obj.bilingual_lesson_count ++
 				}
-				obj.reg_seat = obj.reg_seat + Number(classroom.reg_user_cnt)
-				obj.vacant_seat = obj.vacant_seat + (Math.min(classroom.student_size, 10) - Number(classroom.reg_user_cnt))
+				const reg_seat = Number(classroom.reg_user_cnt)
+				const vacant_seat = Math.min(classroom.student_size, 10) - reg_seat
+				if (reg_seat === 0) {
+					obj.empty_lesson_count ++
+				} else if (reg_seat === 1) {
+					obj.only_one_ppl_lesson_count ++
+				} else if (reg_seat === vacant_seat) {
+					obj.full_house_lesson_count ++
+				} else {
+					obj.enough_ppl_lesson_count ++
+				}
+				obj.reg_seat = obj.reg_seat + reg_seat
+				obj.vacant_seat = obj.vacant_seat + vacant_seat
 			})
 		})
 		return result
