@@ -103,7 +103,7 @@
 						stack: 'Stack 0',
 					},
 					{
-						label: "試用新戶",
+						label: "需跟進戶",
 						data: demand.map(d => d.few_ticker_user_count),
 						backgroundColor: 'rgba(255, 159, 64, 0.2)',
 						borderColor: 'rgba(255, 159, 64, 1)',
@@ -187,7 +187,7 @@
 				datasets: [
 					{
 						data: lesson_status_summary.map(d => d.lesson_count),
-						backgroundColor: [colors.blue, colors.red, colors.green, colors.orange]
+						backgroundColor: [colors.red, colors.orange, colors.blue, colors.green]
 					}
 				]
 			}
