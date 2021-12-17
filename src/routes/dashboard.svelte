@@ -25,6 +25,7 @@
 	const summary = student_store.getSummary()
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import {classroom_analytic} from "$lib/store/big-class-store.js";
+	import DemandSupply from '$lib/dashboard/demand-supply-by-level-bar-chart.svelte'
 	$: {
 		console.log(123, $classroom_analytic)
 	}
@@ -80,65 +81,6 @@
 						label: 'Bilingual Seat',
 						stack: 'stack 1',
 						backgroundColor: colors.orange
-					}
-				]
-			}
-		})
-	}
-
-	const init = (node, level_stat) => {
-		new Chart(node, {
-			type: 'bar',
-			data: {
-				labels: demand.map(d => d.level),
-				datasets: [
-					{
-						label: "試用新戶",
-						data: demand.map(d => d.new_user_count),
-						backgroundColor: 'rgba(255, 99, 132, 0.2)',
-						borderColor: 'rgba(255, 99, 132, 1)',
-						borderWidth: 1,
-						stack: 'Stack 0',
-					},
-					{
-						label: "需跟進戶",
-						data: demand.map(d => d.few_ticker_user_count),
-						backgroundColor: 'rgba(255, 159, 64, 0.2)',
-						borderColor: 'rgba(255, 159, 64, 1)',
-						borderWidth: 1,
-						stack: 'Stack 0',
-					},
-					{
-						label: "大戶人數",
-						data: demand.map(d => d.many_ticker_user_count),
-						backgroundColor: 'rgba(75, 192, 192, 0.2)',
-						borderColor: 'rgba(75, 192, 192, 1)',
-						borderWidth: 1,
-						stack: 'Stack 0',
-					},
-					{
-						label: "無人報",
-						data: level_stat.map(obj => obj.empty_lesson_count),
-						backgroundColor: colors.red,
-						stack: 'Stack 1',
-					},
-					{
-						label: "得一個人",
-						data: level_stat.map(obj => obj.only_one_ppl_lesson_count),
-						backgroundColor: colors.orange,
-						stack: 'Stack 1',
-					},
-					{
-						label: "2-3人",
-						data: level_stat.map(obj => obj.enough_ppl_lesson_count),
-						backgroundColor: colors.blue,
-						stack: 'Stack 1',
-					},
-					{
-						label: "滿員",
-						data: level_stat.map(obj => obj.only_one_ppl_lesson_count),
-						backgroundColor: colors.green,
-						stack: 'Stack 1',
 					}
 				]
 			}
@@ -264,11 +206,7 @@
 			</div>
 		</div>
 
-		<div class="mb-4 bg-white border border-gray-300 p-8 rounded">
-			<p class="text-xl font-bold text-center">課堂供求狀況</p>
-			<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
-			<canvas use:init={$classroom_analytic.by_level}/>
-		</div>
+		<DemandSupply/>
 
 		<div class="grid grid-cols-2 bg-white border border-gray-300 p-8 rounded">
 			<div class="mb-4">

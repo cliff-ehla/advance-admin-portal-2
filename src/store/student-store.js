@@ -38,7 +38,6 @@ const student_store = (() => {
 			new_user_count: 0
 		}))
 		get(store).forEach(s => {
-			console.log(s)
 			if (s.tt_t_amt > 0) {
 				const level = s.level
 				const obj = result.find(r => r.level === level)
