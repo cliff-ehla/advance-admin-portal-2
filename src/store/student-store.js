@@ -1,4 +1,4 @@
-import {writable, get} from "svelte/store";
+import {writable, get, derived} from "svelte/store";
 import {big_class_mapper} from "$lib/store/big-class-mapper.js";
 
 const student_store = (() => {

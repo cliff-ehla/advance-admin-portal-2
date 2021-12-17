@@ -108,13 +108,13 @@
 	<h1 class="mb-2 pt-6 px-4 leading-none" style="font-size: 2em">大細班課Dashboard</h1>
 	<div class="p-4 max-w-screen-xl">
 		<div class="mb-8 flex w-full bg-white p-8 rounded border border-gray-300">
-			<div class="w-28">
+			<a href="/students/classroom" class="block hover:text-blue-500 w-28">
 				<p>學生總數</p>
 				<p style="font-size: 4em" class="font-light leading-none">{summary.total_students}</p>
 				<div class="mb-8"></div>
 				<p>試用新戶</p>
 				<p style="font-size: 4em" class="font-light leading-none">{summary.new_user_count}</p>
-			</div>
+			</a>
 			<div class="flex-1 flex w-full">
 				<div class="flex-1">
 					<div class="flex items-center justify-center">

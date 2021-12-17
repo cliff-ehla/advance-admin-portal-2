@@ -66,6 +66,10 @@
 					href: '/dashboard'
 				},
 				{
+					label: '大細班課學生',
+					href: '/students/classroom'
+				},
+				{
 					label: 'All students',
 					href: '/students'
 				}
