@@ -13,7 +13,7 @@
     @apply text-xs text-blue-500 hover:bg-gray-100 hover:border-blue-500 border border-gray-300 rounded px-1 py-1;
 }
 .button-secondary.normal {
-    @apply text px-2 py-1;
+    @apply text-lg px-2 py-1;
 }
 .button-secondary.active {
     @apply bg-blue-500 text-white;
