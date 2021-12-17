@@ -1,4 +1,4 @@
-import {writable, get, derived} from "svelte/store";
+import {writable, get, derived, readable} from "svelte/store";
 import {big_class_mapper} from "$lib/store/big-class-mapper.js";
 import dayjs from "dayjs";
 
@@ -12,8 +12,32 @@ const create_big_class_store = () => {
 
 export const big_class_store = create_big_class_store()
 
+const _time_range_options = [
+	{
+		key: 'week',
+		label: '一星期',
+		days: 7
+	},
+	{
+		key: 'two-week',
+		label: '兩星期',
+		days: 14
+	},
+	{
+		key: 'month',
+		label: '一個月',
+		days: 30
+	},
+	{
+		key: 'two-month',
+		label: '兩個月',
+		days: 60
+	}
+]
+
 const create_class_analytic = () => {
 	const time_range = writable(7)
+	const time_range_options = readable(_time_range_options)
 	const filtered_classroom = derived([big_class_store, time_range], ([$big_class_store, $time_span]) => {
 		return $big_class_store.filter(classroom => {
 			return dayjs(classroom.start_date).isBefore(dayjs().add(get(time_range), 'day'))
@@ -117,11 +141,16 @@ const create_class_analytic = () => {
 		return result
 	})
 
-	const store = derived([seat_analytic, lesson_analytic, by_level_analytic], ([$seat_analytic, $lesson_analytic, $by_level_analytic]) => {
+	const store = derived([seat_analytic, lesson_analytic, by_level_analytic, time_range_options, time_range],
+			([$seat_analytic, $lesson_analytic, $by_level_analytic, $time_range_options, $time_range]) => {
+		const time_obj = $time_range_options.find(obj => obj.days === $time_range)
 		return {
 			seat: $seat_analytic,
 			classroom: $lesson_analytic,
-			by_level: $by_level_analytic
+			by_level: $by_level_analytic,
+			time_range_options: $time_range_options,
+			time_range: $time_range,
+			time_label: time_obj && time_obj.label
 		}
 	})
 	const setRange = (range) => {

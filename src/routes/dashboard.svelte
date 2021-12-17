@@ -175,10 +175,20 @@
 			</div>
 		</div>
 
-		<div class="p-4 bg-white top-0 sticky mb-4 border-b border-gray-300">
-			<button on:click={() => {classroom_analytic.setRange('7')}} class="button-secondary">一星期</button>
-			<button on:click={() => {classroom_analytic.setRange('14')}} class="button-secondary">兩星期</button>
-			<button on:click={() => {classroom_analytic.setRange('30')}} class="button-secondary">一個月</button>
+		<div class="px-4 py-2 bg-white top-0 sticky mb-4 border-b border-gray-300 flex items-center">
+			<p class="font-light leading-tight" style="font-size: 1.5em">
+				未來{$classroom_analytic.time_label}
+			</p>
+			<p class="text-gray-500 ml-2">{dayjs().format('DD MMM YYYY')} - {dayjs().add($classroom_analytic.time_range, 'day').format('DD MMM YYYY')}</p>
+			<div class="ml-auto">
+				{#each $classroom_analytic.time_range_options as option}
+					<button on:click={() => {classroom_analytic.setRange(option.days)}}
+					        class:active={option.days === $classroom_analytic.time_range}
+					        class="normal button-secondary mx-1">
+						{option.label}
+					</button>
+				{/each}
+			</div>
 		</div>
 		<div class="mb-8 flex bg-white p-8 border border-gray-300 rounded">
 			<div class="w-28">
@@ -201,7 +211,6 @@
 			</div>
 			<div class="w-full">
 				<p class="text-xl font-bold text-center">課堂報名Status</p>
-				<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
 				<canvas use:initLessonStatusChart={$classroom_analytic.classroom.chart}/>
 			</div>
 		</div>
