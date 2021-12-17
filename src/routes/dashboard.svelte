@@ -38,7 +38,7 @@
 	}
 	const start_date = dayjs().format('DD MMM YYYY')
 	const end_date = dayjs().add(2, 'month').format('DD MMM YYYY')
-	const level_stat = big_class_store.getLevelStat()
+	const level_stat = $classroom_analytic.by_level
 
 	const initVacancyChart = node => {
 		new Chart(node, {
@@ -86,7 +86,7 @@
 		})
 	}
 
-	const init = node => {
+	const init = (node, level_stat) => {
 		new Chart(node, {
 			type: 'bar',
 			data: {
@@ -267,7 +267,7 @@
 		<div class="mb-4 bg-white border border-gray-300 p-8 rounded">
 			<p class="text-xl font-bold text-center">課堂供求狀況</p>
 			<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
-			<canvas use:init/>
+			<canvas use:init={$classroom_analytic.by_level}/>
 		</div>
 
 		<div class="grid grid-cols-2 bg-white border border-gray-300 p-8 rounded">
