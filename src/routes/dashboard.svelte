@@ -41,27 +41,36 @@
 	const end_date = dayjs().add(2, 'month').format('DD MMM YYYY')
 	const level_stat = $classroom_analytic.by_level
 
-	const initVacancyChart = node => {
-		new Chart(node, {
+	const initVacancyChart = (node, by_level) => {
+		const getDatasets = (_by_level) => {
+			return [
+				{
+					data: _by_level.map(d => d.reg_seat),
+					label: 'Registered Seat',
+					stack: 'stack 1',
+					backgroundColor: colors.green
+				},
+				{
+					data: _by_level.map(d => d.vacant_seat),
+					label: 'Vacant Seat',
+					stack: 'stack 1',
+					backgroundColor: colors.orange
+				}
+			]
+		}
+		const chart = new Chart(node, {
 			type: 'bar',
 			data: {
 				labels: demand.map(d => d.level),
-				datasets: [
-					{
-						data: level_stat.map(d => d.reg_seat),
-						label: 'Registered Seat',
-						stack: 'stack 1',
-						backgroundColor: colors.green
-					},
-					{
-						data: level_stat.map(d => d.vacant_seat),
-						label: 'Vacant Seat',
-						stack: 'stack 1',
-						backgroundColor: colors.orange
-					}
-				]
+				datasets: getDatasets(by_level)
 			}
 		})
+		return {
+			update: _by_level => {
+				chart.data.datasets = getDatasets(_by_level)
+				chart.update()
+			}
+		}
 	}
 
 	const initLanguageChart = node => {
@@ -220,12 +229,10 @@
 		<div class="grid grid-cols-2 bg-white border border-gray-300 p-8 rounded">
 			<div class="mb-4">
 				<p class="text-xl font-bold text-center">課堂空置狀況</p>
-				<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
-				<canvas use:initVacancyChart/>
+				<canvas use:initVacancyChart={$classroom_analytic.by_level}/>
 			</div>
 			<div class="mb-4">
 				<p class="text-xl font-bold text-center">外敎與雙語課堂比例</p>
-				<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
 				<canvas use:initLanguageChart/>
 			</div>
 		</div>

@@ -91,15 +91,6 @@ const create_class_analytic = () => {
 		const result = big_class_mapper.all_levels.map(lv => ({
 			level: lv,
 			lesson_count: 0,
-			language: languages.map(label => ({
-				label, count: 0
-			})),
-			status: status.map(label => ({
-				label, count: 0
-			})),
-			vacancy: vacancy.map(label => ({
-				label, count: 0
-			})),
 			native_lesson_count: 0,
 			bilingual_lesson_count: 0,
 			full_house_lesson_count: 0,
@@ -123,16 +114,12 @@ const create_class_analytic = () => {
 				const vacant_seat = Math.min(classroom.student_size, 10) - reg_seat
 				if (reg_seat === 0) {
 					obj.empty_lesson_count ++
-					obj.status[0].count++
 				} else if (reg_seat === 1) {
 					obj.only_one_ppl_lesson_count ++
-					obj.status[1].count++
 				} else if (reg_seat !== vacant_seat) {
 					obj.enough_ppl_lesson_count ++
-					obj.status[2].count++
 				} else {
 					obj.full_house_lesson_count ++
-					obj.status[3].count++
 				}
 				obj.reg_seat = obj.reg_seat + reg_seat
 				obj.vacant_seat = obj.vacant_seat + vacant_seat
