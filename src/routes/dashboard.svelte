@@ -95,10 +95,18 @@
 				labels: demand.map(d => d.level),
 				datasets: [
 					{
-						label: "小戶人數",
-						data: demand.map(d => d.few_ticker_user_count),
+						label: "試用新戶",
+						data: demand.map(d => d.new_user_count),
 						backgroundColor: 'rgba(255, 99, 132, 0.2)',
 						borderColor: 'rgba(255, 99, 132, 1)',
+						borderWidth: 1,
+						stack: 'Stack 0',
+					},
+					{
+						label: "試用新戶",
+						data: demand.map(d => d.few_ticker_user_count),
+						backgroundColor: 'rgba(255, 159, 64, 0.2)',
+						borderColor: 'rgba(255, 159, 64, 1)',
 						borderWidth: 1,
 						stack: 'Stack 0',
 					},
@@ -143,11 +151,11 @@
 		new Chart(node, {
 			type: 'pie',
 			data: {
-				labels: ['大戶', '細戶'],
+				labels: ['試用新戶', '大戶', '需跟進戶'],
 				datasets: [
 					{
-						data: [summary.many_ticker_user_count, summary.few_ticker_user_count],
-						backgroundColor: [colors.blue, colors.red]
+						data: [summary.new_user_count, summary.many_ticker_user_count, summary.few_ticker_user_count],
+						backgroundColor: [colors.green, colors.blue, colors.red]
 					}
 				]
 			}
@@ -201,8 +209,8 @@
 				<p>學生總數</p>
 				<p style="font-size: 4em" class="font-light leading-none">{summary.total_students}</p>
 				<div class="mb-8"></div>
-				<p>試用學生數</p>
-				<p style="font-size: 4em" class="font-light leading-none">{summary.few_ticker_user_count}</p>
+				<p>試用新戶</p>
+				<p style="font-size: 4em" class="font-light leading-none">{summary.new_user_count}</p>
 			</div>
 			<div class="flex-1 flex w-full">
 				<div class="flex-1">

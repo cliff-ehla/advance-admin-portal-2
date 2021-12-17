@@ -35,18 +35,21 @@ const student_store = (() => {
 			user_count: 0,
 			few_ticker_user_count: 0,
 			many_ticker_user_count: 0,
-			lesson_demand: 0
+			new_user_count: 0
 		}))
 		get(store).forEach(s => {
-			if (s.r_t_amt > 0) {
+			console.log(s)
+			if (s.tt_t_amt > 0) {
 				const level = s.level
 				const obj = result.find(r => r.level === level)
 				obj.user_count++
-				obj.lesson_demand += Math.min(s.r_t_amt, 8)
-				if (s.r_t_amt > 6) {
-					obj.many_ticker_user_count++
-				} else {
+
+				if (s.tt_t_amt <= 6) {
+					obj.new_user_count++
+				} else if (s.r_t_amt  <= 6) {
 					obj.few_ticker_user_count++
+				} else if (s.r_t_amt > 6) {
+					obj.many_ticker_user_count++
 				}
 			}
 		})
@@ -60,16 +63,19 @@ const student_store = (() => {
 		const result = {
 			total_students: 0,
 			many_ticker_user_count: 0,
-			few_ticker_user_count: 0
+			few_ticker_user_count: 0,
+			new_user_count: 0
 		}
 
 		get(store).forEach(s => {
-			if (s.r_t_amt > 0) {
+			if (s.tt_t_amt > 0) {
 				result.total_students++
-				if (s.r_t_amt > 6) {
-					result.many_ticker_user_count++
-				} else {
+				if (s.tt_t_amt <= 6) {
+					result.new_user_count++
+				} else if (s.r_t_amt  <= 6) {
 					result.few_ticker_user_count++
+				} else if (s.r_t_amt > 6) {
+					result.many_ticker_user_count++
 				}
 			}
 		})
