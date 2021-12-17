@@ -1,5 +1,6 @@
-import {writable, get} from "svelte/store";
+import {writable, get, derived} from "svelte/store";
 import {big_class_mapper} from "$lib/store/big-class-mapper.js";
+import dayjs from "dayjs";
 
 const create_big_class_store = () => {
 	const store = writable([])
@@ -17,7 +18,6 @@ const create_big_class_store = () => {
 			vacant_seat: 0
 		}))
 		get(store).forEach(classroom => {
-			// console.log(classroom)
 			const levels = big_class_mapper.getLevels(classroom.rc_level)
 			levels.forEach(lv => {
 				const obj = result.find(i => i.level === lv)
@@ -45,26 +45,46 @@ const create_big_class_store = () => {
 		return result
 	}
 
-	const getStatusSummary = () => {
-		const result = [
-			{
-				label: '無人報',
-				lesson_count: 0
-			},
-			{
-				label: '得一個人報',
-				lesson_count: 0
-			},
-			{
-				label: '2-3人',
-				lesson_count: 0
-			},
-			{
-				label: '滿員',
-				lesson_count: 0
-			}
-		]
-		get(store).forEach(classroom => {
+	return {
+		subscribe: store.subscribe,
+		set: store.set,
+		getLevelStat
+	}
+}
+
+export const big_class_store = create_big_class_store()
+
+const create_class_analytic = () => {
+	const time_range = writable(7)
+	const filtered_classroom = derived([big_class_store, time_range], ([$big_class_store, $time_span]) => {
+		return $big_class_store.filter(classroom => {
+			return dayjs(classroom.start_date).isBefore(dayjs().add(get(time_range), 'day'))
+		})
+	})
+	const seat_analytic = derived(filtered_classroom, $big_class_tore => {
+		let vacant_seat = 0
+		let reg_seat = 0
+		$big_class_tore.forEach(classroom => {
+			const _reg_seat = Number(classroom.reg_user_cnt)
+			const _vacant_seat = Math.min(classroom.student_size, 20) - _reg_seat
+			vacant_seat += _vacant_seat
+			reg_seat += _reg_seat
+		})
+		const total_seat = vacant_seat + reg_seat
+		return {
+			total_count: total_seat,
+			vacant_count: vacant_seat,
+			reg_count: reg_seat,
+			vacancy_rate: Math.round(vacant_seat / total_seat * 100)
+		}
+	})
+	const lesson_analytic = derived(filtered_classroom, $filtered_classroom => {
+		const labels = ['無人報', '得一個人報', '2-3人', '滿員']
+		const result = labels.map(label => ({
+			label,
+			lesson_count: 0
+		}))
+		$filtered_classroom.forEach(classroom => {
 			const reg_seat = Number(classroom.reg_user_cnt)
 			const vacant_seat = Math.min(classroom.student_size, 10) - reg_seat
 			if (reg_seat === 0) {
@@ -77,34 +97,24 @@ const create_big_class_store = () => {
 				result[2].lesson_count++
 			}
 		})
-		return result
-	}
-
-	const getBookingStatus = () => {
-		let vacant_seat = 0
-		let reg_seat = 0
-		get(store).forEach(classroom => {
-			const _reg_seat = Number(classroom.reg_user_cnt)
-			const _vacant_seat = Math.min(classroom.student_size, 20) - _reg_seat
-			vacant_seat += _vacant_seat
-			reg_seat += _reg_seat
-		})
-		const total_seat = vacant_seat + reg_seat
 		return {
-			total_seat,
-			vacant_seat,
-			reg_seat,
-			vacancy_date: Math.round(vacant_seat / total_seat * 100)
+			total_count: $filtered_classroom.length,
+			chart: result
 		}
+	})
+	const store = derived([seat_analytic, lesson_analytic], ([$seat_analytic, $lesson_analytic]) => {
+		return {
+			seat: $seat_analytic,
+			classroom: $lesson_analytic
+		}
+	})
+	const setRange = (range) => {
+		time_range.set(range)
 	}
-
 	return {
 		subscribe: store.subscribe,
-		set: store.set,
-		getLevelStat,
-		getStatusSummary,
-		getBookingStatus
+		setRange
 	}
 }
 
-export const big_class_store = create_big_class_store()
+export const classroom_analytic = create_class_analytic()

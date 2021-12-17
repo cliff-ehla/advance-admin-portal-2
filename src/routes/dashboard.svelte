@@ -24,7 +24,10 @@
 	const demand = student_store.getLessonDemand()
 	const summary = student_store.getSummary()
 	import Icon from '$lib/ui-elements/icon.svelte'
-
+	import {classroom_analytic} from "$lib/store/big-class-store.js";
+	$: {
+		console.log(123, $classroom_analytic)
+	}
 
 	export let big_class_list
 	const colors = {
@@ -36,11 +39,6 @@
 	const start_date = dayjs().format('DD MMM YYYY')
 	const end_date = dayjs().add(2, 'month').format('DD MMM YYYY')
 	const level_stat = big_class_store.getLevelStat()
-	const lesson_status_summary = big_class_store.getStatusSummary()
-	const total_lessons = lesson_status_summary.reduce((a, b) => {
-		return b.lesson_count + a
-	}, 0)
-	const booking_status = big_class_store.getBookingStatus()
 
 	const initVacancyChart = node => {
 		new Chart(node, {
@@ -179,19 +177,27 @@
 		})
 	}
 
-	const initLessonStatusChart = node => {
-		new Chart(node, {
+	const initLessonStatusChart = (node, chart_data) => {
+		const chart = new Chart(node, {
 			type: 'pie',
 			data: {
-				labels: lesson_status_summary.map(d => d.label),
+				labels: chart_data.map(d => d.label),
 				datasets: [
 					{
-						data: lesson_status_summary.map(d => d.lesson_count),
+						data: chart_data.map(d => d.lesson_count),
 						backgroundColor: [colors.red, colors.orange, colors.blue, colors.green]
 					}
 				]
 			}
 		})
+		return {
+			update: chart_data => {
+				chart.data.datasets.forEach((dataset) => {
+					dataset.data = chart_data.map(d => d.lesson_count)
+				});
+				chart.update()
+			}
+		}
 	}
 
 	const tooltip = node => {
@@ -227,29 +233,34 @@
 			</div>
 		</div>
 
+		<div class="p-4 bg-white top-0 sticky mb-4 border-b border-gray-300">
+			<button on:click={() => {classroom_analytic.setRange('7')}} class="button-secondary">一星期</button>
+			<button on:click={() => {classroom_analytic.setRange('14')}} class="button-secondary">兩星期</button>
+			<button on:click={() => {classroom_analytic.setRange('30')}} class="button-secondary">一個月</button>
+		</div>
 		<div class="mb-8 flex bg-white p-8 border border-gray-300 rounded">
 			<div class="w-28">
 				<div class="mb-8">
 					<p>課堂總數</p>
-					<p style="font-size: 4em" class="font-light leading-none">{total_lessons}</p>
+					<p style="font-size: 4em" class="font-light leading-none">{$classroom_analytic.classroom.total_count}</p>
 				</div>
 				<div class="mb-8">
 					<p>Seat總數</p>
-					<p style="font-size: 4em" class="font-light leading-none">{booking_status.total_seat}</p>
+					<p style="font-size: 4em" class="font-light leading-none">{$classroom_analytic.seat.total_count}</p>
 				</div>
 				<div class="mb-8">
 					<p>已book堂數</p>
-					<p style="font-size: 4em" class="font-light leading-none">{booking_status.reg_seat}</p>
+					<p style="font-size: 4em" class="font-light leading-none">{$classroom_analytic.seat.reg_count}</p>
 				</div>
 				<div class="mb-8">
 					<p>空置率</p>
-					<p style="font-size: 4em" class="font-light leading-none">{booking_status.vacancy_date}%</p>
+					<p style="font-size: 4em" class="font-light leading-none">{$classroom_analytic.seat.vacancy_rate}%</p>
 				</div>
 			</div>
 			<div class="w-full">
 				<p class="text-xl font-bold text-center">課堂報名Status</p>
 				<p class="text-center text-sm text-gray-400">{start_date} - {end_date}</p>
-				<canvas use:initLessonStatusChart/>
+				<canvas use:initLessonStatusChart={$classroom_analytic.classroom.chart}/>
 			</div>
 		</div>
 
