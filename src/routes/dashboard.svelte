@@ -27,6 +27,7 @@
 	import {classroom_analytic} from "$lib/store/big-class-store.js";
 	import DemandSupply from '$lib/dashboard/demand-supply-by-level-bar-chart.svelte'
 	import VacancyBarChar from '$lib/dashboard/vacancy-by-level-bar-chart.svelte'
+	import LanguageByLevelBarChar from '$lib/dashboard/lesson-language-by-level-bar-chart.svelte'
 	$: {
 		console.log(123, $classroom_analytic)
 	}
@@ -40,32 +41,6 @@
 	}
 	const start_date = dayjs().format('DD MMM YYYY')
 	const end_date = dayjs().add(2, 'month').format('DD MMM YYYY')
-	const level_stat = $classroom_analytic.by_level
-
-
-
-	const initLanguageChart = node => {
-		new Chart(node, {
-			type: 'bar',
-			data: {
-				labels: demand.map(d => d.level),
-				datasets: [
-					{
-						data: level_stat.map(d => d.native_lesson_count),
-						label: 'Native',
-						stack: 'stack 1',
-						backgroundColor: colors.green
-					},
-					{
-						data: level_stat.map(d => d.bilingual_lesson_count),
-						label: 'Bilingual Seat',
-						stack: 'stack 1',
-						backgroundColor: colors.orange
-					}
-				]
-			}
-		})
-	}
 
 	const initStudentTrialPie = node => {
 		new Chart(node, {
@@ -197,13 +172,12 @@
 
 		<DemandSupply/>
 
-		<div class="grid grid-cols-2 bg-white border border-gray-300 p-8 rounded">
+		<div class="grid grid-cols-2 gap-8 bg-white border border-gray-300 p-8 rounded">
 			<div class="mb-4">
 				<VacancyBarChar/>
 			</div>
 			<div class="mb-4">
-				<p class="text-xl font-bold text-center">外敎與雙語課堂比例</p>
-				<canvas use:initLanguageChart/>
+				<LanguageByLevelBarChar/>
 			</div>
 		</div>
 	</div>
