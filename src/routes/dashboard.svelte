@@ -26,6 +26,7 @@
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import {classroom_analytic} from "$lib/store/big-class-store.js";
 	import DemandSupply from '$lib/dashboard/demand-supply-by-level-bar-chart.svelte'
+	import VacancyBarChar from '$lib/dashboard/vacancy-by-level-bar-chart.svelte'
 	$: {
 		console.log(123, $classroom_analytic)
 	}
@@ -41,37 +42,7 @@
 	const end_date = dayjs().add(2, 'month').format('DD MMM YYYY')
 	const level_stat = $classroom_analytic.by_level
 
-	const initVacancyChart = (node, by_level) => {
-		const getDatasets = (_by_level) => {
-			return [
-				{
-					data: _by_level.map(d => d.reg_seat),
-					label: 'Registered Seat',
-					stack: 'stack 1',
-					backgroundColor: colors.green
-				},
-				{
-					data: _by_level.map(d => d.vacant_seat),
-					label: 'Vacant Seat',
-					stack: 'stack 1',
-					backgroundColor: colors.orange
-				}
-			]
-		}
-		const chart = new Chart(node, {
-			type: 'bar',
-			data: {
-				labels: demand.map(d => d.level),
-				datasets: getDatasets(by_level)
-			}
-		})
-		return {
-			update: _by_level => {
-				chart.data.datasets = getDatasets(_by_level)
-				chart.update()
-			}
-		}
-	}
+
 
 	const initLanguageChart = node => {
 		new Chart(node, {
@@ -228,8 +199,7 @@
 
 		<div class="grid grid-cols-2 bg-white border border-gray-300 p-8 rounded">
 			<div class="mb-4">
-				<p class="text-xl font-bold text-center">課堂空置狀況</p>
-				<canvas use:initVacancyChart={$classroom_analytic.by_level}/>
+				<VacancyBarChar/>
 			</div>
 			<div class="mb-4">
 				<p class="text-xl font-bold text-center">外敎與雙語課堂比例</p>
