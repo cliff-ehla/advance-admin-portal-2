@@ -146,22 +146,30 @@
 			</div>
 		</div>
 		<div class="mb-8 flex bg-white p-8 border border-gray-300 rounded">
-			<div class="w-28">
-				<div class="mb-8">
-					<p>課堂總數</p>
-					<p style="font-size: 4em" class="font-light leading-none">{$classroom_analytic.classroom.total_count}</p>
+			<div class="w-48 flex-shrink-0">
+				<div class="flex mb-6 border-b border-gray-300 pb-6">
+					<div>
+						<p>課堂總數</p>
+						<p style="font-size: 4em" class="font-light leading-none">{$classroom_analytic.classroom.total_count}</p>
+					</div>
+					<div class="ml-auto">
+						<p class="text-red-800">冇人報的堂</p>
+						<p style="font-size: 4em" class="font-light leading-none text-red-400">{$classroom_analytic.classroom.chart[0].lesson_count}</p>
+					</div>
 				</div>
-				<div class="mb-8">
-					<p>Seat總數</p>
-					<p style="font-size: 4em" class="font-light leading-none">{$classroom_analytic.seat.total_count}</p>
+				<div class="flex mb-2">
+					<div>
+						<p>Seat位總數</p>
+						<p style="font-size: 3.2em" class="font-light leading-none">{$classroom_analytic.seat.total_count}</p>
+					</div>
+					<div class="ml-auto mt-auto mb-1">
+						<p>已Book</p>
+						<p style="font-size: 3.2em" class="font-light leading-none">{$classroom_analytic.seat.reg_count}</p>
+					</div>
 				</div>
-				<div class="mb-8">
-					<p>已book堂數</p>
-					<p style="font-size: 4em" class="font-light leading-none">{$classroom_analytic.seat.reg_count}</p>
-				</div>
-				<div class="mb-8">
-					<p>空置率</p>
-					<p style="font-size: 4em" class="font-light leading-none">{$classroom_analytic.seat.vacancy_rate}%</p>
+				<div class="mb-8 bg-gray-100 text-center flex py-2 px-4 rounded text-gray-500">
+					<p class="mt-auto mb-0.5">空置率</p>
+					<p style="font-size: 2.8em" class="ml-auto font-light leading-none">{$classroom_analytic.seat.vacancy_rate}%</p>
 				</div>
 			</div>
 			<div class="w-full">
