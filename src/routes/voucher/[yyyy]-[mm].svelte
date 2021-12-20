@@ -4,7 +4,7 @@
 
 	export const load = async ({page, fetch}) => {
 		let start_date = `${page.params.yyyy}-${page.params.mm}-01 00:00:00`
-		const {data, success, debug} = await http.post(fetch, '/courseApi/list_voucher', {
+		const {data, success, debug} = await http.post(fetch, '/voucherApi/list_voucher', {
 			start_date: dayjs(start_date).format('YYYY-MM-DD HH:mm:ss'),
 			end_date: dayjs(start_date).add(1, 'month').format('YYYY-MM-DD HH:mm:ss')
 		})
@@ -26,6 +26,7 @@
 	const {openModal, closeModal} = getContext('simple-modal')
 
 	export let record_list
+	console.log('record_list', record_list)
 	$: year = $page.params.yyyy
 	$: month = $page.params.mm
 
