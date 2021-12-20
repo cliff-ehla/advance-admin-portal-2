@@ -13,7 +13,7 @@ export const student_analytic = derived(student_store, $student_store => {
 	}
 
 	$student_store.forEach(s => {
-		if (s.tt_t_amt > 0) {
+		if (s.tt_t_amt > 0 && !s.parent_username.includes('queenie')) {
 			result.total_students++
 			if (s.tt_t_amt <= 6) {
 				result.new_user_count++
