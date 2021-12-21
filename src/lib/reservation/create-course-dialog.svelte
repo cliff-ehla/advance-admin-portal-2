@@ -33,7 +33,7 @@
 	let loading
 	let message
 	let message_note = genMessage2()
-	let app_fee = 0, lesson_fee = 0
+	let voucher_id
 	let is_renewal
 	let step = 1
 
@@ -69,8 +69,7 @@
 			notification: '成功'
 		})
 		await http.post(fetch, '/zoomApi/confirm_zoom_real_reserved', {
-			app_fee,
-			lesson_fee,
+			voucher_id,
 			is_renewal,
 			grouper_id: data.grouper_id,
 			confirm_summary: message
@@ -141,10 +140,6 @@
 
 		<div class="grid grid-cols-2 gap-4 mb-4">
 			<div>
-				<label for="app-fee">App fee</label>
-				<input id="app-fee" bind:value={app_fee} class="input" type="number" placeholder="App fee (i.e. 50)">
-				<label for="lesson-fee">Lesson fee</label>
-				<input id="lesson-fee" bind:value={lesson_fee} class="input" type="number" placeholder="Lesson fee (i.e. 500)">
 				<div class="flex items-center mt-2">
 					<div class="whitespace-nowrap text-gray-400">Is renewal</div>
 					<input bind:checked={is_renewal} class="w-4 h-4 ml-4" type="checkbox">
@@ -192,7 +187,7 @@
 	<div class="flex justify-between mt-4">
 		{#if step === 1}
 			<button on:click={closeModal} class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1">取消</button>
-			<Button disabled={!(typeof app_fee === 'number' && typeof lesson_fee === 'number' && course_title && student_id && teacher_id)} button_class="flex-1 py-2 ml-4" on:click={() => {step = 2}}>下一步</Button>
+			<Button disabled={!(voucher_id && course_title && student_id && teacher_id)} button_class="flex-1 py-2 ml-4" on:click={() => {step = 2}}>下一步</Button>
 		{:else if step === 2}
 			<button on:click={() => {step = 1}} class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1">上一步</button>
 			<Button button_class="flex-1 py-2 ml-4" on:click={onConfirm}>確定建立課堂</Button>

@@ -52,7 +52,7 @@
   $: currentTransitionBg = state.transitionBg;
   $: currentTransitionWindow = state.transitionWindow;
   $: width = state.width || 'auto'
-  $: padding = state.padding || 0
+  $: padding = state.padding || '1em'
 
   const toVoid = () => {};
   let onOpen = toVoid;

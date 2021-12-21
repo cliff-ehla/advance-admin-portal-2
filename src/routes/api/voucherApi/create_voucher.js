@@ -13,7 +13,7 @@ export const post = (req) => {
 	}
 	if (voucher_type === 'TICKET') {
 		data.ticket_amt = req.body.ticket_amt
-		data.ticketExpiryDate = dayjs().add(6, 'month').format('YYYY-MM-DD 00:00:00')
+		data.ticket_expiry_date = dayjs().add(6, 'month').format('YYYY-MM-DD 00:00:00')
 	} else if (voucher_type === 'COURSE' || voucher_type === 'TRIAL') {
 		data.lesson_count = req.body.lesson_count
 		data.lesson_duration = req.body.lesson_duration

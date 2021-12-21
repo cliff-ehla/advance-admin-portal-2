@@ -3,6 +3,7 @@
 	import {getContext} from 'svelte'
 	const {closeModal} = getContext('simple-modal')
 
+	export let parent_mobile = undefined
 	export let onSuccess = () => {}
 	let created_student
 
@@ -13,7 +14,7 @@
 </script>
 
 {#if !created_student}
-	<CreateNewUser on:created={e => {created_student = e.detail}}/>
+	<CreateNewUser {parent_mobile} on:created={e => {created_student = e.detail}}/>
 {:else}
 	<div class="w-96 p-4">
 		<p class="font-bold mb-2">Student created</p>

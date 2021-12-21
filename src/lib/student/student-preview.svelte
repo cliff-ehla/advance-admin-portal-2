@@ -1,23 +1,5 @@
 <script>
-	import CreateTickerDialog from "$lib/ticker/create-ticker-dialog.svelte";
-
 	export let s
-	import Icon from '$lib/ui-elements/icon.svelte'
-	import {getContext} from 'svelte'
-	const {openModal, closeModal} = getContext('simple-modal')
-
-	const openCreateTickerDialog = (student) => {
-		openModal(CreateTickerDialog, {
-			parent_id: student.parent_id,
-			parent_nickname: student.parent_nickname,
-			onSuccess: ({ticket_amt}) => {
-				s.r_t_amt = Number(student.r_t_amt) + Number(ticket_amt)
-			}
-		}, {
-			padding: '1em'
-		})
-	}
-
 </script>
 
 <div class="flex items-center mb-4">
@@ -46,9 +28,6 @@
 				<div class="flex items-center">
 					<img src="/ticket.jpg" alt="ticket" class="w-6 h-6 rounded-full">
 					<p class="ml-1">{s.r_t_amt}張</p>
-					<button on:click={() => {openCreateTickerDialog(s)}} class="text-blue-500 border-gray-400 hover:bg-blue-500 hover:text-white border p-1 rounded-full ml-1">
-						<Icon name="add" className="w-3"/>
-					</button>
 				</div>
 				<p class="text-xs text-gray-500 mt-0.5">已用: {s.used_t_amt}, 總共: {s.tt_t_amt}</p>
 			</div>
