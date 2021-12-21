@@ -19,9 +19,11 @@
 	import Dropdown from '$lib/ui-elements/dropdown3.svelte'
 	import {getContext} from 'svelte'
 	import CreateUserDialog from '$lib/student/create-new-user-dialog.svelte'
-	import {creating_course_from_voucher, action_status} from "../../store/calendar-action-status-store.js";
+	import {tutor_store} from "../../store/tutor-store.js";
+	import {calendar_store, action_status} from "../../store/calendar-action-status-store.js";
 	import {dialog} from "$lib/store/dialog.js";
 	import {tooltip} from "$lib/aciton/tooltip.js";
+	import {goto} from "../../../.svelte-kit/dev/runtime/app/navigation.js";
 
 	const {openModal, closeModal} = getContext('simple-modal')
 
@@ -46,12 +48,21 @@
 	}
 
 	const onCreateCourse = (row, student_id) => {
-		console.log(row, student_id)
-		creating_course_from_voucher.set({
-			voucher_id: row.id,
-			voucher_number: row.voucher_number,
-		})
-		action_status.set('create_course')
+		const type = row.type
+		if (type === 'TRIAL') {
+			calendar_store.createTrial({
+				student_id,
+				teacher_id: row.teacher_id,
+				voucher_id: row.id,
+			})
+		} else if (type === 'COURSE') {
+			calendar_store.createCourse({
+				student_id,
+				teacher_id: row.teacher_id,
+				voucher_id: row.id,
+			})
+		}
+		goto(`/tutor/${row.teacher_id}`)
 	}
 
 	const onCreateVoucher = (option) => {
@@ -131,7 +142,7 @@
 				</td>
 				<td>
 					{#if r.teacher_nickname}
-						{r.teacher_nickname}
+						<img use:tooltip={r.teacher_nickname} src={tutor_store.getTutorProfilePic(r.teacher_id)} alt="img" class="w-12 h-12 rounded-full">
 					{/if}
 				</td>
 				<td>

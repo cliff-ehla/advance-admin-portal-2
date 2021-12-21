@@ -1,14 +1,14 @@
 import FineTunePopup from "../../calendar/time-fine-tune-popup.svelte";
-import {course_lesson_tbc_selection} from "../../../store/calendar-action-status-store";
+import {action_status, calendar_store, course_lesson_tbc_selection} from "../../../store/calendar-action-status-store";
 import dayjs from "dayjs";
-import {action_status} from "../../../store/calendar-action-status-store";
 import {get} from "svelte/store";
 import {genTempSelectEvent} from "../phase-to-events";
 
 export const onReservationSlotSelect = ({jsEvent, start, end}, openPopper, calendar, user_id, month_calendar) => {
-	let _action_status = get(action_status)
+	let _action_status = get(calendar_store).status || get(action_status)
+	console.log('_action_status', _action_status)
 
-	if (_action_status === 'create_option' || _action_status === 'create_trial_lesson' || _action_status === 'create_big_class') {
+	if (_action_status === 'create_option' || _action_status === 'create_trial' || _action_status === 'create_big_class') {
 		let _start_time = dayjs(start).format('HH:mm')
 		let _end_time = dayjs(end).format('HH:mm')
 		openPopper(jsEvent.target, FineTunePopup, {

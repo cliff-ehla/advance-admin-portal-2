@@ -1,4 +1,4 @@
-import {action_status, course_start_hh_mm, course_end_hh_mm, course_lesson_tbc_selection} from "../../../store/calendar-action-status-store";
+import {calendar_store, action_status, course_start_hh_mm, course_end_hh_mm, course_lesson_tbc_selection} from "../../../store/calendar-action-status-store";
 import {get} from 'svelte/store'
 import {getSelectedDateEvent} from "./get-today-event";
 import {genTempSelectEvent} from "../phase-to-events";
@@ -6,7 +6,7 @@ import dayjs from "dayjs";
 import {sentry} from "$lib/sentry";
 
 export const createCourseOnDateSelect = (e, month_calendar, day_calendar, tutor_id) => {
-	let type = get(action_status)
+	let type = get(calendar_store).status || get(action_status)
 	let arr = ['create_leave', 'create_course']
 	if (arr.includes(type)) {
 		let tbc_event = getSelectedDateEvent(month_calendar, e.start)

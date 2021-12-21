@@ -2,7 +2,7 @@
 	import Icon from '../../lib/ui-elements/icon.svelte'
 	import TimePicker from '../../lib/ui-elements/time-picker-2.svelte'
 	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
-	import {action_status} from "../../store/calendar-action-status-store";
+	import {action_status, calendar_store} from "../../store/calendar-action-status-store";
 	import {course_lesson_tbc_selection, edit_lesson_tbc_to_date, course_start_hh_mm, course_end_hh_mm} from "../../store/calendar-action-status-store";
 	import {getContext} from 'svelte'
 	const {openModal} = getContext('simple-modal')
@@ -10,7 +10,6 @@
 	import ConfirmOptionDialog from "../reservation/trial-option-confirm-dialog.svelte";
 	import ConfirmLeaveDialog from "../reservation/confirm-leave-dialog.svelte";
 	import CreateBigClassDialog from "../reservation/create-big-class-dialog.svelte";
-	import StudentSelectDialog from "$lib/student/student-select.svelte";
 	import CreateTrialLessonDialog from "$lib/option/create-trial-lesson.dialog.svelte";
 	import dayjs from "dayjs";
 	import {editZoom, createZoom} from "../../api/zoom-api";
@@ -27,9 +26,7 @@
 
 	const onOpenCourseConfirmDialog = () => {
 		if ($course_lesson_tbc_selection.length) {
-			openModal(CreateCourseDialog, {}, {
-				padding: '1em'
-			})
+			openModal(CreateCourseDialog)
 		}
 	}
 
@@ -49,21 +46,12 @@
 
 	const onOpenTrialLessonConfirmDialog = () => {
 		if (!$course_lesson_tbc_selection.length) return
-		openModal(StudentSelectDialog, {
-			onConfirm: (s) => {
-				let reserve = $course_lesson_tbc_selection[0]
-				openModal(CreateTrialLessonDialog, {
-					student_id: s.student_id,
-					teacher_id: reserve.teacher_id,
-					start_date: dayjs(reserve.start_date).utc().format('YYYY-MM-DD HH:mm:ss'),
-					end_date: dayjs(reserve.end_date).utc().format('YYYY-MM-DD HH:mm:ss')
-				}, {
-					width: '960px'
-				})
-			}
+		let reserve = $course_lesson_tbc_selection[0]
+		openModal(CreateTrialLessonDialog, {
+			start_date: dayjs(reserve.start_date).utc().format('YYYY-MM-DD HH:mm:ss'),
+			end_date: dayjs(reserve.end_date).utc().format('YYYY-MM-DD HH:mm:ss')
 		}, {
-			width: '500px',
-			padding: '1em'
+			width: '960px'
 		})
 	}
 
@@ -124,14 +112,9 @@
 		action_status.set('')
 		edit_lesson_tbc_to_date.set({})
 	}
-
-	const onCourseClick = () => {
-		course_lesson_tbc_selection.set([])
-		action_status.set('create_course')
-	}
 </script>
 
-{#if !!$action_status}
+{#if !!($action_status || $calendar_store.status)}
 	<div class="flex items-center bg-blue-100 h-full mr-2">
 		<div class="flex-1 px-4 relative">
 			{#if loading}
@@ -139,7 +122,7 @@
 					loading
 				</div>
 			{/if}
-			{#if $action_status === 'create_course'}
+			{#if $calendar_store.status === 'create_course'}
 				<div class="flex items-center">
 					<div class="flex">
 						<div>
@@ -174,7 +157,7 @@
 					<Icon name="right" className="w-4 ml-2"/>
 				</button>
 			{/if}
-			{#if $action_status === 'create_trial_lesson'}
+			{#if $calendar_store.status === 'create_trial'}
 				<p class="font-bold text-xs mb-1">Create trial lesson</p>
 				<button on:click={onOpenTrialLessonConfirmDialog} class="{$course_lesson_tbc_selection.length ? 'bg-yellow-500 hover:bg-yellow-700' : 'bg-gray-300'} pl-4 pr-2 py-1 rounded text-white flex items-center">
 					Confirm
@@ -216,14 +199,8 @@
 				<div on:click={() => {action_status.set('create_option')}} class="cursor-pointer px-4 py-2 hover:text-blue-500 hover:bg-gray-100">
 					Options
 				</div>
-				<div on:click={() => {action_status.set('create_trial_lesson')}} class="cursor-pointer px-4 py-2 hover:text-blue-500 hover:bg-gray-100">
-					Trial lesson
-				</div>
 				<div on:click={() => {action_status.set('create_big_class')}} class="cursor-pointer px-4 py-2 hover:text-blue-500 hover:bg-gray-100">
 					Create big/small class
-				</div>
-				<div on:click={onCourseClick} class="cursor-pointer px-4 py-2 hover:text-blue-500 hover:bg-gray-100">
-					Course
 				</div>
 				<div on:click={() => {action_status.set('create_leave')}} class="cursor-pointer px-4 py-2 hover:text-blue-500 hover:bg-gray-100">
 					Create leave

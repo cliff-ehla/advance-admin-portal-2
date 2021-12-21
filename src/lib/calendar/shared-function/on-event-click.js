@@ -2,7 +2,7 @@ import ZoomDetailPopup from "../../zoom/zoom-detail-dialog.svelte";
 import ZoomLessonMenu from "../zoom-lesson-menu.svelte";
 import {genBookedEventFromZoom, genTempEditEvent} from "../phase-to-events";
 import dayjs from "dayjs";
-import {action_status, course_lesson_tbc_selection, edit_lesson_tbc_to_date} from "../../../store/calendar-action-status-store";
+import {calendar_store, action_status, course_lesson_tbc_selection, edit_lesson_tbc_to_date} from "../../../store/calendar-action-status-store";
 import {get} from 'svelte/store'
 import {syncTempEvents} from "./sync-temp-events";
 import FineTunePopup from "../time-fine-tune-popup.svelte";
@@ -12,7 +12,7 @@ import {removeMaterialFromZoom} from "../../../api/zoom-api";
 import {deleteLeaveTime} from "../../../api/tutor-api";
 
 export const onEventClick = ({event, el}, openPopper, openModal, month_calendar, day_calendar, tutor_id, onChangeDate) => {
-	let state = get(action_status)
+	let state = get(calendar_store).status || get(action_status)
 	let props = event.extendedProps
 	let event_type = event.extendedProps.type
 	if ((state === 'create_course' || state === 'create_option') && event_type === 'trial_option_temp') {

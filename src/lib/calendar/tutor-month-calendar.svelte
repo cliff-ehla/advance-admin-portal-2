@@ -309,7 +309,7 @@
 					<span>Select a date and click on the day-calendar to create option</span>
 				{/if}
 			{/if}
-			{#if $action_status === 'create_trial_lesson'}
+			{#if $action_status === 'create_trial'}
 				<span class="font-bold uppercase">Create trial lesson</span>
 				{#if $trial_lesson_retry_student_id}
 					<span class="ml-1 font-bold">({student_store.getStudentName($trial_lesson_retry_student_id)})</span>

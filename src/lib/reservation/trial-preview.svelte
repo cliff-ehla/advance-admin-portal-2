@@ -60,11 +60,7 @@
 	}
 
 	const onRetryClick = (tutor) => {
-		action_status.set('create_trial_lesson')
-		const stduent_id = t.students[0].user_id
-		trial_lesson_retry_student_id.set(stduent_id)
-		console.log('stduent_id', stduent_id)
-		goto(`/tutor/${tutor.user_id}/${dayjs().format('YYYY-MM')}`)
+		alert('wip')
 	}
 
 	const onListMsg = () => {

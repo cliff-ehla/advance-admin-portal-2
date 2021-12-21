@@ -8,23 +8,24 @@
 	import {course_title_options_store} from "../../store/course-title-options-store";
 	import {student_store} from "../../store/student-store";
 	import {tutor_store} from "../../store/tutor-store";
+	import {calendar_store} from "../../store/calendar-action-status-store.js";
 	import dayjs from "dayjs";
 
 	const {openModal, closeModal} = getContext('simple-modal')
 
 	export let reserved_id = undefined
-	export let student_id
-	export let teacher_id
 	export let start_date // in utc
 	export let end_date // in utc
 	export let course_title = undefined
 	export let onSuccess = () => {}
 
+	const student_id = $calendar_store.student_id
+	const teacher_id = $calendar_store.teacher_id
+	const voucher_id = $calendar_store.voucher_id
+
 	let date_display = dayjs.utc(start_date).local().format('DD MMM YYYY')
 	let time_display = dayjs.utc(start_date).local().format('HH:mma') + ' - ' + dayjs.utc(end_date).local().format('HH:mma')
 	let selected_item
-	let lesson_fee
-	let app_fee
 	let step = 1
 	let confirm_summary
 	$: selected_item_id = selected_item ? selected_item.item_id : null
@@ -42,7 +43,7 @@
 				zoom_reserved: [{
 					start_date: dayjs(start_date).format('YYYY-MM-DD HH:mm:ss'),
 					end_date: dayjs(end_date).format('YYYY-MM-DD HH:mm:ss'),
-					teacher_id: teacher_id
+					teacher_id
 				}]
 			}, {
 				notification: '成功建立Option'
@@ -57,8 +58,7 @@
 		}
 		const {success} = await http.post(fetch, '/zoomApi/confirm_zoom_trial_option', {
 			reserved_id,
-			app_fee,
-			lesson_fee,
+			voucher_id,
 			item_id: selected_item_id,
 			course_title,
 			confirm_summary
@@ -104,11 +104,7 @@
 <div class="p-4" style="height: 680px">
 	{#if step === 1}
 		<div style="max-width: 280px">
-			<label for="app-fee">App fee</label>
-			<input id="app-fee" bind:value={app_fee} class="input" type="number" placeholder="App fee (i.e. 50)">
-			<label for="lesson-fee">Lesson fee</label>
-			<input id="lesson-fee" bind:value={lesson_fee} class="input" type="number" placeholder="Lesson fee (i.e. 500)">
-			<label for="lesson-fee">Course title</label>
+			<label>Course title</label>
 			<TemplateTextBox value={course_title} on:input={e => {course_title = e.detail}} options={$course_title_options_store} placeholder="Course title"/>
 		</div>
 	{:else if step === 2}
@@ -121,8 +117,6 @@
 			<div class:ml-8={selected_item}>
 				<p class="font-bold mb-4">總結</p>
 				<CopyMessageTextBox msg={confirm_summary}/>
-				<p class="mt-2">App fee: HKD{app_fee}</p>
-				<p>Lesson fee: HKD{lesson_fee}</p>
 			</div>
 		</div>
 	{/if}
@@ -131,7 +125,7 @@
 <div class="flex justify-between p-4">
 	{#if step === 1}
 		<button on:click={closeModal} class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1">取消</button>
-		<Button disabled={!(typeof app_fee === 'number' && typeof lesson_fee === 'number' && course_title)} button_class="flex-1 py-2 ml-4" on:click={() => {step = 2}}>下一步</Button>
+		<Button disabled={!(course_title)} button_class="flex-1 py-2 ml-4" on:click={() => {step = 2}}>下一步</Button>
 	{:else if step === 2}
 		<button on:click={() => {step = 1}} class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1">上一步</button>
 		<Button button_class="flex-1 py-2 ml-4" on:click={() => {step = 3}}>下一步</Button>

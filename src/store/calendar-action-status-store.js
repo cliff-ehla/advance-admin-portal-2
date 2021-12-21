@@ -1,8 +1,58 @@
 import {writable} from "svelte/store";
 import dayjs from "dayjs";
 
+function createCalendarStore () {
+	const _store = writable({
+		status: undefined,
+		student_id: undefined,
+		teacher_id: undefined,
+		voucher_id: undefined
+	})
+	const createTrial = ({student_id, teacher_id, voucher_id}) => {
+		_store.update(v => {
+			return {
+				...v,
+				student_id,
+				teacher_id,
+				voucher_id,
+				status: 'create_trial'
+			}
+		})
+	}
+	const createCourse = ({start_hh_mm, end_hh_mm, student_id, teacher_id, voucher_id}) => {
+		_store.update(v => {
+			return {
+				...v,
+				student_id,
+				teacher_id,
+				voucher_id,
+				status: 'create_course'
+			}
+		})
+	}
+	const createOption = () => {
+
+	}
+	const editTime = () => {
+
+	}
+	const clear = () => {
+
+	}
+	return {
+		subscribe: _store.subscribe,
+		createTrial,
+		createCourse,
+		createOption,
+		editTime,
+		clear
+	}
+}
+export const calendar_store = createCalendarStore()
+
+
 export const creating_course_from_voucher = writable({})
-export const action_status = writable('') // 'create_option' 'create_course' 'edit_time' 'create_trial_lesson' 'create_big_class' or ''
+export const action_status = writable('') // 'create_option' 'create_course' 'edit_time' 'create_trial' 'create_big_class' or ''
 export const course_start_hh_mm = writable('12:00')
 export const course_end_hh_mm = writable('12:30')
 export const trial_lesson_retry_student_id = writable('')

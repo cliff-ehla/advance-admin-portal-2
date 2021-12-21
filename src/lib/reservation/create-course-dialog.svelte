@@ -1,6 +1,6 @@
 <script>
 	import {onMount} from 'svelte'
-	import {course_lesson_tbc_selection, edit_lesson_tbc_to_date} from "../../store/calendar-action-status-store";
+	import {course_lesson_tbc_selection, calendar_store} from "../../store/calendar-action-status-store";
 	import {action_status} from "../../store/calendar-action-status-store";
 	import dayjs from "dayjs";
 	import {tutor_store} from "../../store/tutor-store";
@@ -19,7 +19,10 @@
 	import {listSyllabus} from "../../api/syllabus-api";
 	import {course_title_options_store} from "../../store/course-title-options-store.js";
 
-	let teacher_id = $course_lesson_tbc_selection[0] && $course_lesson_tbc_selection[0].teacher_id
+	const teacher_id = $calendar_store.teacher_id
+	const student_id = $calendar_store.student_id
+	const voucher_id = $calendar_store.voucher_id
+
 	$: teacherName = $course_lesson_tbc_selection.length ? tutor_store.getTutorName($course_lesson_tbc_selection[0].teacher_id) : ''
 	$: studentName = student_id ? student_store.getStudentName(student_id) : $create_course_from_trial_store ? $create_course_from_trial_store.students[0].nickname : undefined
 	let first_lesson = $course_lesson_tbc_selection[0]
@@ -29,11 +32,9 @@
 	})
 
 	let course_title = ''
-	let student_id // TODO: create course from trial
 	let loading
 	let message
 	let message_note = genMessage2()
-	let voucher_id
 	let is_renewal
 	let step = 1
 
