@@ -1,5 +1,5 @@
 <script>
-	import {course_lesson_tbc_selection, editing_option} from "../../store/calendar-action-status-store";
+	import {calendar_store, course_lesson_tbc_selection, editing_option} from "../../store/calendar-action-status-store";
 	import {action_status} from "../../store/calendar-action-status-store";
 	import {tutor_store} from "../../store/tutor-store";
 	import {createZoomOption, addZoomOption} from "../../api/zoom-api";
@@ -49,6 +49,7 @@
 		}
 		course_lesson_tbc_selection.reset()
 		action_status.set('')
+		calendar_store.clear()
 		goto('/booking/option')
 		closeModal()
 	}

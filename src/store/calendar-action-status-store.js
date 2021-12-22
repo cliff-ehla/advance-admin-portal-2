@@ -37,7 +37,12 @@ function createCalendarStore () {
 
 	}
 	const clear = () => {
-
+		_store.set({
+			status: undefined,
+			student_id: undefined,
+			teacher_id: undefined,
+			voucher_id: undefined
+		})
 	}
 	return {
 		subscribe: _store.subscribe,
@@ -50,8 +55,6 @@ function createCalendarStore () {
 }
 export const calendar_store = createCalendarStore()
 
-
-export const creating_course_from_voucher = writable({})
 export const action_status = writable('') // 'create_option' 'create_course' 'edit_time' 'create_trial' 'create_big_class' or ''
 export const course_start_hh_mm = writable('12:00')
 export const course_end_hh_mm = writable('12:30')

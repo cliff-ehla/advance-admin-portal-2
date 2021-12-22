@@ -22,6 +22,7 @@
 		course_lesson_tbc_selection.reset()
 		edit_lesson_tbc_to_date.set({})
 		action_status.set('')
+		calendar_store.clear()
 	}
 
 	const onOpenCourseConfirmDialog = () => {
@@ -92,6 +93,7 @@
 		await editZoom(payload)
 		loading = false
 		action_status.set('')
+		calendar_store.clear()
 		edit_lesson_tbc_to_date.set({})
 		dispatch('update')
 	}
@@ -110,6 +112,7 @@
 		await createZoom(payload)
 		loading = false
 		action_status.set('')
+		calendar_store.clear()
 		edit_lesson_tbc_to_date.set({})
 	}
 </script>

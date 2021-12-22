@@ -1,5 +1,5 @@
 <script>
-	import {course_lesson_tbc_selection} from "../../store/calendar-action-status-store";
+	import {calendar_store, course_lesson_tbc_selection} from "../../store/calendar-action-status-store";
 	import {action_status} from "../../store/calendar-action-status-store";
 	import {tutor_store} from "../../store/tutor-store";
 	import {createLeaveTime} from "../../api/tutor-api";
@@ -25,6 +25,7 @@
 		await createLeaveTime({leave_times})
 		course_lesson_tbc_selection.set([])
 		action_status.set('')
+		calendar_store.clear()
 		closeModal()
 	}
 </script>

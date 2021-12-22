@@ -1,6 +1,6 @@
 <script>
 	import {onMount, getContext} from 'svelte'
-	import {action_status, course_lesson_tbc_selection} from "../../store/calendar-action-status-store";
+	import {action_status, course_lesson_tbc_selection, calendar_store} from "../../store/calendar-action-status-store";
 	import dayjs from "dayjs";
 	import {tutor_store} from "../../store/tutor-store";
 	import MaterialSelectionList from '$lib/material/material-selection-list.svelte'
@@ -46,6 +46,7 @@
 		closeModal()
 		setTimeout(() => {
 			action_status.set('')
+			calendar_store.clear()
 			course_lesson_tbc_selection.set([])
 		}, 100)
 	}

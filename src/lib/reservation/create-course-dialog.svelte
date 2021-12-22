@@ -80,6 +80,7 @@
 		await goto(`/students/${student_id}`)
 
 		action_status.set('')
+		calendar_store.clear()
 		course_lesson_tbc_selection.reset()
 		closeModal()
 	}
