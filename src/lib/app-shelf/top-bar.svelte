@@ -1,7 +1,6 @@
 <script>
 	import dayjs from "dayjs";
 	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
-	import {user_store} from "../../store/user-store";
 	import {tutor_store} from "../../store/tutor-store";
 	export let user_info
 
@@ -62,7 +61,7 @@
 			href: '/students',
 			children: [
 				{
-					label: 'Dashboard',
+					label: '總覽',
 					href: '/dashboard'
 				},
 				{
@@ -96,12 +95,12 @@
 			href: '/voucher/dashboard',
 			children: [
 				{
-					label: '待處理',
-					href: '/voucher/todo'
+					label: '總覽',
+					href: '/voucher/dashboard'
 				},
 				{
-					label: 'Dashboard',
-					href: '/voucher/dashboard'
+					label: '待處理',
+					href: '/voucher/todo'
 				}
 			]
 		}

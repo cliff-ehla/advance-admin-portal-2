@@ -1,12 +1,28 @@
 import {writable, get, derived, readable} from "svelte/store";
 import {big_class_mapper} from "$lib/store/big-class-mapper.js";
 import dayjs from "dayjs";
+import {http} from "$lib/http.js";
 
 const create_big_class_store = () => {
 	const store = writable([])
+	// TODO: need the fetch para for SSR call?
+	const callIfNoCache = async () => {
+		if (get(store).length) {
+			console.log('use cache')
+			return get(store)
+		}
+		let {data} = await http.post(fetch,'/courseApi/list_registrable_classroom', {
+			start_date: dayjs().subtract(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
+			end_date: dayjs().add(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
+		})
+		data = data.filter(d => !!d.start_date)
+		store.set(data)
+		return data
+	}
 	return {
 		subscribe: store.subscribe,
-		set: store.set
+		set: store.set,
+		callIfNoCache
 	}
 }
 

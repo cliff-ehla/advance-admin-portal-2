@@ -1,18 +1,14 @@
 <script>
-	import {http} from "../../helpers/http";
 	import {tutor_store} from "../../store/tutor-store";
 	import BigClassLessonMenu from '$lib/calendar/big-class-leson-menu.svelte'
 	import {getContext} from 'svelte'
 	import dayjs from "dayjs";
 	import tippy from "tippy.js";
 	const {openPopper} = getContext('popper')
+	import {big_class_store} from "$lib/store/big-class-store.js";
 
 	const init = async (node) => {
-		let {data} = await http.post('courseApi/list_registrable_classroom', {
-			start_date: dayjs().subtract(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
-			end_date: dayjs().add(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
-		})
-		let events = data.filter(d => !!d.start_date)
+		await big_class_store.callIfNoCache()
 		const eventContent = (arg) => {
 			let wrapper = document.createElement('div')
 			wrapper.classList.add('flex', 'items-center', 'w-full', 'overflow-hidden')
@@ -70,7 +66,7 @@
 				domNodes: [wrapper]
 			}
 		}
-		events = events.map(e => {
+		const events = $big_class_store.map(e => {
 			const extendedProps = {
 				reg_user_cnt: e.reg_user_cnt,
 				student_size: e.student_size,
