@@ -11,5 +11,7 @@ export const category_list = readable([
 	"Creative writing",
 	"Storytelling",
 	"EHLA Storytelling",
-	"Interview"
+	"Interview",
+	"Grammar Usage (Concept Teaching) Class",
+	"GrammarUsage-native / GrammarUsage-bil"
 ])
