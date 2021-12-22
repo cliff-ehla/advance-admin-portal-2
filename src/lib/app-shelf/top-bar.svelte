@@ -93,7 +93,17 @@
 		{
 			segment: 'voucher',
 			name: 'Voucher',
-			href: '/voucher'
+			href: '/voucher/dashboard',
+			children: [
+				{
+					label: '待處理',
+					href: '/voucher/todo'
+				},
+				{
+					label: 'Dashboard',
+					href: '/voucher/dashboard'
+				}
+			]
 		}
 	]
 </script>
