@@ -24,6 +24,6 @@
 </script>
 
 <div class="p-4">
-	<h1 class="text-xl mb-4">最近記錄</h1>
+	<h1 class="text-xl mb-4">最近六個月記錄</h1>
 	<VoucherTable {voucher_list}/>
 </div>

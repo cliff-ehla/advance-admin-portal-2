@@ -115,7 +115,7 @@
 </script>
 
 <div class="p-4">
-	<h1 class="text-xl mb-4">未完成Voucher</h1>
+	<h1 class="text-xl mb-4">待完成Voucher</h1>
 	<table class="w-full mx-2 mb-20">
 		<tr class="sticky top-0 bg-white">
 			<th class="text-left">Voucher No</th>

@@ -39,9 +39,7 @@
 	}
 </script>
 
-<p></p>
-
-<div class="grid grid-cols-2 gap-4 p-4 max-w-screen-md">
+<div class="grid grid-cols-2 gap-4 px-4 pt-4 max-w-screen-md">
 	<div>
 		<p class="text-sm text-gray-500">Month</p>
 		<SelectionBox on:input={onMonthChange} options={['01','02','03','04','05','06','07','08','09','10','11','12']} selected_value={month} simple_array/>
@@ -52,4 +50,6 @@
 	</div>
 </div>
 
-<VoucherTable {voucher_list}/>
+<div class="p-4">
+	<VoucherTable {voucher_list}/>
+</div>
