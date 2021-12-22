@@ -98,8 +98,6 @@
 		openModal(CreateVoucher, {
 			voucher_type: option,
 			onSuccess: refresh
-		}, {
-			padding: '1em'
 		})
 	}
 

@@ -9,6 +9,8 @@ function createDialogStore () {
 		onSuccess: () => {}
 	})
 	const confirm = ({message, title, onConfirm, onSuccess}) => {
+		if (!onConfirm) onConfirm = () => {}
+		if (!onSuccess) onSuccess = () => {}
 		store.set({
 			visible: true,
 			title: title || '你確定？',

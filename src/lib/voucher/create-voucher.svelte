@@ -8,12 +8,13 @@
 
 	export let voucher_type
 	export let onSuccess = () => {}
+	export let phone = undefined
+	export let teacher_id = undefined
 
-	let phone, lesson_fee, app_fee = 0, remark
+	let lesson_fee, app_fee = 0, remark
 	let ticket_amt
 	let lesson_count = voucher_type === 'TRIAL' ? 1 : 0,
-			lesson_duration,
-			teacher_id
+			lesson_duration
 	$: base_info_valid = typeof lesson_fee === 'number' && typeof app_fee === 'number' && !!phone
 
 	const onConfirm = async () => {
@@ -27,7 +28,7 @@
 			ticket_amt,
 			teacher_id
 		}, {
-			notification: '成功起左張 Voucher'
+			notification: `成功起左張 Voucher 俾呢個電話 ${phone}`
 		})
 		closeModal()
 		onSuccess()

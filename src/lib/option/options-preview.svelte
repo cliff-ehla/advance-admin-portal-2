@@ -9,6 +9,7 @@
 	import {action_status, editing_option} from "../../store/calendar-action-status-store";
 	import TextInputDialog from '$lib/ui-elements/text-input-dialog.svelte'
 	import {getContext} from 'svelte'
+	import CreateVoucher from "$lib/voucher/create-voucher.svelte";
 	const {openModal, closeModal} = getContext('simple-modal')
 
 	const dispatch = createEventDispatcher()
@@ -44,6 +45,19 @@
 			},
 			onSuccess: () => {
 				dispatch('reload')
+				setTimeout(() => {
+					dialog.confirm({
+						title: '宜加起埋張Voucher?',
+						message: '唔得閒可以遲d係Voucher果版自己起都得',
+						onConfirm: () => {
+							openModal(CreateVoucher, {
+								voucher_type: 'TRIAL',
+								phone: option.phone,
+								teacher_id: slot.teacher_id
+							})
+						}
+					})
+				}, 10)
 			}
 		})
 	}
