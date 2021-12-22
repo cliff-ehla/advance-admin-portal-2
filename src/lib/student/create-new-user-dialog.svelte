@@ -8,7 +8,7 @@
 	let created_student
 
 	const onConfirmClick = () => {
-		onSuccess()
+		onSuccess(created_student)
 		closeModal()
 	}
 </script>

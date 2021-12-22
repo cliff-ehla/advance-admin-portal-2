@@ -13,6 +13,8 @@
 	import {http} from "$lib/http";
 	const dispatch = createEventDispatcher()
 	const {openModal, closeModal} = getContext('simple-modal')
+	import {calendar_store} from "../../store/calendar-action-status-store.js";
+	import {notifications} from "$lib/store/notification.js";
 
 	export let option
 	$: date_display = dayjs.utc(option.reserves[0].start_date).local().format('DD MMM (ddd)')
@@ -44,20 +46,34 @@
 		})
 	}
 
-	const openCreateDialog = () => {
-		openModal(CreateTrialDialog, {
-			student_id: option.student_id,
-			teacher_id: option.reserves[0].teacher_id,
-			course_title: option.course,
-			start_date: option.reserves[0].start_date,
-			end_date: option.reserves[0].end_date,
-			reserved_id: option.reserves[0].reserved_id,
-			onSuccess: () => {
-				goto(`/tutor/${option.reserves[0].teacher_id}/${dayjs.utc(option.reserves[0].start_date).local().format('YYYY-MM')}`)
-			}
-		}, {
-			width: '900px'
+	const openCreateDialog = async () => {
+		let {data} = await http.post(fetch, '/voucherApi/list_voucher_by_user_id', {
+			voucher_type: 'TRIAL',
+			user_id: option.student_id
 		})
+		if (data.length === 0) {
+			notifications.alert(`你未起 Trial Voucher 俾 user_id: ${option.student_id}`)
+		} else if (data.length > 1) {
+			notifications.alert('呢個用戶有多於一張Trial Voucher，唔知邊張先啱')
+		} else {
+			let voucher_id = data[0].id
+			calendar_store.createTrial({
+				student_id: option.student_id,
+				teacher_id: option.reserves[0].teacher_id,
+				voucher_id
+			})
+			openModal(CreateTrialDialog, {
+				course_title: option.course,
+				start_date: option.reserves[0].start_date,
+				end_date: option.reserves[0].end_date,
+				reserved_id: option.reserves[0].reserved_id,
+				onSuccess: () => {
+					goto(`/tutor/${option.reserves[0].teacher_id}/${dayjs.utc(option.reserves[0].start_date).local().format('YYYY-MM')}`)
+				}
+			}, {
+				width: '900px'
+			})
+		}
 	}
 
 	const onDeleteGrouper = () => {
@@ -76,8 +92,11 @@
 </script>
 
 <div class="border border-gray-300 rounded-lg bg-white">
+	{#if option.phone}
+		<div class="text-center py-1 border-gray-300 border-b text-sm bg-blue-100 text-blue-500 font-bold px-2">{option.phone}</div>
+	{/if}
 	{#if option.course}
-		<div class="text-center py-1 border-gray-300 border-b text-sm bg-blue-100 text-blue-500 font-bold px-2">{option.course}</div>
+		<div class="m-2 text-center py-1 border-gray-300 border text-sm bg-blue-50 text-blue-500 font-bold px-2">{option.course}</div>
 	{/if}
 	<div class="flex items-center justify-center mx-auto pt-4 pb-2 relative">
 		<button on:click={onDeleteGrouper} class="absolute right-2 top-2 hover:text-red-500"><Icon className="w-3" name="close"/></button>
