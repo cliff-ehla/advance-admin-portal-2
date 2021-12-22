@@ -22,7 +22,7 @@
 	import {calendar_store, action_status} from "../../store/calendar-action-status-store.js";
 	import {dialog} from "$lib/store/dialog.js";
 	import {tooltip} from "$lib/aciton/tooltip.js";
-	import {goto} from "../../../.svelte-kit/dev/runtime/app/navigation.js";
+	import {goto} from "$app/navigation";
 	import {notifications} from "$lib/store/notification";
 	import CreateTrialDialog from "$lib/option/create-trial-lesson.dialog.svelte";
 	import dayjs from "dayjs";
