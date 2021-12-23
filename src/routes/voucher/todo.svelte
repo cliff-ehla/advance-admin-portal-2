@@ -112,6 +112,21 @@
 		const {data, success, debug} = await http.post(fetch, '/voucherApi/list_pending_voucher')
 		record_list = data
 	}
+
+	const onDelete = async (voucher) => {
+		dialog.confirm({
+			message: '報銷呢張Voucher？',
+			onConfirm: async () => {
+				await http.post(fetch, '/voucherApi/edit_voucher', {
+					id: voucher.id,
+					is_invalid: true
+				}, {
+					notification: '已經報銷'
+				})
+			},
+			onSuccess: refresh
+		})
+	}
 </script>
 
 <div class="p-4">
@@ -129,6 +144,7 @@
 			<th>課堂費用</th>
 			<th>App費用</th>
 			<th>總費用</th>
+			<th></th>
 		</tr>
 		{#if record_list.length}
 			{#each record_list as r}
@@ -201,6 +217,14 @@
 					<td>${r.lesson_fee}</td>
 					<td>${r.app_fee}</td>
 					<td>${Number(r.app_fee) + Number(r.lesson_fee)}</td>
+					<td>
+						<Dropdown placement="bottom-end" activator_style="w-8 h-8 cc rounded-full text-gray-500 border border-transparent" activator_active_style="bg-gray-100 text-blue-500 border-gray-300">
+							<div slot="activator"><Icon className="w-4" name="more"/></div>
+							<div class="dropdown">
+								<button class="item" on:click={() => {onDelete(r)}}>Delete</button>
+							</div>
+						</Dropdown>
+					</td>
 				</tr>
 			{/each}
 		{:else}
@@ -214,9 +238,9 @@
 	<button slot="activator">
 		<Icon name="add"/>
 	</button>
-	<div class="bg-white p-2 shadow-lg border border-gray-300 rounded">
+	<div class="dropdown">
 		{#each type_option as option}
-			<div on:click={() => {onCreateVoucher(option)}} class="cursor-pointer px-2 py-2 hover:bg-gray-100 hover:text-blue-500 flex items-center">
+			<div on:click={() => {onCreateVoucher(option)}} class="item">
 				<img src="/{option.toLowerCase()}.png" alt="img" class="w-6">
 				<p class="ml-1">{option}</p>
 			</div>
