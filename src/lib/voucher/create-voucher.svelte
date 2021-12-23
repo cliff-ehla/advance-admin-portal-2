@@ -5,6 +5,7 @@
 	import {http} from "$lib/http.js";
 	import {getContext} from 'svelte'
 	const {openModal, closeModal} = getContext('simple-modal')
+	import PhoneSelection from '$lib/student/phone-selection.svelte'
 
 	export let voucher_type
 	export let onSuccess = () => {}
@@ -40,7 +41,7 @@
 <div class="flex">
 	<div>
 		<label>Phone</label>
-		<input class="input block mb-2" type="tel" placeholder="Phone" bind:value={phone}/>
+		<PhoneSelection on:input={e => {phone = e.detail}} wrapper_class="mb-2"/>
 		<label>App fee</label>
 		<input class="input block mb-2" type="number" placeholder="App fee" bind:value={app_fee}/>
 		<label>Lesson fee</label>

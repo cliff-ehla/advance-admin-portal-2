@@ -29,6 +29,20 @@ const student_store = (() => {
 		return t && t.level.charAt(0).toUpperCase() + t.level.substring(1)
 	}
 
+	const searchUsers = (search) => {
+		if (!search) return []
+		const result = get(store).filter(s => {
+			const {parent_nickname, student_nickname, parent_phone} = s
+			let search_texts = [parent_nickname, student_nickname, parent_phone]
+			return search_texts.some(text => {
+				if (text) {
+					return text.toLowerCase().includes(search.toLowerCase())
+				}
+			})
+		})
+		return result
+	}
+
 	const getLessonDemand = () => {
 		let result = big_class_mapper.all_levels.map(lv => ({
 			level: lv,
@@ -90,6 +104,7 @@ const student_store = (() => {
 		getGender,
 		getLessonDemand,
 		getSummary,
+		searchUsers,
 		set: store.set
 	}
 })()

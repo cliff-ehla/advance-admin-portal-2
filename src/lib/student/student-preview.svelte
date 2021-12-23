@@ -3,7 +3,7 @@
 </script>
 
 <div class="flex items-center mb-4">
-	<a href="/students/{s.student_id}/tutor-group" class="flex items-center px-2 py-1 leading-tight rounded-full border border-gray-400 hover:border-blue-500 hover:bg-gray-200">
+	<a href="/students/{s.student_id}/tutor-group" class="flex items-center px-2 py-2.5 leading-tight rounded-full border border-gray-400 hover:border-blue-500 hover:bg-gray-200">
 		{#if s.gender === 'm'}
 			<img src="/student-m-icon.png" alt="student" class="w-8 h-8 rounded-full">
 		{:else if s.gender === 'f'}
@@ -18,10 +18,11 @@
 	<div>
 		<div class="flex items-center leading-tight rounded-full border border-gray-400 hover:border-blue-500">
 			<div class="flex items-center px-2 py-1">
-				<img src="/parent-icon.png" alt="parent" class="w-8 h-8 rounded-full">
+				<img src="/parent-icon.png" alt="parent" class="w-8 h-8 rounded-full mx-1.5">
 				<div class="ml-1">
 					<p class="font-bold">{s.parent_nickname}</p>
 					<p class="text-xs text-gray-500">@{s.parent_username}</p>
+					<p class="text-xs text-gray-500 mt-0.5"><span style="font-size: 0.8em" class="mr-0.5">☎</span> {s.parent_phone}</p>
 				</div>
 			</div>
 			<div class="px-2 py-1 ml-2 border-l border-gray-400">

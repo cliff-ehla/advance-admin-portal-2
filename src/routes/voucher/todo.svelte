@@ -19,7 +19,7 @@
 	import {getContext} from 'svelte'
 	import CreateUserDialog from '$lib/student/create-new-user-dialog.svelte'
 	import {tutor_store} from "../../store/tutor-store.js";
-	import {calendar_store, action_status} from "../../store/calendar-action-status-store.js";
+	import {calendar_store} from "../../store/calendar-action-status-store.js";
 	import {dialog} from "$lib/store/dialog.js";
 	import {tooltip} from "$lib/aciton/tooltip.js";
 	import {goto} from "$app/navigation";
