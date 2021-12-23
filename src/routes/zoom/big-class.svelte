@@ -1,3 +1,12 @@
+<script context="module">
+	import {big_class_store, big_class_event, classroom_analytic} from "$lib/store/big-class-store.js";
+
+	export const load = async ({fetch}) => {
+		await big_class_store.callIfNoCache(fetch)
+		return true
+	}
+</script>
+
 <script>
 	import {tutor_store} from "../../store/tutor-store";
 	import BigClassLessonMenu from '$lib/calendar/big-class-leson-menu.svelte'
@@ -5,10 +14,8 @@
 	import dayjs from "dayjs";
 	import tippy from "tippy.js";
 	const {openPopper} = getContext('popper')
-	import {big_class_store} from "$lib/store/big-class-store.js";
 
 	const init = async (node) => {
-		await big_class_store.callIfNoCache()
 		const eventContent = (arg) => {
 			let wrapper = document.createElement('div')
 			wrapper.classList.add('flex', 'items-center', 'w-full', 'overflow-hidden')
@@ -66,39 +73,33 @@
 				domNodes: [wrapper]
 			}
 		}
-		const events = $big_class_store.map(e => {
-			const extendedProps = {
-				reg_user_cnt: e.reg_user_cnt,
-				student_size: e.student_size,
-				cat: e.sub_cat_alter,
-				tutor_id: e.tutor_id,
-				tutor_name: e.tutor_name,
-				start_date: e.start_date,
-				zoom_id: e.zoom_id,
-				no_material: e.no_material,
-				level: e.rc_level
-			}
-			return {
-				start: e.start_date,
-				extendedProps
-			}
-		})
-
 		let cal = new FullCalendar.Calendar(node, {
 			initialView: 'dayGridMonth',
 			eventContent,
 			eventClick: async ({el, event}) => {
-				console.log(event.extendedProps.tutor_name)
 				openPopper(el, BigClassLessonMenu, {
 					zoom_id: event.extendedProps.zoom_id
 				}, {
 					placement: "right"
 				})
 			},
-			events
+			events: $big_class_event
 		})
 		cal.render()
 	}
 </script>
 
-<div use:init></div>
+<div class="p-4">
+	<div class="absolute w-48 left-0">
+		<div class="grid grid-cols-1 gap-2">
+			{#each $classroom_analytic.by_level as lv}
+				<div class="border border-gray-300 px-1 py-2 flex justify-between">
+
+					<div>{lv.level}</div>
+					<div>{lv.lesson_count}</div>
+				</div>
+			{/each}
+		</div>
+	</div>
+	<div class="ml-48" use:init></div>
+</div>

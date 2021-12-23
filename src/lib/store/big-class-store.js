@@ -5,19 +5,21 @@ import {http} from "$lib/http.js";
 
 const create_big_class_store = () => {
 	const store = writable([])
-	// TODO: need the fetch para for SSR call?
-	const callIfNoCache = async () => {
+	const callIfNoCache = async (fetch) => {
 		if (get(store).length) {
-			console.log('use cache')
 			return get(store)
 		}
-		let {data} = await http.post(fetch,'/courseApi/list_registrable_classroom', {
+		let {data, success, debug} = await http.post(fetch,'/courseApi/list_registrable_classroom', {
 			start_date: dayjs().subtract(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
 			end_date: dayjs().add(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
 		})
-		data = data.filter(d => !!d.start_date)
-		store.set(data)
-		return data
+		if (success) {
+			data = data.filter(d => !!d.start_date)
+			store.set(data)
+			return data
+		} else {
+			console.log(debug.error_message)
+		}
 	}
 	return {
 		subscribe: store.subscribe,
@@ -120,6 +122,7 @@ const create_class_analytic = () => {
 			const levels = big_class_mapper.getLevels(classroom.rc_level)
 			levels.forEach(lv => {
 				const obj = result.find(i => i.level === lv)
+				if (!obj) return
 				obj.lesson_count++
 				if (classroom.is_native_teacher) {
 					obj.native_lesson_count ++

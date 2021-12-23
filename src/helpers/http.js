@@ -1,8 +1,10 @@
 import {getCookie, deleteCookie} from "./cookie";
+import {browser} from "$app/env.js";
 
 let http = (() => {
 	const baseUrl = import.meta.env.VITE_API_BASE + '/v1'
 	async function post (url, body) {
+		if (!browser) return console.log('not browser: ' + url)
 		const token = getCookie('access_token')
 		const full_url = `${baseUrl}/${url}?encode=1&access-token=${token}`
 		const res = await fetch(full_url, {
@@ -25,6 +27,7 @@ let http = (() => {
 	}
 
 	async function get (url, query) {
+		if (!browser) return console.log('not browser: ' + url)
 		const token = getCookie('access_token')
 		let full_url = `${baseUrl}/${url}?encode=1&access-token=${token}`
 		if (query) {
