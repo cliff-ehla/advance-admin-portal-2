@@ -14,9 +14,10 @@
 		dispatch('input', e.target.value)
 	}
 	const onSelect = r => {
+		console.log(r)
 		phone = r.parent_phone
 		if (!phone) {
-			notifications.alert('呢條友冇入到電話，爆番佢DB再黎')
+			notifications.alert(`呢條友冇入到電話，爆番佢DB再黎, parent user_id: ${r.parent_id}`)
 		}
 		dispatch('input', phone)
 	}
