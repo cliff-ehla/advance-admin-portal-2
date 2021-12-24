@@ -19,10 +19,13 @@ const getStudentTitle = (extendedProps) => {
 }
 
 export const eventContent = (arg) => {
-	let extendedProps = arg.event.extendedProps
+	const {extendedProps, start} = arg.event
+	const type = extendedProps.type
 	let wrapper = document.createElement('div')
-	wrapper.classList.add('flex', 'items-center', 'overflow-hidden', 'whitespace-nowrap')
-	if (extendedProps.type === 'book') {
+	wrapper.classList.add('flex', 'items-center', 'w-full', 'overflow-hidden')
+	if (type === 'classroom') {
+		renderClassroomEvent(wrapper, start, extendedProps)
+	} else if (extendedProps.type === 'book') {
 		const arrayOfNotes = []
 		let alert_el = document.createElement('span')
 		if (extendedProps.actual_duration) {
