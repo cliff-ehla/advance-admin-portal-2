@@ -30,6 +30,26 @@ const create_big_class_store = () => {
 
 export const big_class_store = create_big_class_store()
 
+export const big_class_events = derived(big_class_store, $big_class_store => {
+	return $big_class_store.map(e => {
+		const extendedProps = {
+			reg_user_cnt: e.reg_user_cnt,
+			student_size: e.student_size,
+			cat: e.sub_cat_alter,
+			tutor_id: e.tutor_id,
+			tutor_name: e.tutor_name,
+			start_date: e.start_date,
+			zoom_id: e.zoom_id,
+			no_material: e.no_material,
+			level: e.rc_level
+		}
+		return {
+			start: e.start_date,
+			extendedProps
+		}
+	})
+})
+
 const _time_range_options = [
 	{
 		key: 'week',

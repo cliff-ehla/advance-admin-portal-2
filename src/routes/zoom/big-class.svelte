@@ -1,5 +1,5 @@
 <script context="module">
-	import {big_class_store, big_class_event, classroom_analytic} from "$lib/store/big-class-store.js";
+	import {big_class_store, big_class_events, classroom_analytic} from "$lib/store/big-class-store.js";
 
 	export const load = async ({fetch}) => {
 		await big_class_store.callIfNoCache(fetch)
@@ -83,7 +83,7 @@
 					placement: "right"
 				})
 			},
-			events: $big_class_event
+			events: $big_class_events
 		})
 		cal.render()
 	}
