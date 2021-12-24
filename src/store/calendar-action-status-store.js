@@ -1,5 +1,6 @@
-import {writable} from "svelte/store";
+import {derived, writable} from "svelte/store";
 import dayjs from "dayjs";
+import {genTempSelectEvent} from "$lib/calendar/phase-to-events.js";
 
 function createCalendarStore () {
 	const _store = writable({
@@ -87,3 +88,6 @@ export const course_lesson_tbc_selection = (() => {
 		reset
 	}
 })()
+export const tbc_selection_events = derived(edit_lesson_tbc_to_date, ($edit_lesson_tbc_to_date) => {
+	return $edit_lesson_tbc_to_date.map(slot => genTempSelectEvent(slot))
+})

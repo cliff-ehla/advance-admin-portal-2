@@ -33,6 +33,7 @@ export const big_class_store = create_big_class_store()
 export const big_class_events = derived(big_class_store, $big_class_store => {
 	return $big_class_store.map(e => {
 		const extendedProps = {
+			type: 'classroom',
 			reg_user_cnt: e.reg_user_cnt,
 			student_size: e.student_size,
 			cat: e.sub_cat_alter,

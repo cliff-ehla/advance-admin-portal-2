@@ -1,3 +1,14 @@
+<script context="module">
+	import {tutor_event_store} from "$lib/store/tutor-event-store.js";
+
+	export const load = async ({page, fetch}) => {
+		await tutor_event_store.callIfNoCache(fetch, {
+			tutor_id: page.params.user_id
+		})
+		return true
+	}
+</script>
+
 <script>
 	import {goto} from '$app/navigation'
 	import {page} from '$app/stores'
