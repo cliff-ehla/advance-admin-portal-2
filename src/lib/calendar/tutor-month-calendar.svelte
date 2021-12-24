@@ -28,6 +28,7 @@
 	export let YYYY_MM
 	export let tutor_id
 
+	const EVENT_SOURCE_ID = 'individual'
 	let events
 	let selected_date = dayjs(YYYY_MM, 'YYYY-MM').startOf('month').toDate()
 	let loading
@@ -38,13 +39,41 @@
 
 	const dispatch = createEventDispatcher()
 
+	$: {
+		if (tutor_id && day_calendar && month_calendar) onTutorChange()
+	}
 	$: tutor_name = $tutor_store ? tutor_store.getTutorName(tutor_id) : ''
 
-	const getEvents = () => {
-		const events = tutor_event_store.getTutorEventsByMonth(tutor_id, YYYY_MM, {
+	const onTutorChange = () => {
+		clearSources()
+		addSourcesToMonthCalendar()
+		addSourcesToDayCalendar()
+	}
+
+	const clearSources = () => {
+		const calendars = [month_calendar, day_calendar]
+		calendars.forEach(c => {
+			let source = c.getEventSourceById(EVENT_SOURCE_ID)
+			if (source) source.remove()
+		})
+	}
+
+	const addSourcesToMonthCalendar = () => {
+		const month_view_events = tutor_event_store.getTutorEvents(tutor_id, {
 			is_grid_view: true
 		})
-		// tbc_selection_events
+		month_calendar.addEventSource({
+			id: EVENT_SOURCE_ID,
+			events: month_view_events
+		})
+	}
+
+	const addSourcesToDayCalendar = () => {
+		const day_view_events = tutor_event_store.getTutorEvents(tutor_id)
+		day_calendar.addEventSource({
+			id: EVENT_SOURCE_ID,
+			events: day_view_events
+		})
 	}
 
 	const fetchData = async () => {
@@ -71,30 +100,8 @@
 		// renderTimeCalendar([...events, ...temp_events, ...temp_edit_event])
 	}
 
-	const renderMonthCalendar = (events) => {
-		let all_events = month_calendar.getEvents()
-		if (all_events.length) {
-			all_events.forEach(e => e.remove())
-		}
-		month_calendar.addEventSource(events)
-		let view_month = dayjs(YYYY_MM, 'YYYY-MM').toDate()
-		month_calendar.changeView('dayGridMonth', view_month)
-	}
-
-	const renderTimeCalendar = (events) => {
-		let all_events = day_calendar.getEvents()
-		if (all_events.length) {
-			all_events.forEach(e => e.remove())
-		}
-		day_calendar.addEventSource(events)
-	}
-
 	const initMonthCalendar = (node) => {
-		const events = tutor_event_store.getTutorEventsByMonth(tutor_id, YYYY_MM, {
-			is_grid_view: true
-		})
 		month_calendar = new FullCalendar.Calendar(node, {
-			events,
 			initialView: 'dayGridMonth',
 			dayMaxEventRows: true,
 			height: "calc(100vh - 120px)",
@@ -128,6 +135,7 @@
 			}
 		})
 		month_calendar.render()
+		addSourcesToMonthCalendar()
 	}
 
 	const initTimeCalendar = (node) => {
@@ -170,6 +178,7 @@
 		})
 		day_calendar.changeView('timeGridOneDay', selected_date)
 		day_calendar.render()
+		addSourcesToDayCalendar
 	}
 
 	const onChangeMonth = (type) => {
@@ -180,12 +189,6 @@
 		}
 		const _YYYY_MM = dayjs(selected_date).format('YYYY-MM')
 		dispatch('monthChange', _YYYY_MM)
-		const events = tutor_event_store.getTutorEventsByMonth(tutor_id, _YYYY_MM, {
-			is_grid_view: true
-		})
-		const events2 = tutor_event_store.getTutorEventsByMonth(tutor_id, _YYYY_MM)
-		renderMonthCalendar(events)
-		renderTimeCalendar(events2)
 		if (type === 'next') {
 			month_calendar.next()
 		} else {

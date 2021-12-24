@@ -52,7 +52,7 @@
 		} else {
 			overlay_tutor_id = tutor.user_id
 			await tutor_event_store.callIfNoCache(fetch, {tutor_id: tutor.user_id})
-			const events = tutor_event_store.getTutorEventsByMonth(tutor.user_id, '2021-12', {
+			const events = tutor_event_store.getTutorEvents(tutor.user_id, {
 				is_grid_view: true
 			})
 			calendar.addEventSource({

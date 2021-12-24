@@ -40,15 +40,16 @@ const create_tutor_event_store = () => {
 		})
 		return events
 	}
-	const getTutorEventsByMonth = (tutor_id, YYYY_MM, filters = {}) => {
+	const getTutorEvents = (tutor_id, filters = {}) => {
 		const {skip_available, is_grid_view} = filters
 		let events = get(store)[tutor_id]
 		if (!events) return []
-		events = events.filter(e => {
-			const isSameMonth = dayjs(e.start).isSame(dayjs(`${YYYY_MM}-01`), 'month')
-			// const isType = e.extendedProps.type !== 'available'
-			return isSameMonth
-		})
+		// events = events.filter(e => {
+		// 	return true
+		// 	const isSameMonth = dayjs(e.start).isSame(dayjs(`${YYYY_MM}-01`), 'month')
+		// 	// const isType = e.extendedProps.type !== 'available'
+		// 	return isSameMonth
+		// })
 		events = JSON.parse(JSON.stringify(events))
 		if (is_grid_view) {
 			events.forEach(e => {
@@ -64,7 +65,7 @@ const create_tutor_event_store = () => {
 	return {
 		subscribe: store.subscribe,
 		callIfNoCache,
-		getTutorEventsByMonth
+		getTutorEvents
 	}
 }
 
