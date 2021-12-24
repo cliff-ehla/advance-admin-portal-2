@@ -183,12 +183,12 @@
 
 	const onChangeMonth = (type) => {
 		if (type === 'next') {
-			selected_date = dayjs(YYYY_MM, 'YYYY-MM-01').add(1, 'month')
+			selected_date = dayjs(selected_date).add(1, 'month')
 		} else {
-			selected_date = dayjs(YYYY_MM, 'YYYY-MM-01').subtract(1, 'month')
+			selected_date = dayjs(selected_date).subtract(1, 'month')
 		}
-		const _YYYY_MM = dayjs(selected_date).format('YYYY-MM')
-		dispatch('monthChange', _YYYY_MM)
+		// const _YYYY_MM = dayjs(selected_date).format('YYYY-MM')
+		// dispatch('monthChange', _YYYY_MM)
 		if (type === 'next') {
 			month_calendar.next()
 		} else {
@@ -211,7 +211,7 @@
 		<div class="flex-1 flex items-center justify-center" style="font-size: 1.6em">
 			<img src={tutor_store.getTutorProfilePic(tutor_id)} alt={tutor_name} class="w-12 h-12 rounded-full mr-2">
 			<p class="font-bold leading-none">{tutor_name}</p>
-			<p class="ml-2 leading-none">{dayjs(YYYY_MM).format('MMMM YYYY')}</p>
+			<p class="ml-2 leading-none">{dayjs(selected_date).format('MMMM YYYY')}</p>
 		</div>
 		<button class="w-12 h-12 hover:bg-blue-500 hover:text-white rounded-full bg-gray-100 border border-gray-300 flex items-center justify-center" on:click={() => {onChangeMonth('next')}}>
 			<Icon className="w-4" name="right"/>

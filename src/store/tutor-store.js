@@ -10,7 +10,12 @@ const tutor_store = (() => {
 
 	const getTutorProfilePic = (id) => {
 		let t = get(store).find(t => t.user_id == id)
-		return t && t.profile_pic
+		const profile_pic = t && t.profile_pic
+		if (profile_pic) {
+			return profile_pic
+		} else {
+			return '/pre-user-icon.png'
+		}
 	}
 
 	return {
