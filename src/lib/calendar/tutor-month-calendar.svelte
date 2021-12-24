@@ -29,6 +29,7 @@
 	export let tutor_id
 
 	const EVENT_SOURCE_ID = 'individual'
+	const TBC_SELECTION = 'tbc'
 	let events
 	let selected_date = dayjs(YYYY_MM, 'YYYY-MM').startOf('month').toDate()
 	let loading
@@ -66,6 +67,10 @@
 			id: EVENT_SOURCE_ID,
 			events: month_view_events
 		})
+		month_calendar.addEventSource({
+			id: TBC_SELECTION,
+			events: []
+		})
 	}
 
 	const addSourcesToDayCalendar = () => {
@@ -73,6 +78,10 @@
 		day_calendar.addEventSource({
 			id: EVENT_SOURCE_ID,
 			events: day_view_events
+		})
+		day_calendar.addEventSource({
+			id: TBC_SELECTION,
+			events: []
 		})
 	}
 
@@ -196,6 +205,14 @@
 		}
 	}
 
+	const onReset = () => {
+		const calendars = [month_calendar, day_calendar]
+		calendars.forEach(c => {
+			let source = c.getEventSourceById(TBC_SELECTION)
+			if (source) source.remove()
+		})
+	}
+
 	const onShowStudentClick = () => {
 		openModal(StudentListDialog, {
 			tutor_id
@@ -241,7 +258,7 @@
 		<button on:click={fetchData} class="border border-gray-300 w-10 h-10 flex items-center justify-center rounded hover:bg-gray-100 hover:text-blue-500 mx-2">
 			<Icon name="refresh"></Icon>
 		</button>
-		<Widget on:hide-overlay={() => {disabled = false}} on:show-overlay={() => {disabled = true}} on:update={fetchData}/>
+		<Widget on:hide-overlay={() => {disabled = false}} on:show-overlay={() => {disabled = true}} on:reset={onReset} on:update={fetchData}/>
 		<div class="ml-2">
 			<ToggleViewMenu {tutor_id} active_menu="month"/>
 		</div>

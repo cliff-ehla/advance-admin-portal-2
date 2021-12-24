@@ -24,7 +24,7 @@ export const onReservationSlotSelect = ({jsEvent, start, end}, openPopper, calen
 					end: end_date
 				})
 				calendars.forEach(c => {
-					c.addEventSource([new_selected_events])
+					c.addEvent(new_selected_events, 'tbc')
 				})
 				course_lesson_tbc_selection.add({
 					teacher_id: user_id,

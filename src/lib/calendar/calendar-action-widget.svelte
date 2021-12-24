@@ -23,6 +23,7 @@
 		edit_lesson_tbc_to_date.set({})
 		action_status.set('')
 		calendar_store.clear()
+		dispatch('reset')
 	}
 
 	const onOpenCourseConfirmDialog = () => {
