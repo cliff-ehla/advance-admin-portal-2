@@ -3,7 +3,7 @@
 	import TimePicker from '../../lib/ui-elements/time-picker-2.svelte'
 	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
 	import {action_status, calendar_store} from "../../store/calendar-action-status-store";
-	import {course_lesson_tbc_selection, edit_lesson_tbc_to_date, course_start_hh_mm, course_end_hh_mm} from "../../store/calendar-action-status-store";
+	import {course_lesson_tbc_selection, edit_lesson_tbc_to_date, course_start_hh_mm, course_end_hh_mm, editing_option} from "../../store/calendar-action-status-store";
 	import {getContext} from 'svelte'
 	const {openModal} = getContext('simple-modal')
 	import CreateCourseDialog from '../reservation/create-course-dialog.svelte'
@@ -14,9 +14,14 @@
 	import dayjs from "dayjs";
 	import {editZoom, createZoom} from "../../api/zoom-api";
 	import {createEventDispatcher} from 'svelte'
+	import {student_store} from "../../store/student-store.js";
 	const dispatch = createEventDispatcher()
 
 	let loading
+	$: computed_status = $action_status || $calendar_store.status
+	$: {
+		console.log($edit_lesson_tbc_to_date)
+	}
 
 	const onExit = () => {
 		course_lesson_tbc_selection.reset()
@@ -123,6 +128,42 @@
 		dispatch('refresh')
 	}
 </script>
+
+{#if computed_status}
+	<div class="{!!computed_status ? 'bg-blue-700' : ''} h-12 flex items-center justify-center text-white fixed inset-0 top-0">
+		{#if computed_status === 'create_course'}
+			<span class="font-bold uppercase">Create Course for: {student_store.getStudentName($calendar_store.student_id)}</span>
+		{/if}
+		{#if computed_status === 'create_trial'}
+			<span class="font-bold uppercase">Create trial lesson for {student_store.getStudentName($calendar_store.student_id)}</span>
+		{/if}
+
+		{#if computed_status === 'create_option'}
+			{#if $editing_option.grouper_id}
+				<span>Add option to</span>
+				<span class="font-bold ml-1">{$editing_option.phone}</span>
+			{:else}
+				<span class="font-bold uppercase">Create Option: </span>
+				<span>Select a date and click on the day-calendar to create option</span>
+			{/if}
+		{/if}
+		{#if computed_status === 'edit_time'}
+			<p class="font-bold">Edit {$edit_lesson_tbc_to_date.event_title}
+				from {dayjs($edit_lesson_tbc_to_date.from_start_date).format('DD MMM h:mm a')}
+				To: {dayjs($edit_lesson_tbc_to_date.to_start_date).format('DD MMM h:mm a')}
+			</p>
+		{/if}
+		{#if computed_status === 'add_zoom_to_tutor_group'}
+			<p>Add zoom to tutor group <span class="font-bold">{$edit_lesson_tbc_to_date.title} ({$edit_lesson_tbc_to_date.tutor_group_id})</span></p>
+		{/if}
+		{#if computed_status === 'create_leave'}
+			<p>Create Leave</p>
+		{/if}
+		{#if computed_status === 'create_big_class'}
+			<p class="font-bold">Create big/small class</p>
+		{/if}
+	</div>
+{/if}
 
 {#if !!($action_status || $calendar_store.status)}
 	<div class="flex items-center bg-blue-100 h-full mr-2">

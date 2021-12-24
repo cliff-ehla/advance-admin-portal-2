@@ -248,46 +248,7 @@
 		</div>
 	</div>
 </div>
-{#if $action_status}
-	<div class="{!!$action_status ? 'bg-blue-700' : ''} h-12 flex items-center justify-center text-white fixed inset-0 top-0">
-		{#if $action_status === 'create_course'}
-			<span class="font-bold uppercase">Create Course: </span>
-			{#if $create_course_from_trial_store}
-				<span class="px-1">for </span>
-				<i class="border-b border-current font-bold">{$create_course_from_trial_store.students[0].nickname}</i>
-			{:else}
-				<span>click on month calendar to create lesson</span>
-			{/if}
-		{/if}
-		{#if $action_status === 'create_option'}
-			{#if $editing_option.grouper_id}
-				<span>Add option to</span>
-				<span class="font-bold ml-1">{$editing_option.phone}</span>
-			{:else}
-				<span class="font-bold uppercase">Create Option: </span>
-				<span>Select a date and click on the day-calendar to create option</span>
-			{/if}
-		{/if}
-		{#if $action_status === 'create_trial'}
-			<span class="font-bold uppercase">Create trial lesson</span>
-			{#if $trial_lesson_retry_student_id}
-				<span class="ml-1 font-bold">({student_store.getStudentName($trial_lesson_retry_student_id)})</span>
-			{/if}
-		{/if}
-		{#if $action_status === 'edit_time'}
-			<p class="font-bold">Edit lesson time</p>
-		{/if}
-		{#if $action_status === 'add_zoom_to_tutor_group'}
-			<p>Add zoom to tutor group <span class="font-bold">{$edit_lesson_tbc_to_date.title} ({$edit_lesson_tbc_to_date.tutor_group_id})</span></p>
-		{/if}
-		{#if $action_status === 'create_leave'}
-			<p>Create Leave</p>
-		{/if}
-		{#if $action_status === 'create_big_class'}
-			<p class="font-bold">Create big/small class</p>
-		{/if}
-	</div>
-{/if}
+
 <div class="flex relative">
 	{#if loading}
 		<div class="absolute z-50 bg-black bg-opacity-20 inset-0 flex items-center justify-center text-white" style="font-size: 3em">Loading...</div>
