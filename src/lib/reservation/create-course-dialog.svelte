@@ -18,6 +18,7 @@
 	import {syllabus_store} from "../../store/syllabus-store";
 	import {listSyllabus} from "../../api/syllabus-api";
 	import {course_title_options_store} from "../../store/course-title-options-store.js";
+	import {tutor_event_store} from "$lib/store/tutor-event-store.js";
 
 	const teacher_id = $calendar_store.teacher_id
 	const student_id = $calendar_store.student_id
@@ -77,6 +78,7 @@
 		}, {
 			notification: '已經建立課堂'
 		})
+		tutor_event_store.clearCache(teacher_id)
 		await goto(`/students/${student_id}`)
 
 		action_status.set('')

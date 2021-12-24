@@ -10,6 +10,8 @@
 	import {http} from "../../helpers/http";
 	import {category_list} from "$lib/store/category-list";
 
+	export let onSuccess = () => {}
+
 	const {closeModal} = getContext('simple-modal')
 	let code_list = null
 	let selected_code_id
@@ -43,6 +45,7 @@
 		loading = true
 		await http.post('courseApi/reg_course', payload)
 		loading = false
+		onSuccess()
 		closeModal()
 		setTimeout(() => {
 			action_status.set('')

@@ -9,6 +9,7 @@
 	import {notifications} from "$lib/store/notification.js";
 
 	export let wrapper_class = undefined
+	export let phone = undefined
 
 	const onInput = e => {
 		dispatch('input', e.target.value)
@@ -24,7 +25,6 @@
 	const onBlur = () => {
 		focused = false
 	}
-	let phone = ''
 	let focused
 	$: filtered_result = student_store.searchUsers(phone)
 </script>

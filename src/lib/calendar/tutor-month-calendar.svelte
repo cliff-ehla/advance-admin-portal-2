@@ -190,8 +190,6 @@
 		} else {
 			selected_date = dayjs(selected_date).subtract(1, 'month')
 		}
-		// const _YYYY_MM = dayjs(selected_date).format('YYYY-MM')
-		// dispatch('monthChange', _YYYY_MM)
 		if (type === 'next') {
 			month_calendar.next()
 		} else {
@@ -241,10 +239,10 @@
 		<button on:click={onShowStudentClick} class="border border-gray-300 w-10 h-10 flex items-center justify-center rounded hover:bg-gray-100 hover:text-blue-500">
 			<Icon name="avatar"></Icon>
 		</button>
-		<button on:click={reRender} class="border border-gray-300 w-10 h-10 flex items-center justify-center rounded hover:bg-gray-100 hover:text-blue-500 mx-2">
+		<button on:click={fetchAndReRender} class="border border-gray-300 w-10 h-10 flex items-center justify-center rounded hover:bg-gray-100 hover:text-blue-500 mx-2">
 			<Icon name="refresh"></Icon>
 		</button>
-		<Widget on:hide-overlay={() => {disabled = false}} on:show-overlay={() => {disabled = true}} on:reset={clearTBCSource} on:update={fetchAndReRender}/>
+		<Widget on:hide-overlay={() => {disabled = false}} on:show-overlay={() => {disabled = true}} on:clearTBC={clearTBCSource} on:refresh={fetchAndReRender}/>
 		<div class="ml-2">
 			<ToggleViewMenu {tutor_id} active_menu="month"/>
 		</div>

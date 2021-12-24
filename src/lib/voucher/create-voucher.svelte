@@ -41,7 +41,7 @@
 <div class="flex">
 	<div>
 		<label>Phone</label>
-		<PhoneSelection on:input={e => {phone = e.detail}} wrapper_class="mb-2"/>
+		<PhoneSelection {phone} on:input={e => {phone = e.detail}} wrapper_class="mb-2"/>
 		<label>App fee</label>
 		<input class="input block mb-2" type="number" placeholder="App fee" bind:value={app_fee}/>
 		<label>Lesson fee</label>

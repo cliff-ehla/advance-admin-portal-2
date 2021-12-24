@@ -23,7 +23,7 @@
 		edit_lesson_tbc_to_date.set({})
 		action_status.set('')
 		calendar_store.clear()
-		dispatch('reset')
+		dispatch('clearTBC')
 	}
 
 	const onOpenCourseConfirmDialog = () => {
@@ -51,15 +51,20 @@
 		let reserve = $course_lesson_tbc_selection[0]
 		openModal(CreateTrialLessonDialog, {
 			start_date: dayjs(reserve.start_date).utc().format('YYYY-MM-DD HH:mm:ss'),
-			end_date: dayjs(reserve.end_date).utc().format('YYYY-MM-DD HH:mm:ss')
+			end_date: dayjs(reserve.end_date).utc().format('YYYY-MM-DD HH:mm:ss'),
+			onSuccess: () => {
+				dispatch('refresh')
+			}
 		}, {
 			width: '960px'
 		})
 	}
 
 	const onOpenCreateBigClassDialog = () => {
-		openModal(CreateBigClassDialog, {}, {
-			padding: '1em'
+		openModal(CreateBigClassDialog, {
+			onSuccess: () => {
+				dispatch('refresh')
+			}
 		})
 	}
 
@@ -96,7 +101,7 @@
 		action_status.set('')
 		calendar_store.clear()
 		edit_lesson_tbc_to_date.set({})
-		dispatch('update')
+		dispatch('refresh')
 	}
 
 	const onConfirmAddZoom = async () => {
@@ -115,7 +120,7 @@
 		action_status.set('')
 		calendar_store.clear()
 		edit_lesson_tbc_to_date.set({})
-		dispatch('update')
+		dispatch('refresh')
 	}
 </script>
 

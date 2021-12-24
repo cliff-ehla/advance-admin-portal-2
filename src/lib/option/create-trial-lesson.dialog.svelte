@@ -9,6 +9,7 @@
 	import {student_store} from "../../store/student-store";
 	import {tutor_store} from "../../store/tutor-store";
 	import {calendar_store} from "../../store/calendar-action-status-store.js";
+	import {tutor_event_store} from "$lib/store/tutor-event-store.js";
 	import dayjs from "dayjs";
 
 	const {openModal, closeModal} = getContext('simple-modal')
@@ -65,6 +66,8 @@
 		}, {
 			notification: `已經為${student_store.getStudentName(student_id)}建立了$${teacher_name}的課堂, 於${date_display}`
 		})
+		calendar_store.clear()
+		tutor_event_store.clearCache(teacher_id)
 		if (success) onSuccess()
 		closeModal()
 	}

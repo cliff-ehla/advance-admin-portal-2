@@ -40,6 +40,14 @@ const create_tutor_event_store = () => {
 		})
 		return events
 	}
+	const clearCache = (tutor_id) => {
+		store.update(v => {
+			return {
+				...v,
+				[tutor_id]: null
+			}
+		})
+	}
 	const getTutorEvents = (tutor_id, filters = {}) => {
 		const {skip_available, is_grid_view} = filters
 		let events = get(store)[tutor_id]
@@ -65,6 +73,7 @@ const create_tutor_event_store = () => {
 	return {
 		subscribe: store.subscribe,
 		callIfNoCache,
+		clearCache,
 		getTutorEvents
 	}
 }
