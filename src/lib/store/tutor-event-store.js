@@ -5,8 +5,8 @@ import {convertToEvents} from "$lib/calendar/phase-to-events.js";
 
 const create_tutor_event_store = () => {
 	const store = writable({})
-	const callIfNoCache = async (fetch, {tutor_id}) => {
-		if (get(store)[tutor_id]) {
+	const callIfNoCache = async (fetch, {tutor_id, force}) => {
+		if (get(store)[tutor_id] && !force) {
 			console.log('cached!')
 			return get(store)[tutor_id]
 		}

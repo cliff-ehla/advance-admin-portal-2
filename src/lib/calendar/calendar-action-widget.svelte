@@ -115,6 +115,7 @@
 		action_status.set('')
 		calendar_store.clear()
 		edit_lesson_tbc_to_date.set({})
+		dispatch('update')
 	}
 </script>
 

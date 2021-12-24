@@ -9,11 +9,10 @@
 	import {tutor_store} from "../../store/tutor-store";
 	import {onEventClick} from "./shared-function/on-event-click";
 	import {onReservationSlotSelect} from "./shared-function/on-reservation-slot-select";
-	import {course_lesson_tbc_selection, action_status, edit_lesson_tbc_to_date, editing_option} from "../../store/calendar-action-status-store";
+	import {action_status, edit_lesson_tbc_to_date, editing_option} from "../../store/calendar-action-status-store";
 	import Widget from './calendar-action-widget.svelte'
 	import ToggleViewMenu from './toggle-view-menu.svelte'
 	import {createCourseOnDateSelect} from "./shared-function/create-course-on-date-select";
-	import {genTempSelectEvent, genTempEditEvent} from "./phase-to-events";
 	import {syncTempEvents} from "./shared-function/sync-temp-events";
 	import {CALENDAR_HEIGHT} from "./shared-function/calendar-height";
 	import {create_course_from_trial_store} from "../../store/create-course-from-trial-store";
@@ -41,17 +40,36 @@
 	const dispatch = createEventDispatcher()
 
 	$: {
-		if (tutor_id && day_calendar && month_calendar) onTutorChange()
+		if (tutor_id && day_calendar && month_calendar) reRender()
 	}
 	$: tutor_name = $tutor_store ? tutor_store.getTutorName(tutor_id) : ''
 
-	const onTutorChange = () => {
-		clearSources()
+	const fetchAndReRender = async () => {
+		clearTBCSource()
+		clearTutorSource()
+		await tutor_event_store.callIfNoCache(fetch, {
+			tutor_id,
+			force: true
+		})
 		addSourcesToMonthCalendar()
 		addSourcesToDayCalendar()
 	}
 
-	const clearSources = () => {
+	const clearTBCSource = () => {
+		const calendars = [month_calendar, day_calendar]
+		calendars.forEach(c => {
+			let source = c.getEventSourceById(TBC_SELECTION)
+			if (source) source.remove()
+		})
+	}
+
+	const reRender = () => {
+		clearTutorSource()
+		addSourcesToMonthCalendar()
+		addSourcesToDayCalendar()
+	}
+
+	const clearTutorSource = () => {
 		const calendars = [month_calendar, day_calendar]
 		calendars.forEach(c => {
 			let source = c.getEventSourceById(EVENT_SOURCE_ID)
@@ -83,30 +101,6 @@
 			id: TBC_SELECTION,
 			events: []
 		})
-	}
-
-	const fetchData = async () => {
-		// TODO get temp event from store
-		let temp_events = $course_lesson_tbc_selection.filter(s => s.teacher_id === tutor_id).map(s => ({
-			start: s.start_date,
-			end: s.end_date
-		})).map(slot => genTempSelectEvent(slot))
-
-
-		let temp_edit_event = []
-		if ($edit_lesson_tbc_to_date.to_start_date) {
-			let s = $edit_lesson_tbc_to_date
-			temp_edit_event.push(genTempEditEvent({
-				start: s.to_start_date,
-				end: s.to_end_date,
-				title: s.event_title
-			}))
-		}
-		if ($action_status !== 'create_option') {
-			events = events.filter(e => e.extendedProps.type !== 'ff_reserved')
-		}
-		// renderMonthCalendar([...events, ...temp_events, ...temp_edit_event])
-		// renderTimeCalendar([...events, ...temp_events, ...temp_edit_event])
 	}
 
 	const initMonthCalendar = (node) => {
@@ -205,14 +199,6 @@
 		}
 	}
 
-	const onReset = () => {
-		const calendars = [month_calendar, day_calendar]
-		calendars.forEach(c => {
-			let source = c.getEventSourceById(TBC_SELECTION)
-			if (source) source.remove()
-		})
-	}
-
 	const onShowStudentClick = () => {
 		openModal(StudentListDialog, {
 			tutor_id
@@ -255,10 +241,10 @@
 		<button on:click={onShowStudentClick} class="border border-gray-300 w-10 h-10 flex items-center justify-center rounded hover:bg-gray-100 hover:text-blue-500">
 			<Icon name="avatar"></Icon>
 		</button>
-		<button on:click={fetchData} class="border border-gray-300 w-10 h-10 flex items-center justify-center rounded hover:bg-gray-100 hover:text-blue-500 mx-2">
+		<button on:click={reRender} class="border border-gray-300 w-10 h-10 flex items-center justify-center rounded hover:bg-gray-100 hover:text-blue-500 mx-2">
 			<Icon name="refresh"></Icon>
 		</button>
-		<Widget on:hide-overlay={() => {disabled = false}} on:show-overlay={() => {disabled = true}} on:reset={onReset} on:update={fetchData}/>
+		<Widget on:hide-overlay={() => {disabled = false}} on:show-overlay={() => {disabled = true}} on:reset={clearTBCSource} on:update={fetchAndReRender}/>
 		<div class="ml-2">
 			<ToggleViewMenu {tutor_id} active_menu="month"/>
 		</div>

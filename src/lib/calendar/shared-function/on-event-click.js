@@ -10,6 +10,7 @@ import DeleteMenu from "../delete-menu.svelte";
 import MaterialSelectionDialog from '../../material/material-selection-dialog.svelte'
 import {removeMaterialFromZoom} from "../../../api/zoom-api";
 import {deleteLeaveTime} from "../../../api/tutor-api";
+import {genTempSelectEvent} from "../phase-to-events";
 
 export const onEventClick = ({event, el}, openPopper, openModal, month_calendar, day_calendar, tutor_id, onChangeDate) => {
 	let state = get(calendar_store).status || get(action_status)
@@ -146,9 +147,17 @@ export const onEventClick = ({event, el}, openPopper, openModal, month_calendar,
 					from_start_date: dayjs(event.start).format('YYYY-MM-DD HH:mm:ss'),
 					from_end_date: dayjs(event.end).format('YYYY-MM-DD HH:mm:ss'),
 				})
+				const tbc_event = genTempSelectEvent({
+					start: start_date,
+					end: end_date
+				})
 				action_status.set(type)
 				month_calendar.changeView('dayGridMonth', e.detail)
 				day_calendar.changeView('timeGridOneDay', e.detail)
+				let calendars = [day_calendar, month_calendar]
+				calendars.forEach(c => {
+					c.addEvent(tbc_event, 'tbc')
+				})
 				onChangeDate(e.detail)
 			}
 		}, {
