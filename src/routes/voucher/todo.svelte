@@ -36,7 +36,6 @@
 	const type_option = ['TICKET', 'COURSE', 'TRIAL']
 
 	const openCreateTickerDialog = (row, parent) => {
-		console.log(parent)
 		dialog.confirm({
 			message: `Add ticket to ${parent.nickname}`,
 			onConfirm: () => {
@@ -139,6 +138,7 @@
 			<th>Type</th>
 			<th>Phone</th>
 			<th>用戶名箱</th>
+			<th>Remark</th>
 			<th>課堂長度</th>
 			<th>課堂數目</th>
 			<th>課堂費用</th>
@@ -203,6 +203,9 @@
 						{:else}
 							<a href="/booking/option" class="text-blue-500">To option page</a>
 						{/if}
+					</td>
+					<td>
+						{r.remark}
 					</td>
 					<td>
 						{#if r.lesson_duration}
