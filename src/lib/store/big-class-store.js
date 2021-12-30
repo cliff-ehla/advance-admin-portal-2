@@ -31,10 +31,10 @@ const create_big_class_store = () => {
 export const big_class_store = create_big_class_store()
 
 const createBigClassEventStore = () => {
-	const level_filters = writable([])
+	const selected_levels = writable([])
 	const selected_codes = writable([])
 	const toggleLevelFilter = (lv) => {
-		level_filters.update(v => {
+		selected_levels.update(v => {
 			if (v.includes(lv)) {
 				v.splice(v.indexOf(lv),1)
 				return v
@@ -56,7 +56,10 @@ const createBigClassEventStore = () => {
 		})
 	}
 	const clearLevelFilters = () => {
-		level_filters.set([])
+		selected_levels.set([])
+	}
+	const clearCodeFilters = () => {
+		selected_codes.set([])
 	}
 	const big_class_events = derived(big_class_store, $big_class_store => {
 		return $big_class_store.map(e => {
@@ -81,21 +84,22 @@ const createBigClassEventStore = () => {
 			}
 		})
 	})
-	const _store = derived([big_class_events, level_filters, selected_codes], ([$events, $level_filters, $selected_codes]) => {
+	const _store = derived([big_class_events, selected_levels, selected_codes], ([$events, $selected_levels, $selected_codes]) => {
 		const code_filters = big_class_mapper.all_codes.map(c => ({
 			key: c,
 			count: 0,
 			selected: $selected_codes.includes(c)
 		}))
-		$events.forEach(e => {
-			let code = e.extendedProps.code
-			const obj = code_filters.find(f => f.key === code)
-			if (obj) obj.count++
-		})
-		if ($level_filters.length) {
+		const level_filters = big_class_mapper.all_levels.map(c => ({
+			key: c,
+			count: 0,
+			selected: $selected_levels.includes(c)
+		}))
+
+		if ($selected_levels.length) {
 			$events = $events.filter(e => {
 				return e.extendedProps.levels.some(lv => {
-					return $level_filters.includes(lv)
+					return $selected_levels.includes(lv)
 				})
 			})
 		}
@@ -104,17 +108,29 @@ const createBigClassEventStore = () => {
 				return $selected_codes.includes(e.extendedProps.code)
 			})
 		}
+		$events.forEach(e => {
+			let {code, levels} = e.extendedProps
+			let obj = code_filters.find(f => f.key === code)
+			if (obj) obj.count++
+			levels.forEach(lv => {
+				let obj = level_filters.find(f => f.key === lv)
+				if (obj) obj.count++
+			})
+		})
 		return {
 			events: $events,
-			level_filters: $level_filters,
-			code_filters
+			level_filter_off:  $selected_levels.length === 0,
+			code_filter_off: $selected_codes.length === 0,
+			code_filters,
+			level_filters
 		}
 	})
 	return {
 		subscribe: _store.subscribe,
 		toggleLevelFilter,
 		toggleCodeFilter,
-		clearLevelFilters
+		clearLevelFilters,
+		clearCodeFilters
 	}
 }
 

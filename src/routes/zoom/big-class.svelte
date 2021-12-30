@@ -20,7 +20,6 @@
 
 	const CLASSROOM = 'classroom'
 	const INDIVIDUAL = 'individual'
-	$: big_class_on = $big_class_events.level_filters.length === 0
 	let overlay_tutor_id // TODO in store?
 
 	const init = async (node) => {
@@ -67,6 +66,11 @@
 		reRenderEvents()
 	}
 
+	const onClearCodeFilter = () => {
+		big_class_events.clearCodeFilters()
+		reRenderEvents()
+	}
+
 	const onToggleLevel = (lv) => {
 		big_class_events.toggleLevelFilter(lv)
 		reRenderEvents()
@@ -94,27 +98,33 @@
 		<div class="my-4">
 			<div class="bg-blue-100 border border-blue-200">
 				<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
-					<input id="big-class" type="checkbox" bind:checked={big_class_on} on:input={onToggleBigClass}>
+					<input id="big-class" type="checkbox" bind:checked={$big_class_events.level_filter_off} on:input={onToggleBigClass}>
 					<label for="big-class" class="ml-4 cursor-pointer">全部程度</label>
 				</div>
 				<div class="p-1 bg-blue-100">
-					{#each $classroom_analytic.by_level as lv}
+					{#each $big_class_events.level_filters as obj}
 						<div class="flex items-center px-2 py-0.5 cursor-pointer hover:bg-white">
-							<input id={lv.level} on:input={() => {onToggleLevel(lv.level)}} type="checkbox" checked={$big_class_events.level_filters.includes(lv.level)}>
-							<label for={lv.level} class="ml-4 cursor-pointer">{lv.level}</label>
+							<input id={obj.key} on:input={() => {onToggleLevel(obj.key)}} type="checkbox" checked={obj.selected}>
+							<label for={obj.key} class="ml-4 cursor-pointer">{obj.key} ({obj.count})</label>
 						</div>
 					{/each}
 				</div>
 			</div>
 		</div>
 
-		<div class="p-1 bg-blue-100">
-			{#each $big_class_events.code_filters as f}
-				<div class="flex items-center px-2 py-0.5 cursor-pointer hover:bg-white">
-					<input id={f.key} type="checkbox" checked={f.selected} on:input={() => {onToggleCode(f.key)}}>
-					<label for={f.key} class="ml-4 cursor-pointer">{f.key} ({f.count})</label>
-				</div>
-			{/each}
+		<div class="bg-blue-100 border border-blue-200">
+			<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
+				<input id="code" type="checkbox" bind:checked={$big_class_events.code_filter_off} on:input={onClearCodeFilter}>
+				<label for="code" class="ml-4 cursor-pointer">全部Course</label>
+			</div>
+			<div class="p-1 bg-blue-100">
+				{#each $big_class_events.code_filters as f}
+					<div class="flex items-center px-2 py-0.5 cursor-pointer hover:bg-white">
+						<input id={f.key} type="checkbox" checked={f.selected} on:input={() => {onToggleCode(f.key)}}>
+						<label for={f.key} class="ml-4 cursor-pointer">{f.key} ({f.count})</label>
+					</div>
+				{/each}
+			</div>
 		</div>
 
 <!--		<div class="my-4">-->
