@@ -143,7 +143,6 @@
 
 	const initTimeCalendar = (node) => {
 		day_calendar = new FullCalendar.Calendar(node, {
-			events: $tutor_event_store[tutor_id], // TODO single get event place
 			initialView: 'timeGridOneDay',
 			height: CALENDAR_HEIGHT,
 			views: {
@@ -181,7 +180,7 @@
 		})
 		day_calendar.changeView('timeGridOneDay', selected_date)
 		day_calendar.render()
-		addSourcesToDayCalendar
+		addSourcesToDayCalendar()
 	}
 
 	const onChangeMonth = (type) => {
