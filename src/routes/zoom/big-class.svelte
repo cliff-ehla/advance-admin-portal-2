@@ -20,7 +20,7 @@
 
 	const CLASSROOM = 'classroom'
 	const INDIVIDUAL = 'individual'
-	let big_class_on = true
+	$: big_class_on = $big_class_events.level_filters.length === 0
 	let overlay_tutor_id // TODO in store?
 
 	const init = async (node) => {
@@ -36,7 +36,7 @@
 			},
 			eventSources: [
 				{
-					events: $big_class_events,
+					events: $big_class_events.events,
 					id: CLASSROOM
 				}
 			]
@@ -63,13 +63,22 @@
 	}
 
 	const onToggleBigClass = (e) => {
+		big_class_events.clearLevelFilters()
+		reRenderEvents()
+	}
+
+	const onToggleLevel = (lv) => {
+		big_class_events.toggleLevelFilter(lv)
+		reRenderEvents()
+	}
+
+	const reRenderEvents = () => {
 		const source = calendar.getEventSourceById(CLASSROOM)
 		if (source) {
 			source.remove()
-		} else {
 			calendar.addEventSource({
 				id: CLASSROOM,
-				events: $big_class_events
+				events: $big_class_events.events
 			})
 		}
 	}
@@ -81,13 +90,13 @@
 			<div class="bg-blue-100 border border-blue-200">
 				<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
 					<input id="big-class" type="checkbox" bind:checked={big_class_on} on:input={onToggleBigClass}>
-					<label for="big-class" class="ml-4 cursor-pointer">Big class</label>
+					<label for="big-class" class="ml-4 cursor-pointer">全部程度</label>
 				</div>
 				<div class="p-1 bg-blue-100">
 					{#each $classroom_analytic.by_level as lv}
-						<div class="flex items-center px-2 py-0.5">
-							<input type="checkbox" >
-							<label class="ml-4">{lv.level} ({lv.lesson_count})</label>
+						<div class="flex items-center px-2 py-0.5 cursor-pointer hover:bg-white">
+							<input id={lv.level} on:input={() => {onToggleLevel(lv.level)}} type="checkbox" checked={$big_class_events.level_filters.includes(lv.level)}>
+							<label for={lv.level} class="ml-4 cursor-pointer">{lv.level} ({lv.lesson_count})</label>
 						</div>
 					{/each}
 				</div>

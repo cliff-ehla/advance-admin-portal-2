@@ -30,27 +30,66 @@ const create_big_class_store = () => {
 
 export const big_class_store = create_big_class_store()
 
-export const big_class_events = derived(big_class_store, $big_class_store => {
-	return $big_class_store.map(e => {
-		const extendedProps = {
-			type: 'classroom',
-			reg_user_cnt: e.reg_user_cnt,
-			student_size: e.student_size,
-			cat: e.sub_cat_alter,
-			tutor_id: e.tutor_id,
-			tutor_name: e.tutor_name,
-			start_date: e.start_date,
-			zoom_id: e.zoom_id,
-			no_material: e.no_material,
-			level: e.rc_level,
-			material: e.name
+const createBigClassEventStore = () => {
+	const level_filters = writable([])
+	const category_filter = writable([])
+	const toggleLevelFilter = (lv) => {
+		level_filters.update(v => {
+			if (v.includes(lv)) {
+				v.splice(v.indexOf(lv),1)
+				return v
+			} else {
+				v.push(lv)
+				return v
+			}
+		})
+	}
+	const clearLevelFilters = () => {
+		level_filters.set([])
+	}
+	const big_class_events = derived(big_class_store, $big_class_store => {
+		return $big_class_store.map(e => {
+			const extendedProps = {
+				type: 'classroom',
+				reg_user_cnt: e.reg_user_cnt,
+				student_size: e.student_size,
+				cat: e.sub_cat_alter,
+				tutor_id: e.tutor_id,
+				tutor_name: e.tutor_name,
+				start_date: e.start_date,
+				zoom_id: e.zoom_id,
+				no_material: e.no_material,
+				level: e.rc_level,
+				levels: big_class_mapper.getLevels(e.rc_level),
+				material: e.name
+			}
+			return {
+				start: e.start_date,
+				extendedProps
+			}
+		})
+	})
+	const _store = derived([big_class_events, level_filters], ([$events, $level_filters]) => {
+		if ($level_filters.length) {
+			$events = $events.filter(e => {
+				return e.extendedProps.levels.some(lv => {
+					return $level_filters.includes(lv)
+				})
+			})
 		}
 		return {
-			start: e.start_date,
-			extendedProps
+			events: $events,
+			level_filters: $level_filters
 		}
 	})
-})
+	return {
+		subscribe: _store.subscribe,
+		toggleLevelFilter,
+		clearLevelFilters
+	}
+}
+
+export const big_class_events = createBigClassEventStore()
 
 const _time_range_options = [
 	{

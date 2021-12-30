@@ -28,9 +28,6 @@
 	import DemandSupply from '$lib/dashboard/demand-supply-by-level-bar-chart.svelte'
 	import VacancyBarChar from '$lib/dashboard/vacancy-by-level-bar-chart.svelte'
 	import LanguageByLevelBarChar from '$lib/dashboard/lesson-language-by-level-bar-chart.svelte'
-	$: {
-		console.log(123, $classroom_analytic)
-	}
 
 	export let big_class_list
 	const colors = {
