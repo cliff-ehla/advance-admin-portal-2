@@ -12,7 +12,7 @@ export const renderClassroomEvent = (wrapper, start, extendedProps) => {
 	content_bottom.innerHTML = extendedProps.cat
 	content_bottom.classList.add('text-xs', 'overflow-hidden', 'overflow-ellipsis', 'whitespace-nowrap')
 	tippy(content_bottom, {
-		content: extendedProps.cat
+		content: extendedProps.material
 	})
 	let time_el = document.createElement('div')
 	time_el.innerHTML = dayjs(start).add(8, 'hour').format('h:mma')

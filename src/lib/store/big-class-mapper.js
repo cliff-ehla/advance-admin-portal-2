@@ -31,7 +31,7 @@ export const createLevelMapper = () => {
 		"p4-to-p5-exam-prep": ['p4', 'p5'],
 		"p4-to-p6-exam-prep": ['p4', 'p5', 'p6'],
 	})
-	const all_levels = ['k1', 'k2', 'k3', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6']
+	const all_levels = ['k1', 'k2', 'k3', 'p1', 'p2', 'p3', 'p4', 'p5', 'p6', 's1', 's2']
 	const getCourseCategoryFullName = (short_code) => {
 		return get(course_code_store)[short_code] || 'No full name'
 	}

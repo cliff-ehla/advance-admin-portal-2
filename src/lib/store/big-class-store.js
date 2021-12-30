@@ -42,7 +42,8 @@ export const big_class_events = derived(big_class_store, $big_class_store => {
 			start_date: e.start_date,
 			zoom_id: e.zoom_id,
 			no_material: e.no_material,
-			level: e.rc_level
+			level: e.rc_level,
+			material: e.name
 		}
 		return {
 			start: e.start_date,

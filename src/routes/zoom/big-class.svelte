@@ -63,8 +63,8 @@
 	}
 
 	const onToggleBigClass = (e) => {
-		if (e.target.checked) {
-			const source = calendar.getEventSourceById(CLASSROOM)
+		const source = calendar.getEventSourceById(CLASSROOM)
+		if (source) {
 			source.remove()
 		} else {
 			calendar.addEventSource({

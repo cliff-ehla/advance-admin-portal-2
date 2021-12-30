@@ -20,9 +20,9 @@
 
 <script>
 	import {student_store} from "../store/student-store.js";
+	import {student_analytic} from "$lib/store/student-analytic.js";
 	import tippy from "tippy.js";
 	const demand = student_store.getLessonDemand()
-	const summary = student_store.getSummary()
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import {classroom_analytic} from "$lib/store/big-class-store.js";
 	import DemandSupply from '$lib/dashboard/demand-supply-by-level-bar-chart.svelte'
@@ -49,7 +49,7 @@
 				labels: ['試用新戶', '大戶', '需跟進戶'],
 				datasets: [
 					{
-						data: [summary.new_user_count, summary.many_ticker_user_count, summary.few_ticker_user_count],
+						data: [$student_analytic.new_user_count, $student_analytic.many_ticker_user_count, $student_analytic.few_ticker_user_count],
 						backgroundColor: [colors.green, colors.blue, colors.red]
 					}
 				]
@@ -110,10 +110,10 @@
 		<div class="mb-8 flex w-full bg-white p-8 rounded border border-gray-300">
 			<a href="/students/classroom" class="block hover:text-blue-500 w-28">
 				<p>學生總數</p>
-				<p style="font-size: 4em" class="font-light leading-none">{summary.total_students}</p>
+				<p style="font-size: 4em" class="font-light leading-none">{$student_analytic.total_students}</p>
 				<div class="mb-8"></div>
 				<p>試用新戶</p>
-				<p style="font-size: 4em" class="font-light leading-none">{summary.new_user_count}</p>
+				<p style="font-size: 4em" class="font-light leading-none">{$student_analytic.new_user_count}</p>
 			</a>
 			<div class="flex-1 flex w-full">
 				<div class="flex-1">

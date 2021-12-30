@@ -55,42 +55,22 @@ const student_store = (() => {
 			if (s.tt_t_amt > 0) {
 				const level = s.level
 				const obj = result.find(r => r.level === level)
-				obj.user_count++
-
-				if (s.tt_t_amt <= 6) {
-					obj.new_user_count++
-				} else if (s.r_t_amt  <= 6) {
-					obj.few_ticker_user_count++
-				} else if (s.r_t_amt > 6) {
-					obj.many_ticker_user_count++
+				if (obj) {
+					obj.user_count++
+					if (s.tt_t_amt <= 6) {
+						obj.new_user_count++
+					} else if (s.r_t_amt  <= 6) {
+						obj.few_ticker_user_count++
+					} else if (s.r_t_amt > 6) {
+						obj.many_ticker_user_count++
+					}
+				} else {
+					console.log(`Warning: ${level} is not found from the default level list`)
 				}
 			}
 		})
 		result = result.sort((a,b) => {
 			return a.level > b.level ? 1 : -1
-		})
-		return result
-	}
-
-	const getSummary = () => {
-		const result = {
-			total_students: 0,
-			many_ticker_user_count: 0,
-			few_ticker_user_count: 0,
-			new_user_count: 0
-		}
-
-		get(store).forEach(s => {
-			if (s.tt_t_amt > 0) {
-				result.total_students++
-				if (s.tt_t_amt <= 6) {
-					result.new_user_count++
-				} else if (s.r_t_amt  <= 6) {
-					result.few_ticker_user_count++
-				} else if (s.r_t_amt > 6) {
-					result.many_ticker_user_count++
-				}
-			}
 		})
 		return result
 	}
@@ -103,7 +83,6 @@ const student_store = (() => {
 		getStudentAvatar,
 		getGender,
 		getLessonDemand,
-		getSummary,
 		searchUsers,
 		set: store.set
 	}
