@@ -8,11 +8,9 @@
 </script>
 
 <script>
-	import {tutor_store} from "../../store/tutor-store";
 	import {tutor_event_store} from "$lib/store/tutor-event-store.js";
 	import BigClassLessonMenu from '$lib/calendar/big-class-leson-menu.svelte'
 	import {getContext} from 'svelte'
-	import {tooltip} from "$lib/aciton/tooltip.js";
 	import {eventContent} from "$lib/calendar/shared-function/event-content.js";
 
 	const {openPopper} = getContext('popper')
