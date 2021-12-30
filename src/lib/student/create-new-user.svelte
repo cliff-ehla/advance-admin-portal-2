@@ -9,6 +9,7 @@
 	import {createEventDispatcher} from 'svelte'
 	const dispatch = createEventDispatcher()
 	import {level_options_store} from "../../store/level-options";
+	import {student_store} from "../../store/student-store.js";
 
 	dayjs.extend(utc)
 
@@ -78,6 +79,7 @@
 			nickname,
 			username
 		})
+		await student_store.fetchData(fetch)
 	}
 </script>
 

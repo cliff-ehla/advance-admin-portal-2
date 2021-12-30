@@ -12,24 +12,10 @@
 				})
 				tutor_store.set(data)
 			}
-			const res = await http.get(fetch, '/adminApi/list_students_with_ticket_info')
-			if (res.success) {
-				student_store.set(res.data)
-				return {
-					props: {
-						tutor_list: data,
-						student_list: res.data,
-						user_info: session.user_info
-					}
-				}
-			} else {
-				if (res.debug.err_code === 401 && page.path !== '/login') {
-					return {
-						status: 302,
-						redirect: '/login'
-					}
-				} else {
-					return true
+			await student_store.fetchData(fetch)
+			return {
+				props: {
+					user_info: session.user_info
 				}
 			}
 		} else {

@@ -1,8 +1,20 @@
 import {writable, get, derived} from "svelte/store";
 import {big_class_mapper} from "$lib/store/big-class-mapper.js";
+import {http} from "$lib/http.js";
+import {notifications} from "$lib/store/notification.js";
 
 const student_store = (() => {
 	const store = writable([])
+
+	const fetchData = async (fetch) => {
+		const {data, success, debug} = await http.get(fetch, '/adminApi/list_students_with_ticket_info')
+		if (success) {
+			store.set(data)
+			return data
+		} else {
+			notifications.alert(debug.debug_msg)
+		}
+	}
 
 	const getStudent = (id) => {
 		return get(store).find(t => t.student_id == id)
@@ -84,6 +96,7 @@ const student_store = (() => {
 		getGender,
 		getLessonDemand,
 		searchUsers,
+		fetchData,
 		set: store.set
 	}
 })()
