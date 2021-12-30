@@ -72,6 +72,11 @@
 		reRenderEvents()
 	}
 
+	const onToggleCode = (code) => {
+		big_class_events.toggleCodeFilter(code)
+		reRenderEvents()
+	}
+
 	const reRenderEvents = () => {
 		const source = calendar.getEventSourceById(CLASSROOM)
 		if (source) {
@@ -101,6 +106,15 @@
 					{/each}
 				</div>
 			</div>
+		</div>
+
+		<div class="p-1 bg-blue-100">
+			{#each $big_class_events.code_filters as f}
+				<div class="flex items-center px-2 py-0.5 cursor-pointer hover:bg-white">
+					<input id={f.key} type="checkbox" checked={f.selected} on:input={() => {onToggleCode(f.key)}}>
+					<label for={f.key} class="ml-4 cursor-pointer">{f.key} ({f.count})</label>
+				</div>
+			{/each}
 		</div>
 
 <!--		<div class="my-4">-->

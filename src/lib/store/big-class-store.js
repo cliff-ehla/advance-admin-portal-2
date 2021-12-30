@@ -32,7 +32,7 @@ export const big_class_store = create_big_class_store()
 
 const createBigClassEventStore = () => {
 	const level_filters = writable([])
-	const category_filter = writable([])
+	const selected_codes = writable([])
 	const toggleLevelFilter = (lv) => {
 		level_filters.update(v => {
 			if (v.includes(lv)) {
@@ -40,6 +40,17 @@ const createBigClassEventStore = () => {
 				return v
 			} else {
 				v.push(lv)
+				return v
+			}
+		})
+	}
+	const toggleCodeFilter = (code) => {
+		selected_codes.update(v => {
+			if (v.includes(code)) {
+				v.splice(v.indexOf(code),1)
+				return v
+			} else {
+				v.push(code)
 				return v
 			}
 		})
@@ -70,7 +81,17 @@ const createBigClassEventStore = () => {
 			}
 		})
 	})
-	const _store = derived([big_class_events, level_filters], ([$events, $level_filters]) => {
+	const _store = derived([big_class_events, level_filters, selected_codes], ([$events, $level_filters, $selected_codes]) => {
+		const code_filters = big_class_mapper.all_codes.map(c => ({
+			key: c,
+			count: 0,
+			selected: $selected_codes.includes(c)
+		}))
+		$events.forEach(e => {
+			let code = e.extendedProps.code
+			const obj = code_filters.find(f => f.key === code)
+			if (obj) obj.count++
+		})
 		if ($level_filters.length) {
 			$events = $events.filter(e => {
 				return e.extendedProps.levels.some(lv => {
@@ -78,14 +99,21 @@ const createBigClassEventStore = () => {
 				})
 			})
 		}
+		if ($selected_codes.length) {
+			$events = $events.filter(e => {
+				return $selected_codes.includes(e.extendedProps.code)
+			})
+		}
 		return {
 			events: $events,
-			level_filters: $level_filters
+			level_filters: $level_filters,
+			code_filters
 		}
 	})
 	return {
 		subscribe: _store.subscribe,
 		toggleLevelFilter,
+		toggleCodeFilter,
 		clearLevelFilters
 	}
 }

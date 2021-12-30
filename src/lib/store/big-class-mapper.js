@@ -16,6 +16,7 @@ export const createLevelMapper = () => {
 		WG: "WritingGradingApp",
 		WGC: "WritingGradingCorrection"
 	})
+	const all_codes = Object.keys(get(course_code_store))
 	let level_map_store = readable({
 		"6yro-or-below": ['k1', 'k2', 'k3'],
 		"7yro-to-9yro": ['p1', 'p2', 'p3'],
@@ -47,7 +48,8 @@ export const createLevelMapper = () => {
 	return {
 		getCourseCategoryFullName,
 		getLevels,
-		all_levels
+		all_levels,
+		all_codes
 	}
 }
 export const big_class_mapper = createLevelMapper()
