@@ -119,7 +119,7 @@ const create_class_analytic = () => {
 	const time_range_options = readable(_time_range_options)
 	const filtered_classroom = derived([big_class_store, time_range], ([$big_class_store, $time_span]) => {
 		return $big_class_store.filter(classroom => {
-			return dayjs(classroom.start_date).isBefore(dayjs().add(get(time_range), 'day'))
+			return dayjs(classroom.start_date).isBefore(dayjs().add(get(time_range), 'day')) && dayjs(classroom.start_date).isAfter(dayjs())
 		})
 	})
 	const seat_analytic = derived(filtered_classroom, $big_class_tore => {

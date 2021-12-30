@@ -4,17 +4,8 @@
 	import {big_class_store} from "$lib/store/big-class-store.js";
 
 	export const load = async ({page, fetch}) => {
-		const {data, success, debug} = await http.post(fetch, '/courseApi/list_registrable_classroom', {
-			start_date: dayjs().format('YYYY-MM-DD HH:mm:ss'),
-			end_date: dayjs().add(2, 'month').format('YYYY-MM-DD HH:mm:ss'),
-		})
-		if (!success) return onFail(debug)
-		big_class_store.set(data)
-		return {
-			props: {
-				big_class_list: data
-			}
-		}
+		await big_class_store.callIfNoCache(fetch)
+		return true
 	}
 </script>
 
@@ -29,7 +20,6 @@
 	import VacancyBarChar from '$lib/dashboard/vacancy-by-level-bar-chart.svelte'
 	import LanguageByLevelBarChar from '$lib/dashboard/lesson-language-by-level-bar-chart.svelte'
 
-	export let big_class_list
 	const colors = {
 		blue: 'rgba(54, 162, 235, 0.6)',
 		red: 'rgba(255, 99, 132, 0.6)',
