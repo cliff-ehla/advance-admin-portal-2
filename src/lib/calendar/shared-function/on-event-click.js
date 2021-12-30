@@ -71,20 +71,11 @@ export const onEventClick = ({event, el}, openPopper, openModal, month_calendar,
 					zoom: event.extendedProps,
 					category,
 					onAddMaterialSuccess: ({item_id, item_title, day_id}) => {
-						event.remove()
-						setTimeout(() => {
-							let new_zoom = props
-							if (!new_zoom.days) {
-								new_zoom.days = []
-							}
-							new_zoom.days.push({
-								item_id,
-								day_id,
-								title: item_title
-							})
-							let new_event = genBookedEventFromZoom(new_zoom)
-							month_calendar.addEventSource([new_event])
-						}, 1000)
+						const event = new CustomEvent('refresh-calendar', {
+							bubbles: true,
+							cancelable: true
+						})
+						el.dispatchEvent(event)
 					}
 				}, {
 					styleWindow: {
@@ -98,15 +89,11 @@ export const onEventClick = ({event, el}, openPopper, openModal, month_calendar,
 					wrapper_id: event.extendedProps.zoom_id,
 					day_ids
 				})
-				event.remove()
-				setTimeout(() => {
-					let new_zoom = JSON.parse(JSON.stringify(props))
-					new_zoom.days = new_zoom.days.filter(d => {
-						day_ids.includes(d.day_id)
-					})
-					let new_event = genBookedEventFromZoom(new_zoom)
-					month_calendar.addEventSource([new_event])
-				}, 500)
+				const event = new CustomEvent('refresh-calendar', {
+					bubbles: true,
+					cancelable: true
+				})
+				el.dispatchEvent(event)
 			},
 			onEdit: () => {
 				openModal(ZoomDetailPopup, {

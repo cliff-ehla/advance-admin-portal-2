@@ -1,6 +1,6 @@
 <script>
 	import {tutor_event_store} from "$lib/store/tutor-event-store.js";
-	import {createEventDispatcher, getContext} from "svelte";
+	import {createEventDispatcher, getContext, onMount} from "svelte";
 	import dayjs from "dayjs";
 	import {eventContent} from "./shared-function/event-content";
 	import {eventDidMount} from "./shared-function/event-did-mount";
@@ -9,15 +9,11 @@
 	import {tutor_store} from "../../store/tutor-store";
 	import {onEventClick} from "./shared-function/on-event-click";
 	import {onReservationSlotSelect} from "./shared-function/on-reservation-slot-select";
-	import {action_status, edit_lesson_tbc_to_date, editing_option} from "../../store/calendar-action-status-store";
 	import Widget from './calendar-action-widget.svelte'
 	import ToggleViewMenu from './toggle-view-menu.svelte'
 	import {createCourseOnDateSelect} from "./shared-function/create-course-on-date-select";
 	import {syncTempEvents} from "./shared-function/sync-temp-events";
 	import {CALENDAR_HEIGHT} from "./shared-function/calendar-height";
-	import {create_course_from_trial_store} from "../../store/create-course-from-trial-store";
-	import {trial_lesson_retry_student_id} from "../../store/calendar-action-status-store";
-	import {student_store} from "../../store/student-store";
 	import StudentListDialog from '../student/student-list-dialog.svelte'
 	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
 
@@ -43,6 +39,12 @@
 		if (tutor_id && day_calendar && month_calendar) reRender()
 	}
 	$: tutor_name = $tutor_store ? tutor_store.getTutorName(tutor_id) : ''
+
+	onMount(() => {
+		document.addEventListener('refresh-calendar', e => {
+			fetchAndReRender()
+		})
+	})
 
 	const fetchAndReRender = async () => {
 		clearTBCSource()
