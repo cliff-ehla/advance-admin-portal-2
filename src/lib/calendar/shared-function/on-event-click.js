@@ -79,9 +79,10 @@ export const onEventClick = ({event, el}, openPopper, openModal, month_calendar,
 					}
 				}, {
 					styleWindow: {
-						width: '680px',
-						borderRadius: '0.5em'
+						width: '980px',
+						borderRadius: '0.5em',
 					},
+					closeButton: false
 				})
 			},
 			onRemoveMaterial: async ({day_ids}) => {

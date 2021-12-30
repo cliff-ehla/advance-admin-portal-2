@@ -41,9 +41,11 @@
 	}
 </script>
 
+<h2 class="mb-4 font-bold text-xl">Add material</h2>
+
 <MaterialSelectionList on:input={onInput} {category} max_height="calc(100vh - 300px)"/>
 
-<div class="h-16 px-8 flex border-t border-gray-300 justify-between items-center">
+<div class="px-8 flex justify-between items-center mt-4">
 	<button on:click={closeModal} class="rounded border border-gray-300 px-12 flex items-center h-8">Cancel</button>
 	<button on:click={onSave} class="rounded {(loading_save || !selected_item_id) ? 'bg-gray-300 text-gray-400' : 'bg-blue-500 text-white'} px-12 flex items-center h-8">{loading_save ? 'Saving...' : 'Save'}</button>
 </div>
