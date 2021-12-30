@@ -61,7 +61,8 @@ const createBigClassEventStore = () => {
 				no_material: e.no_material,
 				level: e.rc_level,
 				levels: big_class_mapper.getLevels(e.rc_level),
-				material: e.name
+				material: e.name,
+				code: e.description_code_short_id
 			}
 			return {
 				start: e.start_date,

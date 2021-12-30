@@ -96,32 +96,32 @@
 					{#each $classroom_analytic.by_level as lv}
 						<div class="flex items-center px-2 py-0.5 cursor-pointer hover:bg-white">
 							<input id={lv.level} on:input={() => {onToggleLevel(lv.level)}} type="checkbox" checked={$big_class_events.level_filters.includes(lv.level)}>
-							<label for={lv.level} class="ml-4 cursor-pointer">{lv.level} ({lv.lesson_count})</label>
+							<label for={lv.level} class="ml-4 cursor-pointer">{lv.level}</label>
 						</div>
 					{/each}
 				</div>
 			</div>
 		</div>
 
-		<div class="my-4">
-			<div class="bg-blue-100 border border-blue-200">
-				<div class="flex items-center p-2 bg-blue-50">
-					<input type="checkbox" bind:checked={overlay_tutor_id}>
-					<label class="ml-4">Individual</label>
-				</div>
+<!--		<div class="my-4">-->
+<!--			<div class="bg-blue-100 border border-blue-200">-->
+<!--				<div class="flex items-center p-2 bg-blue-50">-->
+<!--					<input type="checkbox" bind:checked={overlay_tutor_id}>-->
+<!--					<label class="ml-4">Individual</label>-->
+<!--				</div>-->
 
-				<div class="p-1 bg-blue-100">
-					{#each $tutor_store as t}
-						<img on:click={() => {onToggleTutor(t)}}
-						     use:tooltip={tutor_store.getTutorName(t.user_id)}
-						     src={tutor_store.getTutorProfilePic(t.user_id)}
-						     class:opacity-80={overlay_tutor_id !== t.user_id}
-						     class:active={overlay_tutor_id === t.user_id}
-						     class="w-12 h-12 rounded-full inline-block my-1 mx-0.5">
-					{/each}
-				</div>
-			</div>
-		</div>
+<!--				<div class="p-1 bg-blue-100">-->
+<!--					{#each $tutor_store as t}-->
+<!--						<img on:click={() => {onToggleTutor(t)}}-->
+<!--						     use:tooltip={tutor_store.getTutorName(t.user_id)}-->
+<!--						     src={tutor_store.getTutorProfilePic(t.user_id)}-->
+<!--						     class:opacity-80={overlay_tutor_id !== t.user_id}-->
+<!--						     class:active={overlay_tutor_id === t.user_id}-->
+<!--						     class="w-12 h-12 rounded-full inline-block my-1 mx-0.5">-->
+<!--					{/each}-->
+<!--				</div>-->
+<!--			</div>-->
+<!--		</div>-->
 	</div>
 	<div class="py-4 px-2 ml-48" use:init></div>
 </div>

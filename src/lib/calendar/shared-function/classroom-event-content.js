@@ -9,11 +9,21 @@ export const renderClassroomEvent = (wrapper, start, extendedProps) => {
 	let content_upper = document.createElement('div')
 	content_upper.classList.add('flex', 'items-center')
 	let content_bottom = document.createElement('div')
-	content_bottom.innerHTML = extendedProps.cat
-	content_bottom.classList.add('text-xs', 'overflow-hidden', 'overflow-ellipsis', 'whitespace-nowrap')
-	tippy(content_bottom, {
+	content_bottom.classList.add('flex', 'items-center')
+	const code_el = document.createElement('div')
+	code_el.classList.add('bg-gray-100', 'px-1', 'rounded' , 'leading-tight', 'overflow-hidden', 'text-xs', 'border', 'border-gray-300', 'flex-shrink-0', 'mr-1')
+	code_el.innerHTML = extendedProps.code
+	tippy(code_el, {
+		content: extendedProps.cat
+	})
+	const material_el = document.createElement('div')
+	material_el.innerHTML = extendedProps.material
+	material_el.classList.add('text-xs', 'overflow-hidden', 'overflow-ellipsis', 'whitespace-nowrap')
+	tippy(material_el, {
 		content: extendedProps.material
 	})
+	content_bottom.appendChild(code_el)
+	content_bottom.appendChild(material_el)
 	let time_el = document.createElement('div')
 	time_el.innerHTML = dayjs(start).add(8, 'hour').format('h:mma')
 	let size_el = document.createElement('div')
