@@ -52,6 +52,10 @@
 				{
 					label: 'Big class',
 					href: '/zoom/big-class'
+				},
+				{
+					label: 'Requested class',
+					href: '/classroom/request'
 				}
 			]
 		},
@@ -107,7 +111,7 @@
 	]
 </script>
 
-<div class="bg-blue-900 h-12 flex items-center text-white">
+<div class="bg-blue-900 h-12 flex items-center text-white sticky top-0">
 	<a href="/dashboard" class="w-40 ml-4">EHLA</a>
 	<div class="flex-1 items-center flex justify-center">
 		{#each menu_items as item}
