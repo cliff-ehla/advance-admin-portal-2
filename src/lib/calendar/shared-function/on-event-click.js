@@ -69,14 +69,7 @@ export const onEventClick = ({event, el}, openPopper, openModal, month_calendar,
 			onAddMaterial: (category) => {
 				openModal(MaterialSelectionDialog, {
 					zoom: event.extendedProps,
-					category,
-					onAddMaterialSuccess: ({item_id, item_title, day_id}) => {
-						const event = new CustomEvent('refresh-calendar', {
-							bubbles: true,
-							cancelable: true
-						})
-						el.dispatchEvent(event)
-					}
+					category
 				}, {
 					styleWindow: {
 						width: '980px',
@@ -90,11 +83,10 @@ export const onEventClick = ({event, el}, openPopper, openModal, month_calendar,
 					wrapper_id: event.extendedProps.zoom_id,
 					day_ids
 				})
-				const event = new CustomEvent('refresh-calendar', {
+				el.dispatchEvent(new CustomEvent('refresh-calendar', {
 					bubbles: true,
 					cancelable: true
-				})
-				el.dispatchEvent(event)
+				}))
 			},
 			onEdit: () => {
 				openModal(ZoomDetailPopup, {

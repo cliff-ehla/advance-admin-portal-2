@@ -1,37 +1,66 @@
 <script>
 	import MaterialSelectionList from './material-selection-list.svelte'
-	import {addMaterialToZoom} from "../../store/org-api";
 	import {getContext} from 'svelte'
 	const {closeModal} = getContext('simple-modal')
 	import dayjs from "dayjs";
+	import {http} from "$lib/http.js";
+	import Button from '$lib/ui-elements/button.svelte'
 
 	export let zoom
 	export let category
-	export let onAddMaterialSuccess = () => {}
 
+	$: is_classroom = !!zoom.rc_type
 	let selected_item_id
-	let loading_save
 	let item_title
 
-	const onSave = async () => {
+	const onSave = () => {
+		if (is_classroom) {
+			editMaterialForClassroom()
+		} else {
+			addMaterialForOneOnOne()
+		}
+	}
+
+	const addMaterialForOneOnOne = async () => {
 		let start_time = dayjs(zoom.start_time).subtract(1, 'day').format('YYYY-MM-DD HH:mm:ss')
-		let payload = {
-			item_id: selected_item_id,
+		let data = await http.post(fetch, '/organizationApi/purchase_work_task', {
+			item_ids: [selected_item_id],
 			tutor_group_id: zoom.tutor_group_id,
 			wrapper_id: zoom.zoom_id,
-			start_time,
-			type_key: "reading-pdf"
-		}
-		loading_save = true
-		let data = await addMaterialToZoom(payload)
-		let day_id = data.day_id
-		loading_save = false
-		closeModal()
-		onAddMaterialSuccess({
-			item_title,
-			day_id,
-			item_id: selected_item_id
+			start_time
 		})
+		closeModal()
+		onSuccess()
+	}
+
+	const editMaterialForClassroom = async () => {
+		const map = {
+			SMALL: 4,
+			BIG: 20,
+			UNLIMITED: 9999
+		}
+		await http.post(fetch, '/courseApi/edit_course_material', {
+			item_id: selected_item_id,
+			wrapper_id: zoom.zoom_id,
+			code_id: zoom.description_code_id,
+			student_size: map[zoom.big_classroom_type],
+			teacher_id: zoom.teacher_id,
+			rc_level: zoom.rc_level,
+			start_date: zoom.start_time,
+			duration: zoom.duration
+		}, {
+			notification: '成功更改Material'
+		})
+		onSuccess()
+		closeModal()
+	}
+
+	const onSuccess = () => {
+		const event = new CustomEvent('refresh-calendar', {
+			bubbles: true,
+			cancelable: true
+		})
+		document.dispatchEvent(event)
 	}
 
 	const onInput = (e) => {
@@ -47,5 +76,7 @@
 
 <div class="px-8 flex justify-between items-center mt-4">
 	<button on:click={closeModal} class="rounded border border-gray-300 px-12 flex items-center h-8">Cancel</button>
-	<button on:click={onSave} class="rounded {(loading_save || !selected_item_id) ? 'bg-gray-300 text-gray-400' : 'bg-blue-500 text-white'} px-12 flex items-center h-8">{loading_save ? 'Saving...' : 'Save'}</button>
+	<Button on:click={onSave} disabled={!selected_item_id}>
+		Save
+	</Button>
 </div>
