@@ -43,7 +43,7 @@
 			<td class="font-bold text-gray-700 whitespace-nowrap">{r.phone}</td>
 			<td>
 				<p class="leading-tight">{dayjs(r.create_ts).format('DD MMM YYYY (ddd)')}</p>
-				<p class="text-gray-500 text-sm leading-tight">{dayjs(r.create_ts).format('h:mma')}</p>
+				<p class="text-gray-500 text-sm leading-tight">{dayjs.utc(r.create_ts).local().format('h:mma')}</p>
 				<p class="text-gray-500 text-xs leading-tight">by ~{r.admin_username}</p>
 			</td>
 			<td>

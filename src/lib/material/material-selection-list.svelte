@@ -70,7 +70,7 @@
 		{/each}
 	</div>
 	<div class="flex-1">
-		<div class="h-16 flex text-sm text-gray-300 px-2 border-b border-gray-300 bg-gray-100 items-center overflow-x-scroll">
+		<div class="h-16 flex text-sm text-gray-300 px-2 border-b border-gray-300 bg-gray-100 items-center overflow-x-scroll" style="max-width: 788px">
 			{#if filters}
 				{#each filters as f}
 					<div on:click={() => {onFilterSelect(f)}} class="{selected_filter === f ? 'bg-blue-500 text-white' : 'bg-white text-blue-500 border-blue-500 border'} cursor-pointer px-2 py-1 mx-1 rounded whitespace-nowrap">{f}</div>
