@@ -38,10 +38,12 @@
 	const openCreateTickerDialog = (row, parent) => {
 		dialog.confirm({
 			message: `Add ticket to ${parent.nickname}`,
-			onConfirm: () => {
+			checkbox: '是否特別關注學生?',
+			onConfirm: ({checked}) => {
 				return http.post(fetch, '/courseApi/purchase_course_ticket', {
 					parent_id: parent.user_id,
-					voucher_id: row.id
+					voucher_id: row.id,
+					is_trial_vip: checked
 				}, {
 					notification: `成功增加Ticker俾${parent.user_id}`
 				})

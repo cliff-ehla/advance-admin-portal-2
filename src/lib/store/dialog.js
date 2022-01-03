@@ -5,15 +5,17 @@ function createDialogStore () {
 		visible: false,
 		title: '',
 		message: '',
+		checkbox: '',
 		onConfirm: () => {},
 		onSuccess: () => {}
 	})
-	const confirm = ({message, title, onConfirm, onSuccess}) => {
+	const confirm = ({message, title, checkbox, onConfirm, onSuccess}) => {
 		if (!onConfirm) onConfirm = () => {}
 		if (!onSuccess) onSuccess = () => {}
 		store.set({
 			visible: true,
 			title: title || '你確定？',
+			checkbox,
 			message,
 			onConfirm,
 			onSuccess
@@ -24,6 +26,7 @@ function createDialogStore () {
 			visible: false,
 			title: '',
 			message: '',
+			checkbox: '',
 			onConfirm: () => {},
 			onSuccess: () => {}
 		})

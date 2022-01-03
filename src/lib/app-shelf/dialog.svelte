@@ -3,9 +3,11 @@
 	import { fly, fade } from "svelte/transition";
 	import Button from '$lib/ui-elements/button.svelte'
 
+	let checked = false
+
 	const onConfirm = async () => {
-		await $dialog.onConfirm()
-		$dialog.onSuccess()
+		await $dialog.onConfirm({checked})
+		$dialog.onSuccess({checked})
 		dialog.close()
 	}
 </script>
@@ -23,6 +25,12 @@
 			<p class="font-bold my-2">{$dialog.title}</p>
 			<p>{$dialog.message}</p>
 		</div>
+		{#if $dialog.checkbox}
+			<div class="mb-2 flex items-center justify-center">
+				<input type="checkbox" bind:checked={checked} id="extra_option" class="cursor-pointer">
+				<label for="extra_option" class="cursor-pointer ml-2">{$dialog.checkbox}</label>
+			</div>
+		{/if}
 		<div class="flex justify-between p-4">
 			<button class="flex-1 bg-gray-100 hover:border-gray-400 border border-gray-200 rounded px-1 py-1" on:click={() => {dialog.close()}}>取消</button>
 			<Button button_class="flex-1 py-2 ml-4" on:click={onConfirm}>確定</Button>
