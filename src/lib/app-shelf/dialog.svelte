@@ -4,10 +4,12 @@
 	import Button from '$lib/ui-elements/button.svelte'
 
 	let checked = false
+	let textarea_el
 
 	const onConfirm = async () => {
-		await $dialog.onConfirm({checked})
-		$dialog.onSuccess({checked})
+		let text_input = textarea_el.value
+		await $dialog.onConfirm({checked, text_input})
+		$dialog.onSuccess({checked, text_input})
 		dialog.close()
 	}
 </script>
@@ -23,12 +25,21 @@
 				<img src="/confirm-dialog-icon.png" class="w-24 mx-auto" alt="confirm">
 			</div>
 			<p class="font-bold my-2">{$dialog.title}</p>
-			<p>{$dialog.message}</p>
+			{#if $dialog.message}
+				<p>{$dialog.message}</p>
+			{/if}
 		</div>
 		{#if $dialog.checkbox}
 			<div class="mb-2 flex items-center justify-center">
 				<input type="checkbox" bind:checked={checked} id="extra_option" class="cursor-pointer">
 				<label for="extra_option" class="cursor-pointer ml-2">{$dialog.checkbox}</label>
+			</div>
+		{/if}
+		{#if $dialog.text_input}
+			<div class="mb-2 px-4">
+				<textarea class="input w-full"
+				          bind:this={textarea_el}
+				          placeholder="{$dialog.text_input.placeholder}">{$dialog.text_input.value}</textarea>
 			</div>
 		{/if}
 		<div class="flex justify-between p-4">

@@ -128,6 +128,26 @@
 			onSuccess: refresh
 		})
 	}
+
+	const onEdit = (voucher) => {
+		dialog.confirm({
+			title: '更改Remark',
+			text_input: {
+				value: voucher.remark,
+				placeholder: 'Remark'
+			},
+			onConfirm: async ({text_input}) => {
+				await http.post(fetch, '/voucherApi/edit_voucher', {
+					id: voucher.id,
+					remark: text_input,
+					is_invalid: false
+				}, {
+					notification: '已經更新了Remark'
+				})
+			},
+			onSuccess: refresh
+		})
+	}
 </script>
 
 <div class="p-4">
@@ -227,6 +247,7 @@
 							<div slot="activator"><Icon className="w-4" name="more"/></div>
 							<div class="dropdown">
 								<button class="item" on:click={() => {onDelete(r)}}>Delete</button>
+								<button class="item" on:click={() => {onEdit(r)}}>Edit remark</button>
 							</div>
 						</Dropdown>
 					</td>
