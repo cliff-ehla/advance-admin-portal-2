@@ -7,7 +7,7 @@
 	let textarea_el
 
 	const onConfirm = async () => {
-		let text_input = textarea_el.value
+		let text_input = textarea_el ? textarea_el.value : null
 		await $dialog.onConfirm({checked, text_input})
 		$dialog.onSuccess({checked, text_input})
 		dialog.close()
