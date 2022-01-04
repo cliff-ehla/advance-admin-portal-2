@@ -33,7 +33,7 @@
 	}
 
 	const setWidth = node => {
-		dropdown_menu_width = node.clientWidth
+		dropdown_menu_width = node.parentNode.offsetWidth
 	}
 </script>
 

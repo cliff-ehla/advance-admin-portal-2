@@ -10,26 +10,31 @@
 <script>
 	import {tutor_event_store} from "$lib/store/tutor-event-store.js";
 	import BigClassLessonMenu from '$lib/calendar/big-class-leson-menu.svelte'
-	import {getContext} from 'svelte'
+	import {getContext, onMount} from 'svelte'
 	import {eventContent} from "$lib/calendar/shared-function/event-content.js";
-
-	const {openPopper} = getContext('popper')
+	const {openModal, closeModal} = getContext('simple-modal')
 	let calendar
 
 	const CLASSROOM = 'classroom'
 	const INDIVIDUAL = 'individual'
 	let overlay_tutor_id // TODO in store?
 
+	onMount(() => {
+		document.addEventListener('refresh-calendar', e => {
+			fetchAndReRender()
+		})
+	})
+
 	const init = async (node) => {
 		calendar = new FullCalendar.Calendar(node, {
 			initialView: 'dayGridMonth',
 			eventContent,
 			eventClick: async ({el, event}) => {
-				openPopper(el, BigClassLessonMenu, {
+				openModal(BigClassLessonMenu, {
 					zoom_id: event.extendedProps.zoom_id,
 					tutor_group_id: event.extendedProps.tutor_group_id
 				}, {
-					placement: "right"
+					overflow: 'initial'
 				})
 			},
 			eventSources: [
@@ -84,11 +89,18 @@
 		const source = calendar.getEventSourceById(CLASSROOM)
 		if (source) {
 			source.remove()
-			calendar.addEventSource({
-				id: CLASSROOM,
-				events: $big_class_events.events
-			})
 		}
+		calendar.addEventSource({
+			id: CLASSROOM,
+			events: $big_class_events.events
+		})
+	}
+
+	const fetchAndReRender = async () => {
+		const source = calendar.getEventSourceById(CLASSROOM)
+		if (source) source.remove()
+		await big_class_store.callIfNoCache(fetch, {force: true})
+		reRenderEvents()
 	}
 </script>
 

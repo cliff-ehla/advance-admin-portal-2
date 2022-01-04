@@ -5,8 +5,9 @@ import {http} from "$lib/http.js";
 
 const create_big_class_store = () => {
 	const store = writable([])
-	const callIfNoCache = async (fetch) => {
-		if (get(store).length) {
+	const callIfNoCache = async (fetch, option) => {
+		const force = option && option.force
+		if (get(store).length && !force) {
 			return get(store)
 		}
 		let {data, success, debug} = await http.post(fetch,'/courseApi/list_registrable_classroom', {

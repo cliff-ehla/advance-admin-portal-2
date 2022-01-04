@@ -31,6 +31,7 @@
     transitionBgProps,
     transitionWindow,
     transitionWindowProps,
+	  overflow: 'auto'
   };
   let state = { ...defaultState };
 
@@ -53,6 +54,7 @@
   $: currentTransitionWindow = state.transitionWindow;
   $: width = state.width || 'auto'
   $: padding = state.padding || '1em'
+  $: overflow = state.overflow || 'auto'
 
   const toVoid = () => {};
   let onOpen = toVoid;
@@ -133,7 +135,7 @@
         on:outroend={onClosed}
         style={cssWindow}
       >
-        <div class="relative overflow-auto" style="{cssContent}; width: {width}; padding: {padding}; max-height: calc(100vh - 4rem)">
+        <div class="relative overflow-auto" style="{cssContent}; width: {width}; padding: {padding}; overflow: {state.overflow}; max-height: calc(100vh - 4rem)">
 	        {#if state.closeButton}
 		        <button class="z-50 flex w-10 h-10 absolute right-2 top-2 rounded-full bg-white items-center justify-center hover:bg-blue-500 hover:text-white" on:click={close}>
 			        <Icon name="close" className="w-4"/>
