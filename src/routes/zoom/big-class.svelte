@@ -26,7 +26,8 @@
 			eventContent,
 			eventClick: async ({el, event}) => {
 				openPopper(el, BigClassLessonMenu, {
-					zoom_id: event.extendedProps.zoom_id
+					zoom_id: event.extendedProps.zoom_id,
+					tutor_group_id: event.extendedProps.tutor_group_id
 				}, {
 					placement: "right"
 				})

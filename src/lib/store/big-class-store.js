@@ -69,6 +69,7 @@ const createBigClassEventStore = () => {
 				student_size: e.student_size,
 				cat: e.sub_cat_alter,
 				tutor_id: e.tutor_id,
+				tutor_group_id: e.tutor_group_id,
 				tutor_name: e.tutor_name,
 				start_date: e.start_date,
 				zoom_id: e.zoom_id,

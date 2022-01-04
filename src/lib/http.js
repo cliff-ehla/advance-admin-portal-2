@@ -35,12 +35,15 @@ const http = (() => {
 				body: body && JSON.stringify(body)
 			})
 			const {success, data, metadata, debug} = await res.json()
+			const actually_not_success = data ? data.status === 'failure' : false
 			is_loading.set(false)
 			if (!!notification) {
-				if (success)
+				if (!success || actually_not_success) {
+					const message = actually_not_success ? data.debug_msg : debug.debug_msg
+					notifications.alert('哎！錯誤發生了: ' + message)
+				} else {
 					notifications.success(notification)
-				else
-					notifications.alert('哎！錯誤發生了: ' + debug.debug_msg)
+				}
 			}
 			return {success, data, metadata, debug}
 		} catch (e) {
