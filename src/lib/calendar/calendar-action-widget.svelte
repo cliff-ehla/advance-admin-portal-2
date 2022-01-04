@@ -19,9 +19,6 @@
 
 	let loading
 	$: computed_status = $action_status || $calendar_store.status
-	$: {
-		console.log($edit_lesson_tbc_to_date)
-	}
 
 	const onExit = () => {
 		course_lesson_tbc_selection.reset()
@@ -128,9 +125,8 @@
 		dispatch('refresh')
 	}
 </script>
-
 {#if computed_status}
-	<div class="{!!computed_status ? 'bg-blue-700' : ''} h-12 flex items-center justify-center text-white fixed inset-0 top-0">
+	<div class="bg-blue-700 h-12 flex items-center justify-center text-white fixed inset-0 top-0 z-50">
 		{#if computed_status === 'create_course'}
 			<span class="font-bold uppercase">Create Course for: {student_store.getStudentName($calendar_store.student_id)}</span>
 		{/if}
