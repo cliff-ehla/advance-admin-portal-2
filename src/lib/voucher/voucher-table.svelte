@@ -8,6 +8,7 @@
 	import Icon from "$lib/ui-elements/icon.svelte"
 	import {tutor_store} from "../../store/tutor-store.js";
 	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
+	import Dropdown from '$lib/ui-elements/dropdown3.svelte'
 	import {dialog} from "$lib/store/dialog.js";
 	dayjs.extend(utc)
 
@@ -50,6 +51,24 @@
 			}
 		})
 	}
+
+	const onDelete = async (voucher) => {
+		dialog.confirm({
+			message: '報銷呢張Voucher？',
+			onConfirm: async () => {
+				await http.post(fetch, '/voucherApi/edit_voucher', {
+					id: voucher.id,
+					is_invalid: true
+				}, {
+					notification: '已經報銷'
+				})
+			},
+			onSuccess: () => {
+				voucher_list.splice(voucher_list.indexOf(voucher), 1)
+				voucher_list = voucher_list
+			}
+		})
+	}
 </script>
 
 <tr class="sticky top-0 bg-white">
@@ -66,6 +85,7 @@
 	<th>Lesson fee</th>
 	<th>App fee</th>
 	<th>Total fee</th>
+	<td></td>
 </tr>
 
 {#if voucher_list.length}
@@ -145,6 +165,14 @@
 			<td>${r.lesson_fee}</td>
 			<td>${r.app_fee}</td>
 			<td>${Number(r.app_fee) + Number(r.lesson_fee)}</td>
+			<td>
+				<Dropdown placement="bottom-end" activator_style="w-8 h-8 cc rounded-full text-gray-500 border border-transparent" activator_active_style="bg-gray-100 text-blue-500 border-gray-300">
+					<div slot="activator"><Icon className="w-4" name="more"/></div>
+					<div class="dropdown">
+						<button class="item" on:click={() => {onDelete(r)}}>Delete</button>
+					</div>
+				</Dropdown>
+			</td>
 		</tr>
 	{/each}
 {:else}
