@@ -1,10 +1,13 @@
 <script>
+	import {http} from "$lib/http.js";
+
 	export let voucher_list
 	import dayjs from "dayjs";
 	import utc from "dayjs/plugin/utc.js";
 	import {tooltip} from "$lib/aciton/tooltip.js";
 	import Icon from "$lib/ui-elements/icon.svelte"
 	import {tutor_store} from "../../store/tutor-store.js";
+	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
 	dayjs.extend(utc)
 
 	const isTodo = (r) => {
@@ -12,16 +15,30 @@
 		if ((r.type === 'COURSE' || r.type === 'TRIAL') && !r.tutor_group_id) return false
 		return true
 	}
+
+	const onChangeStatus = async (r, e) => {
+		await http.post(fetch, '/voucherApi/set_voucher_status', {
+			check_status: e.detail,
+			id: r.id
+		}, {
+			notification: '已更新了status'
+		})
+		r.check_status = e.detail
+		voucher_list = voucher_list
+	}
 </script>
 
 <tr class="sticky top-0 bg-white">
 	<th class="text-left">Voucher No</th>
 	<th class="text-left">Phone</th>
+	<th>User</th>
 	<th>Date</th>
 	<th>Parent</th>
 	<th>Teacher</th>
 	<th>Detail</th>
+	<th>Payment</th>
 	<th>Remark</th>
+	<th>Status</th>
 	<th>Lesson fee</th>
 	<th>App fee</th>
 	<th>Total fee</th>
@@ -41,6 +58,16 @@
 				{/if}
 			</td>
 			<td class="font-bold text-gray-700 whitespace-nowrap">{r.phone}</td>
+			<td class="text-gray-700 whitespace-nowrap">
+				{#each r.related_users as user}
+					<p use:tooltip={'parent'}>{user.nickname}</p>
+					<div class="pl-2 border-l border-gray-500">
+						{#each user.students as student}
+							<a use:tooltip={'child'} href="/students/{student.user_id}" class="text-xs hover:text-blue-500">{student.nickname}</a>
+						{/each}
+					</div>
+				{/each}
+			</td>
 			<td>
 				<p class="leading-tight">{dayjs(r.create_ts).format('DD MMM YYYY (ddd)')}</p>
 				<p class="text-gray-500 text-sm leading-tight">{dayjs.utc(r.create_ts).local().format('h:mma')}</p>
@@ -71,6 +98,13 @@
 					<p>x {r.lesson_cnt}堂</p>
 				{/if}
 			</td>
+			<td>
+				{#if r.payment_method}
+					{r.payment_method}
+				{:else}
+					<span class="text-gray-300">n/a</span>
+				{/if}
+			</td>
 			<td style="max-width: 300px; min-width: 300px">
 				{#if r.remark}
 					<div class="items-center">
@@ -80,6 +114,9 @@
 				{:else}
 					<p class="text-sm text-gray-300">-No remark-</p>
 				{/if}
+			</td>
+			<td>
+				<SelectionBox simple_array options={['EMPTY', 'DONE', 'ERROR']} selected_value={r.check_status} on:input={e => onChangeStatus(r, e)}/>
 			</td>
 			<td>${r.lesson_fee}</td>
 			<td>${r.app_fee}</td>
