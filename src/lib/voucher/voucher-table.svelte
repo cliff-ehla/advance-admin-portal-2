@@ -10,6 +10,10 @@
 	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
 	import Dropdown from '$lib/ui-elements/dropdown3.svelte'
 	import {dialog} from "$lib/store/dialog.js";
+	import {calendar_store} from "../../store/calendar-action-status-store.js";
+	import {goto} from "$app/navigation";
+	import {notifications} from "$lib/store/notification.js";
+	import CreateTrialDialog from "$lib/option/create-trial-lesson.dialog.svelte";
 	dayjs.extend(utc)
 
 	const isTodo = (r) => {
@@ -69,6 +73,69 @@
 			}
 		})
 	}
+
+	const openCreateTickerDialog = (row, parent) => {
+		dialog.confirm({
+			message: `Add ticket to ${parent.nickname}`,
+			checkbox: '是否特別關注學生?',
+			onConfirm: ({checked}) => {
+				return http.post(fetch, '/courseApi/purchase_course_ticket', {
+					parent_id: parent.user_id,
+					voucher_id: row.id,
+					is_trial_vip: checked
+				}, {
+					notification: `成功增加Ticker俾${parent.user_id}`
+				})
+			},
+			onSuccess: () => {
+				row.reg_ticket_id = true
+				voucher_list = voucher_list
+			}
+		})
+	}
+
+	const onCreateCourse = (row, student_id) => {
+		const {type, reserved_grouper_ids} = row
+		const reserved_grouper_id = reserved_grouper_ids && reserved_grouper_ids[0]
+		if (type === 'TRIAL') {
+			calendar_store.createTrial({
+				student_id,
+				teacher_id: row.teacher_id,
+				voucher_id: row.id,
+			})
+		} else if (type === 'COURSE') {
+			calendar_store.createCourse({
+				student_id,
+				teacher_id: row.teacher_id,
+				voucher_id: row.id,
+			})
+		}
+		if (reserved_grouper_id) {
+			return openCreateCourseDialog(reserved_grouper_id)
+		}
+		goto(`/tutor/${row.teacher_id}`)
+	}
+
+	const openCreateCourseDialog = async (reserved_grouper_id) => {
+		const {data, success, debug} = await http.post(fetch, '/zoomApi/list_zoom_trial_option')
+		const items = data.filter(r => r.grouper_id === reserved_grouper_id && !r.auto_delete_date)
+		if (!items.length) {
+			notifications.alert('冇相應的 reserved_grouper_id: ' + reserved_grouper_id + ', 可能未 Confirm date')
+		} else {
+			const option = items[0]
+			openModal(CreateTrialDialog, {
+				course_title: option.course,
+				start_date: option.reserves[0].start_date,
+				end_date: option.reserves[0].end_date,
+				reserved_id: option.reserves[0].reserved_id,
+				onSuccess: () => {
+					goto(`/tutor/${option.reserves[0].teacher_id}/${dayjs.utc(option.reserves[0].start_date).local().format('YYYY-MM')}`)
+				}
+			}, {
+				width: '900px'
+			})
+		}
+	}
 </script>
 
 <tr class="sticky top-0 bg-white">
@@ -104,10 +171,24 @@
 			<td class="font-bold text-gray-700 whitespace-nowrap">{r.phone}</td>
 			<td class="text-gray-700 whitespace-nowrap">
 				{#each r.related_users as user}
-					<p use:tooltip={'parent'}>{user.nickname}</p>
+					<div class="flex">
+						<p use:tooltip={'parent'}>{user.nickname}</p>
+						{#if r.type === 'TICKET' && !r.reg_ticket_id}
+							<button use:tooltip={'入卷俾家長'} on:click={() => {openCreateTickerDialog(r, user)}} class="ml-2 bg-white border-red-500 text-red-500 border w-4 h-4 cc hover:bg-red-100">
+								<Icon name="add" className="w-2"/>
+							</button>
+						{/if}
+					</div>
 					<div class="pl-2 border-l border-gray-500">
 						{#each user.students as student}
-							<a use:tooltip={'child'} href="/students/{student.user_id}" class="text-xs hover:text-blue-500">{student.nickname}</a>
+							<div class="flex">
+								<a use:tooltip={'child'} href="/students/{student.user_id}" class="text-xs hover:text-blue-500">{student.nickname}</a>
+								{#if (r.type === 'COURSE' || r.type === 'TRIAL') && !r.tutor_group_id}
+									<button use:tooltip={'開堂俾細路'} on:click={() => {onCreateCourse(r, student.user_id)}} class="ml-2 bg-white border-red-500 text-red-500 border w-4 h-4 cc hover:bg-red-100">
+										<Icon name="add" className="w-2"/>
+									</button>
+								{/if}
+							</div>
 						{/each}
 					</div>
 				{/each}
