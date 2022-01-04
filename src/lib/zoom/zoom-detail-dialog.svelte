@@ -144,7 +144,7 @@
 			<button slot="activator" class="w-10 h-10 flex items-center justify-center">
 				<Icon className="w-6" name="more"/>
 			</button>
-			<div class="shadow-lg bg-white border border-gray-300 w-64">
+			<div class="dropdown">
 				<div on:click={onDeleteClick} class="px-4 py-2 hover:text-gray-100 hover:text-red-500 cursor-pointer">Delete</div>
 			</div>
 		</Dropdown>
