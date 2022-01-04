@@ -33,7 +33,8 @@ const student_store = (() => {
 	const getStudentAvatar = (id) => {
 		let t = getStudent(id)
 		let gender = t && t.gender
-		return `/student-${gender}-icon.png`
+		if (gender) return `/student-${gender}-icon.png`
+		else return '/pre-user-icon.png'
 	}
 
 	const getStudentLevel = (id) => {

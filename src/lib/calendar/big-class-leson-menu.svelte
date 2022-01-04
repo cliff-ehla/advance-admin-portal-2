@@ -8,21 +8,25 @@
 	import Preview from '$lib/student/student-preview.svelte'
 	import Dropdown from '$lib/ui-elements/dropdown3.svelte'
 	import Icon from '$lib/ui-elements/icon.svelte'
-	import StudentSelectionBox from '$lib/student/student-selection-box.svelte'
+	import StudentWithTickerSelectionBox from '$lib/student/user-with-ticket-selection-box.svelte'
 	import {getContext} from 'svelte'
 	import {dialog} from "$lib/store/dialog.js";
 	const {openModal, closeModal} = getContext('simple-modal')
 
 	let students
 
-	onMount(async () => {
+	onMount(() => {
+		fetchData()
+	})
+
+	const fetchData = async () => {
 		const {data} = await http.post(fetch, '/zoomApi/zoom_detail', {
 			wrapper_id: zoom_id
 		})
 		students = data.students
 		students = students.map(s => student_store.getStudent(s.user_id))
 		students = students.filter(s => !!s)
-	})
+	}
 
 	const onReg = async (student_id, is_reg) => {
 		let message = is_reg ? '係咪Reg?' : '係咪UnReg?'
@@ -38,12 +42,13 @@
 					notification
 				})
 			},
-			onSuccess: () => {
+			onSuccess: async () => {
 				document.dispatchEvent(new CustomEvent('refresh-calendar', {
 					bubbles: true,
 					cancelable: true
 				}))
-				closeModal()
+				await student_store.fetchData(fetch)
+				await fetchData()
 			}
 		})
 	}
@@ -62,7 +67,7 @@
 								<Icon className="w-4" name="more"/>
 							</button>
 							<div class="dropdown">
-								<div on:click={() => {onReg(s.student_id, false)}} class="px-4 py-2 hover:text-gray-100 hover:text-red-500 cursor-pointer">Delete</div>
+								<div on:click={() => {onReg(s.student_id, false)}} class="px-4 py-2 hover:text-gray-100 hover:text-red-500 cursor-pointer">Un-Reg</div>
 							</div>
 						</Dropdown>
 					</div>
@@ -74,8 +79,8 @@
 			loading...
 		{/if}
 	</div>
-	<h1 class="font-bold mb-2">加人：</h1>
-	<StudentSelectionBox with_ticket_only on:input={e => {onReg(e.detail, true)}}/>
+	<h1 class="font-bold mb-2">加入學生：</h1>
+	<StudentWithTickerSelectionBox on:input={e => {onReg(e.detail.student_id, true)}}/>
 </div>
 
 
