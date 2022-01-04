@@ -119,7 +119,7 @@
 
 {#if Component}
   <div
-    class="fixed flex justify-center items-center w-full h-full bg-black bg-opacity-60 z-50"
+    class="fixed flex justify-center items-center w-full h-full bg-black bg-opacity-60 z-40"
     on:click={handleOuterClick}
     bind:this={background}
     transition:currentTransitionBg={state.transitionBgProps}

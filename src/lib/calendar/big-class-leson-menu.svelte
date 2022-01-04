@@ -10,6 +10,7 @@
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import StudentSelectionBox from '$lib/student/student-selection-box.svelte'
 	import {getContext} from 'svelte'
+	import {dialog} from "$lib/store/dialog.js";
 	const {openModal, closeModal} = getContext('simple-modal')
 
 	let students
@@ -23,32 +24,28 @@
 		students = students.filter(s => !!s)
 	})
 
-	const onReg = async (student_id) => {
-		await http.post(fetch, '/courseApi/reg_registrable_classroom', {
-			tutor_group_id,
-			child_id: student_id
-		}, {
-			notification: '成功幫佢Reg堂'
+	const onReg = async (student_id, is_reg) => {
+		let message = is_reg ? '係咪Reg?' : '係咪UnReg?'
+		let notification = is_reg ? '成功幫佢Reg堂?' : '成功幫佢UnReg堂?'
+		const url = is_reg ? '/courseApi/reg_registrable_classroom' : '/courseApi/unreg_registrable_classroom'
+		dialog.confirm({
+			message,
+			onConfirm: async () => {
+				await http.post(fetch, url, {
+					tutor_group_id,
+					child_id: student_id
+				}, {
+					notification
+				})
+			},
+			onSuccess: () => {
+				document.dispatchEvent(new CustomEvent('refresh-calendar', {
+					bubbles: true,
+					cancelable: true
+				}))
+				closeModal()
+			}
 		})
-		document.dispatchEvent(new CustomEvent('refresh-calendar', {
-			bubbles: true,
-			cancelable: true
-		}))
-		closeModal()
-	}
-
-	const onUnReg = async (student_id) => {
-		await http.post(fetch, '/courseApi/unreg_registrable_classroom', {
-			tutor_group_id,
-			child_id: student_id
-		}, {
-			notification: '成功幫佢UnReg堂'
-		})
-		document.dispatchEvent(new CustomEvent('refresh-calendar', {
-			bubbles: true,
-			cancelable: true
-		}))
-		closeModal()
 	}
 </script>
 
@@ -65,7 +62,7 @@
 								<Icon className="w-4" name="more"/>
 							</button>
 							<div class="dropdown">
-								<div on:click={() => {onUnReg(s.student_id)}} class="px-4 py-2 hover:text-gray-100 hover:text-red-500 cursor-pointer">Delete</div>
+								<div on:click={() => {onReg(s.student_id, false)}} class="px-4 py-2 hover:text-gray-100 hover:text-red-500 cursor-pointer">Delete</div>
 							</div>
 						</Dropdown>
 					</div>
@@ -78,7 +75,7 @@
 		{/if}
 	</div>
 	<h1 class="font-bold mb-2">加人：</h1>
-	<StudentSelectionBox with_ticket_only on:input={e => {onReg(e.detail)}}/>
+	<StudentSelectionBox with_ticket_only on:input={e => {onReg(e.detail, true)}}/>
 </div>
 
 

@@ -19,7 +19,7 @@
 {/if}
 
 {#if $dialog.visible}
-	<div transition:fly={{ y: 100, duration: 200 }} class="z-50 bg-white fixed top-1/2 left-1/2 transform -translate-y-1/2 -ml-48 rounded-lg shadow-lg w-72">
+	<div transition:fly={{ y: 100, duration: 200 }} class="z-50 bg-white fixed top-1/2 left-1/2 transform -translate-y-1/2 -translate-x-1/2 rounded-lg shadow-lg w-72">
 		<div class="p-4 text-center">
 			<div class="w-24 h-32 mx-auto">
 				<img src="/confirm-dialog-icon.png" class="w-24 mx-auto" alt="confirm">
