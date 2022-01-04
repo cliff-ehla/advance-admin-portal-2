@@ -127,8 +127,8 @@
 			</td>
 			<td>
 				{#if r.type === 'TICKET'}
-					<p>x{r.ticket_amt} <span class="text-xs">張飛</span></p>
-					<p class="text-xs text-gray-500">
+					<p>{r.ticket_amt} <span class="text-xs">Tickets</span></p>
+					<p class="text-xs text-gray-500 whitespace-nowrap">
 						{#if r.ticket_expiry_date}
 							Exp: {dayjs(r.ticket_expiry_date).format('DD MMM YYYY')}
 						{:else}
@@ -138,8 +138,8 @@
 				{:else if r.type === 'TRIAL'}
 					<p>{r.lesson_duration}min</p>
 				{:else if r.type === 'COURSE'}
-					<p>{r.lesson_duration}min</p>
-					<p>x {r.lesson_cnt}堂</p>
+					<p>{r.lesson_cnt} lesson(s)</p>
+					<p class="text-xs text-gray-500">Length: {r.lesson_duration}min</p>
 				{/if}
 			</td>
 			<td>
@@ -156,7 +156,7 @@
 						<span class="text-gray-500 text-sm">{r.remark}</span>
 					</div>
 				{:else}
-					<p class="text-sm text-gray-300">-No remark-</p>
+					<p on:click={() => {onEditRemark(r)}} class="text-sm text-gray-300 p-2 hover:bg-gray-100 cursor-pointer inline-block rounded">-No remark-</p>
 				{/if}
 			</td>
 			<td>
@@ -166,7 +166,7 @@
 			<td>${r.app_fee}</td>
 			<td>${Number(r.app_fee) + Number(r.lesson_fee)}</td>
 			<td>
-				<Dropdown placement="bottom-end" activator_style="w-8 h-8 cc rounded-full text-gray-500 border border-transparent" activator_active_style="bg-gray-100 text-blue-500 border-gray-300">
+				<Dropdown placement="bottom-end" activator_style="w-8 h-8 cc rounded-full text-gray-500 border border-transparent transition" activator_active_style="bg-gray-100 text-blue-500 border-gray-300">
 					<div slot="activator"><Icon className="w-4" name="more"/></div>
 					<div class="dropdown">
 						<button class="item" on:click={() => {onDelete(r)}}>Delete</button>
