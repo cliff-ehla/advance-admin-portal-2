@@ -8,6 +8,7 @@
 	import Icon from "$lib/ui-elements/icon.svelte"
 	import {tutor_store} from "../../store/tutor-store.js";
 	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
+	import {dialog} from "$lib/store/dialog.js";
 	dayjs.extend(utc)
 
 	const isTodo = (r) => {
@@ -25,6 +26,29 @@
 		})
 		r.check_status = e.detail
 		voucher_list = voucher_list
+	}
+
+	const onEditRemark = (voucher) => {
+		dialog.confirm({
+			title: '更改Remark',
+			text_input: {
+				value: voucher.remark,
+				placeholder: 'Remark'
+			},
+			onConfirm: async ({text_input}) => {
+				await http.post(fetch, '/voucherApi/edit_voucher', {
+					id: voucher.id,
+					remark: text_input,
+					is_invalid: false
+				}, {
+					notification: '已經更新了Remark'
+				})
+			},
+			onSuccess: ({text_input}) => {
+				voucher.remark = text_input
+				voucher_list = voucher_list
+			}
+		})
 	}
 </script>
 
@@ -107,7 +131,7 @@
 			</td>
 			<td style="max-width: 300px; min-width: 300px">
 				{#if r.remark}
-					<div class="items-center">
+					<div on:click={() => {onEditRemark(r)}} class="items-center cursor-pointer hover:bg-gray-100 inline-block rounded p-2">
 						<Icon name="message" className="w-4 text-green-500 inline"/>
 						<span class="text-gray-500 text-sm">{r.remark}</span>
 					</div>
