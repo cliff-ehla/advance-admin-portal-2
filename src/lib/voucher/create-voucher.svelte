@@ -14,6 +14,7 @@
 
 	let lesson_fee, app_fee = 0, remark
 	let ticket_amt
+	let payment_method
 	let lesson_count = voucher_type === 'TRIAL' ? 1 : 0,
 			lesson_duration
 	$: base_info_valid = typeof lesson_fee === 'number' && typeof app_fee === 'number' && !!phone
@@ -25,6 +26,7 @@
 			lesson_fee,
 			lesson_count,
 			app_fee,
+			payment_method,
 			remark,
 			ticket_amt,
 			teacher_id
@@ -43,13 +45,15 @@
 		<label>Phone</label>
 		<PhoneSelection {phone} on:input={e => {phone = e.detail}} wrapper_class="mb-2"/>
 		<label>App fee</label>
-		<input class="input block mb-2" type="number" placeholder="App fee" bind:value={app_fee}/>
+		<input class="input block mb-2 w-full" type="number" placeholder="App fee" bind:value={app_fee}/>
 		<label>Lesson fee</label>
-		<input class="input block mb-2" type="number" placeholder="Lesson fee" bind:value={lesson_fee}/>
+		<input class="input block mb-2 w-full" type="number" placeholder="Lesson fee" bind:value={lesson_fee}/>
+		<label>Payment method</label>
+		<SelectionBox simple_array options={['Alipay', 'Bank Transfer', 'Payme']} selected_value={payment_method} on:input={e => {payment_method = e.detail}}/>
 		<label>Remark</label>
-		<textarea class="input block mb-2" placeholder="Remark" bind:value={remark}/>
+		<textarea class="input block mb-2 w-full" placeholder="Remark" bind:value={remark}/>
 	</div>
-	<div class="ml-2 bg-gray-100 p-2">
+	<div class="ml-4 bg-gray-100 p-2">
 		{#if voucher_type === 'TICKET'}
 			<p class="text-xs font-bold uppercase mb-2">Ticket detail:</p>
 			<label>Ticker amount</label>

@@ -23,6 +23,7 @@
 
 <script>
 	export let voucher_list
+	console.log(voucher_list)
 	import VoucherTable from '$lib/voucher/voucher-table.svelte'
 </script>
 

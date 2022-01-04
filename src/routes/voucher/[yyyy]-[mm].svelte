@@ -26,6 +26,7 @@
 	import VoucherTable from '$lib/voucher/voucher-table.svelte'
 
 	export let voucher_list
+	console.log(voucher_list)
 	$: year = $page.params.yyyy
 	$: month = $page.params.mm
 

@@ -34,6 +34,7 @@
 
 	export let record_list
 	const type_option = ['TICKET', 'COURSE', 'TRIAL']
+	console.log(record_list)
 
 	const openCreateTickerDialog = (row, parent) => {
 		dialog.confirm({
@@ -160,6 +161,7 @@
 			<th>Type</th>
 			<th>Phone</th>
 			<th>用戶名箱</th>
+			<th>Payment method</th>
 			<th>Remark</th>
 			<th>課堂長度</th>
 			<th>課堂數目</th>
@@ -225,6 +227,9 @@
 						{:else}
 							<a href="/booking/option" class="text-blue-500">To option page</a>
 						{/if}
+					</td>
+					<td>
+						{r.payment_method}
 					</td>
 					<td>
 						{r.remark}
