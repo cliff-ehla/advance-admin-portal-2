@@ -36,7 +36,10 @@
 	const dispatch = createEventDispatcher()
 
 	$: {
-		if (tutor_id && day_calendar && month_calendar) reRender()
+		if ($tutor_event_store && tutor_id && day_calendar && month_calendar) {
+			console.log('watch: tutor_event_store updated, re-render calendar')
+			reRender()
+		}
 	}
 	$: tutor_name = $tutor_store ? tutor_store.getTutorName(tutor_id) : ''
 

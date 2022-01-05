@@ -6,10 +6,6 @@ import {convertToEvents} from "$lib/calendar/phase-to-events.js";
 const create_tutor_event_store = () => {
 	const store = writable({})
 	const callIfNoCache = async (fetch, {tutor_id, force}) => {
-		if (get(store)[tutor_id] && !force) {
-			console.log('cached!')
-			return get(store)[tutor_id]
-		}
 		let start_time = dayjs().subtract(3, 'month').format('YYYY-MM-DD HH:mm:ss')
 		let end_time = dayjs().add(3, 'month').format('YYYY-MM-DD HH:mm:ss')
 		let p1 = http.post(fetch,'/zoomApi/list_teacher_available_time_in_calendar', {

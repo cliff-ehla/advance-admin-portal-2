@@ -8,7 +8,6 @@
 </script>
 
 <script>
-	import {tutor_event_store} from "$lib/store/tutor-event-store.js";
 	import BigClassLessonMenu from '$lib/calendar/big-class-leson-menu.svelte'
 	import {getContext, onMount} from 'svelte'
 	import {eventContent} from "$lib/calendar/shared-function/event-content.js";
@@ -16,8 +15,6 @@
 	let calendar
 
 	const CLASSROOM = 'classroom'
-	const INDIVIDUAL = 'individual'
-	let overlay_tutor_id // TODO in store?
 
 	onMount(() => {
 		document.addEventListener('refresh-calendar', e => {
@@ -45,24 +42,6 @@
 			]
 		})
 		calendar.render()
-	}
-
-	const onToggleTutor = async (tutor) => {
-		if (overlay_tutor_id) {
-			let individual_tutor_events = calendar.getEventSourceById(INDIVIDUAL)
-			individual_tutor_events.remove()
-			overlay_tutor_id = null
-		} else {
-			overlay_tutor_id = tutor.user_id
-			await tutor_event_store.callIfNoCache(fetch, {tutor_id: tutor.user_id})
-			const events = tutor_event_store.getTutorEvents(tutor.user_id, {
-				is_grid_view: true
-			})
-			calendar.addEventSource({
-				id: INDIVIDUAL,
-				events
-			})
-		}
 	}
 
 	const onToggleBigClass = (e) => {
@@ -137,32 +116,6 @@
 				{/each}
 			</div>
 		</div>
-
-<!--		<div class="my-4">-->
-<!--			<div class="bg-blue-100 border border-blue-200">-->
-<!--				<div class="flex items-center p-2 bg-blue-50">-->
-<!--					<input type="checkbox" bind:checked={overlay_tutor_id}>-->
-<!--					<label class="ml-4">Individual</label>-->
-<!--				</div>-->
-
-<!--				<div class="p-1 bg-blue-100">-->
-<!--					{#each $tutor_store as t}-->
-<!--						<img on:click={() => {onToggleTutor(t)}}-->
-<!--						     use:tooltip={tutor_store.getTutorName(t.user_id)}-->
-<!--						     src={tutor_store.getTutorProfilePic(t.user_id)}-->
-<!--						     class:opacity-80={overlay_tutor_id !== t.user_id}-->
-<!--						     class:active={overlay_tutor_id === t.user_id}-->
-<!--						     class="w-12 h-12 rounded-full inline-block my-1 mx-0.5">-->
-<!--					{/each}-->
-<!--				</div>-->
-<!--			</div>-->
-<!--		</div>-->
 	</div>
 	<div class="py-4 px-2 ml-48" use:init></div>
 </div>
-
-<style>
-	.active {
-		@apply border-4 border-blue-500 shadow;
-	}
-</style>
