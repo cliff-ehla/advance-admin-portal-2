@@ -17,6 +17,7 @@
 	import CreateUserDialog from '$lib/student/create-new-user-dialog.svelte'
 	import {triggerReload} from "$lib/helper/trigger-reload.js";
 	import {getContext} from 'svelte'
+	import CopyMessageTextBox from '$lib/ui-elements/copy-text.svelte'
 	const {openModal, closeModal} = getContext('simple-modal')
 
 	dayjs.extend(utc)
@@ -164,14 +165,12 @@
 			{#each voucher_list as r}
 				<tr class="align-middle" class:invalid={r.is_invalid}>
 					<td class="text-left text-blue-800 whitespace-nowrap">
-						{#if !isTodo(r)}
-							<a href="/voucher/todo" class="relative hover:bg-blue-500 hover:text-white rounded px-2">
-								{r.voucher_number}
+						<div class="relative">
+							<CopyMessageTextBox value={r.voucher_number}/>
+							{#if !isTodo(r)}
 								<div class="w-2 h-2 rounded-full bg-red-500 absolute -top-1.5 -left-1"></div>
-							</a>
-						{:else}
-							{r.voucher_number}
-						{/if}
+							{/if}
+						</div>
 					</td>
 					<td class="font-bold text-gray-700 whitespace-nowrap">{r.phone}</td>
 					<td class="text-gray-700 whitespace-nowrap">
