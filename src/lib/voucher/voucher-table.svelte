@@ -39,20 +39,20 @@
 		voucher_list = voucher_list
 	}
 
-	const onEditRemark = (voucher) => {
+	const onEditField = (voucher, field = 'remark') => {
 		dialog.confirm({
-			title: '更改Remark',
+			title: `更改${field}`,
 			text_input: {
-				value: voucher.remark,
-				placeholder: 'Remark'
+				value: voucher[field],
+				placeholder: field
 			},
 			onConfirm: async ({text_input}) => {
 				await http.post(fetch, '/voucherApi/edit_voucher', {
 					id: voucher.id,
-					remark: text_input,
+					[field]: text_input,
 					is_invalid: false
 				}, {
-					notification: '已經更新了Remark'
+					notification: `已經更新了${field}`
 				})
 			},
 			onSuccess: triggerReload
@@ -242,19 +242,27 @@
 					</td>
 					<td>
 						{#if r.remark}
-							<div on:click={() => {onEditRemark(r)}} class="items-center cursor-pointer hover:bg-gray-100 inline-block rounded p-2">
+							<div on:click={() => {onEditField(r, 'remark')}} class="items-center cursor-pointer hover:bg-gray-100 inline-block rounded p-2">
 								<Icon name="message" className="w-4 text-green-500 inline"/>
 								<span class="text-gray-500 text-sm">{r.remark}</span>
 							</div>
 						{:else}
-							<p on:click={() => {onEditRemark(r)}} class="text-sm text-gray-300 p-2 hover:bg-gray-100 cursor-pointer inline-block rounded">-No remark-</p>
+							<p on:click={() => {onEditField(r, 'remark')}} class="text-sm text-gray-300 p-2 hover:bg-gray-100 cursor-pointer inline-block rounded">-No remark-</p>
 						{/if}
 					</td>
 					<td>
 						<SelectionBox simple_array options={['EMPTY', 'DONE', 'ERROR']} selected_value={r.check_status} on:input={e => onChangeStatus(r, e)}/>
 					</td>
-					<td>${r.lesson_fee}</td>
-					<td>${r.app_fee}</td>
+					<td>
+						<div class="text-sm p-2 hover:bg-gray-100 cursor-pointer inline-block rounded" on:click={() => {onEditField(r, 'lesson_fee')}}>
+							${r.lesson_fee}
+						</div>
+					</td>
+					<td>
+						<div class="text-sm p-2 hover:bg-gray-100 cursor-pointer inline-block rounded" on:click={() => {onEditField(r, 'app_fee')}}>
+							${r.app_fee}
+						</div>
+					</td>
 					<td>${Number(r.app_fee) + Number(r.lesson_fee)}</td>
 					<td>
 						<Dropdown placement="bottom-end" activator_style="w-8 h-8 cc rounded-full text-gray-500 border border-transparent transition" activator_active_style="bg-gray-100 text-blue-500 border-gray-300">
