@@ -14,6 +14,8 @@
 	import {goto} from "$app/navigation";
 	import {notifications} from "$lib/store/notification.js";
 	import CreateTrialDialog from "$lib/option/create-trial-lesson.dialog.svelte";
+	import {triggerReload} from "$lib/helper/trigger-reload.js";
+
 	dayjs.extend(utc)
 
 	const isTodo = (r) => {
@@ -49,10 +51,7 @@
 					notification: '已經更新了Remark'
 				})
 			},
-			onSuccess: ({text_input}) => {
-				voucher.remark = text_input
-				voucher_list = voucher_list
-			}
+			onSuccess: triggerReload
 		})
 	}
 
@@ -67,10 +66,7 @@
 					notification: '已經報銷'
 				})
 			},
-			onSuccess: () => {
-				voucher_list.splice(voucher_list.indexOf(voucher), 1)
-				voucher_list = voucher_list
-			}
+			onSuccess: triggerReload
 		})
 	}
 
@@ -87,10 +83,7 @@
 					notification: `成功增加Ticker俾${parent.user_id}`
 				})
 			},
-			onSuccess: () => {
-				row.reg_ticket_id = true
-				voucher_list = voucher_list
-			}
+			onSuccess: triggerReload
 		})
 	}
 
@@ -138,127 +131,131 @@
 	}
 </script>
 
-<tr class="sticky top-0 bg-white">
-	<th class="text-left">Voucher No</th>
-	<th class="text-left">Phone</th>
-	<th>User</th>
-	<th>Date</th>
-	<th>Parent</th>
-	<th>Teacher</th>
-	<th>Detail</th>
-	<th>Payment</th>
-	<th>Remark</th>
-	<th>Status</th>
-	<th>Lesson fee</th>
-	<th>App fee</th>
-	<th>Total fee</th>
-	<td></td>
-</tr>
+<div class="overflow-x-scroll">
+	<table>
+		<tr class="sticky top-0 bg-white">
+			<th class="text-left">Voucher No</th>
+			<th class="text-left">Phone</th>
+			<th>User</th>
+			<th>Date</th>
+			<th>Parent</th>
+			<th>Teacher</th>
+			<th>Detail</th>
+			<th>Payment</th>
+			<th>Remark</th>
+			<th>Status</th>
+			<th>Lesson fee</th>
+			<th>App fee</th>
+			<th>Total fee</th>
+			<td></td>
+		</tr>
 
-{#if voucher_list.length}
-	{#each voucher_list as r}
-		<tr class="align-middle">
-			<td class="text-left text-blue-800 whitespace-nowrap">
-				{#if !isTodo(r)}
-					<a href="/voucher/todo" class="relative hover:bg-blue-500 hover:text-white rounded px-2">
-						{r.voucher_number}
-						<div class="w-2 h-2 rounded-full bg-red-500 absolute -top-1.5 -left-1"></div>
-					</a>
-				{:else}
-					{r.voucher_number}
-				{/if}
-			</td>
-			<td class="font-bold text-gray-700 whitespace-nowrap">{r.phone}</td>
-			<td class="text-gray-700 whitespace-nowrap">
-				{#each r.related_users as user}
-					<div class="flex">
-						<p use:tooltip={'parent'}>{user.nickname}</p>
-						{#if r.type === 'TICKET' && !r.reg_ticket_id}
-							<button use:tooltip={'入卷俾家長'} on:click={() => {openCreateTickerDialog(r, user)}} class="ml-2 bg-white border-red-500 text-red-500 border w-4 h-4 cc hover:bg-red-100">
-								<Icon name="add" className="w-2"/>
-							</button>
+		{#if voucher_list.length}
+			{#each voucher_list as r}
+				<tr class="align-middle">
+					<td class="text-left text-blue-800 whitespace-nowrap">
+						{#if !isTodo(r)}
+							<a href="/voucher/todo" class="relative hover:bg-blue-500 hover:text-white rounded px-2">
+								{r.voucher_number}
+								<div class="w-2 h-2 rounded-full bg-red-500 absolute -top-1.5 -left-1"></div>
+							</a>
+						{:else}
+							{r.voucher_number}
 						{/if}
-					</div>
-					<div class="pl-2 border-l border-gray-500">
-						{#each user.students as student}
+					</td>
+					<td class="font-bold text-gray-700 whitespace-nowrap">{r.phone}</td>
+					<td class="text-gray-700 whitespace-nowrap">
+						{#each r.related_users as user}
 							<div class="flex">
-								<a use:tooltip={'child'} href="/students/{student.user_id}" class="text-xs hover:text-blue-500">{student.nickname}</a>
-								{#if (r.type === 'COURSE' || r.type === 'TRIAL') && !r.tutor_group_id}
-									<button use:tooltip={'開堂俾細路'} on:click={() => {onCreateCourse(r, student.user_id)}} class="ml-2 bg-white border-red-500 text-red-500 border w-4 h-4 cc hover:bg-red-100">
+								<p use:tooltip={'parent'}>{user.nickname}</p>
+								{#if r.type === 'TICKET' && !r.reg_ticket_id}
+									<button use:tooltip={'入卷俾家長'} on:click={() => {openCreateTickerDialog(r, user)}} class="ml-2 bg-white border-red-500 text-red-500 border w-4 h-4 cc hover:bg-red-100">
 										<Icon name="add" className="w-2"/>
 									</button>
 								{/if}
 							</div>
+							<div class="pl-2 border-l border-gray-500">
+								{#each user.students as student}
+									<div class="flex">
+										<a use:tooltip={'child'} href="/students/{student.user_id}" class="text-xs hover:text-blue-500">{student.nickname}</a>
+										{#if (r.type === 'COURSE' || r.type === 'TRIAL') && !r.tutor_group_id}
+											<button use:tooltip={'開堂俾細路'} on:click={() => {onCreateCourse(r, student.user_id)}} class="ml-2 bg-white border-red-500 text-red-500 border w-4 h-4 cc hover:bg-red-100">
+												<Icon name="add" className="w-2"/>
+											</button>
+										{/if}
+									</div>
+								{/each}
+							</div>
 						{/each}
-					</div>
-				{/each}
-			</td>
-			<td>
-				<p class="leading-tight">{dayjs(r.create_ts).format('DD MMM YYYY (ddd)')}</p>
-				<p class="text-gray-500 text-sm leading-tight">{dayjs.utc(r.create_ts).local().format('h:mma')}</p>
-				<p class="text-gray-500 text-xs leading-tight">by ~{r.admin_username}</p>
-			</td>
-			<td>
-				<img src="/{r.type.toLowerCase()}.png" alt="ticket" class="w-8 h-8 flex" use:tooltip={r.type}>
-			</td>
-			<td>
-				{#if r.teacher_nickname}
-					<img use:tooltip={r.teacher_nickname} src={tutor_store.getTutorProfilePic(r.teacher_id)} alt="img" class="w-8 h-8 rounded-full inline-flex">
-				{/if}
-			</td>
-			<td>
-				{#if r.type === 'TICKET'}
-					<p>{r.ticket_amt} <span class="text-xs">Tickets</span></p>
-					<p class="text-xs text-gray-500 whitespace-nowrap">
-						{#if r.ticket_expiry_date}
-							Exp: {dayjs(r.ticket_expiry_date).format('DD MMM YYYY')}
-						{:else}
-							- no expiry date -
+					</td>
+					<td>
+						<p class="leading-tight">{dayjs(r.create_ts).format('DD MMM YYYY (ddd)')}</p>
+						<p class="text-gray-500 text-sm leading-tight">{dayjs.utc(r.create_ts).local().format('h:mma')}</p>
+						<p class="text-gray-500 text-xs leading-tight">by ~{r.admin_username}</p>
+					</td>
+					<td>
+						<img src="/{r.type.toLowerCase()}.png" alt="ticket" class="w-8 h-8 flex" use:tooltip={r.type}>
+					</td>
+					<td>
+						{#if r.teacher_nickname}
+							<img use:tooltip={r.teacher_nickname} src={tutor_store.getTutorProfilePic(r.teacher_id)} alt="img" class="w-8 h-8 rounded-full inline-flex">
 						{/if}
-					</p>
-				{:else if r.type === 'TRIAL'}
-					<p>{r.lesson_duration}min</p>
-				{:else if r.type === 'COURSE'}
-					<p>{r.lesson_cnt} lesson(s)</p>
-					<p class="text-xs text-gray-500">Length: {r.lesson_duration}min</p>
-				{/if}
-			</td>
-			<td>
-				{#if r.payment_method}
-					{r.payment_method}
-				{:else}
-					<span class="text-gray-300">n/a</span>
-				{/if}
-			</td>
-			<td style="max-width: 300px; min-width: 300px">
-				{#if r.remark}
-					<div on:click={() => {onEditRemark(r)}} class="items-center cursor-pointer hover:bg-gray-100 inline-block rounded p-2">
-						<Icon name="message" className="w-4 text-green-500 inline"/>
-						<span class="text-gray-500 text-sm">{r.remark}</span>
-					</div>
-				{:else}
-					<p on:click={() => {onEditRemark(r)}} class="text-sm text-gray-300 p-2 hover:bg-gray-100 cursor-pointer inline-block rounded">-No remark-</p>
-				{/if}
-			</td>
-			<td>
-				<SelectionBox simple_array options={['EMPTY', 'DONE', 'ERROR']} selected_value={r.check_status} on:input={e => onChangeStatus(r, e)}/>
-			</td>
-			<td>${r.lesson_fee}</td>
-			<td>${r.app_fee}</td>
-			<td>${Number(r.app_fee) + Number(r.lesson_fee)}</td>
-			<td>
-				<Dropdown placement="bottom-end" activator_style="w-8 h-8 cc rounded-full text-gray-500 border border-transparent transition" activator_active_style="bg-gray-100 text-blue-500 border-gray-300">
-					<div slot="activator"><Icon className="w-4" name="more"/></div>
-					<div class="dropdown">
-						<button class="item" on:click={() => {onDelete(r)}}>Delete</button>
-					</div>
-				</Dropdown>
-			</td>
-		</tr>
-	{/each}
-{:else}
-	<p class="p-4">no data</p>
-{/if}
+					</td>
+					<td>
+						{#if r.type === 'TICKET'}
+							<p>{r.ticket_amt} <span class="text-xs">Tickets</span></p>
+							<p class="text-xs text-gray-500 whitespace-nowrap">
+								{#if r.ticket_expiry_date}
+									Exp: {dayjs(r.ticket_expiry_date).format('DD MMM YYYY')}
+								{:else}
+									- no expiry date -
+								{/if}
+							</p>
+						{:else if r.type === 'TRIAL'}
+							<p>{r.lesson_duration}min</p>
+						{:else if r.type === 'COURSE'}
+							<p>{r.lesson_cnt} lesson(s)</p>
+							<p class="text-xs text-gray-500">Length: {r.lesson_duration}min</p>
+						{/if}
+					</td>
+					<td>
+						{#if r.payment_method}
+							{r.payment_method}
+						{:else}
+							<span class="text-gray-300">n/a</span>
+						{/if}
+					</td>
+					<td>
+						{#if r.remark}
+							<div on:click={() => {onEditRemark(r)}} class="items-center cursor-pointer hover:bg-gray-100 inline-block rounded p-2">
+								<Icon name="message" className="w-4 text-green-500 inline"/>
+								<span class="text-gray-500 text-sm">{r.remark}</span>
+							</div>
+						{:else}
+							<p on:click={() => {onEditRemark(r)}} class="text-sm text-gray-300 p-2 hover:bg-gray-100 cursor-pointer inline-block rounded">-No remark-</p>
+						{/if}
+					</td>
+					<td>
+						<SelectionBox simple_array options={['EMPTY', 'DONE', 'ERROR']} selected_value={r.check_status} on:input={e => onChangeStatus(r, e)}/>
+					</td>
+					<td>${r.lesson_fee}</td>
+					<td>${r.app_fee}</td>
+					<td>${Number(r.app_fee) + Number(r.lesson_fee)}</td>
+					<td>
+						<Dropdown placement="bottom-end" activator_style="w-8 h-8 cc rounded-full text-gray-500 border border-transparent transition" activator_active_style="bg-gray-100 text-blue-500 border-gray-300">
+							<div slot="activator"><Icon className="w-4" name="more"/></div>
+							<div class="dropdown">
+								<button class="item" on:click={() => {onDelete(r)}}>Delete</button>
+							</div>
+						</Dropdown>
+					</td>
+				</tr>
+			{/each}
+		{:else}
+			<p class="p-4">no data</p>
+		{/if}
+	</table>
+</div>
 
 <style>
 	td, th {

@@ -1,7 +1,8 @@
 <script context="module">
 	import {http, onFail} from "$lib/http";
 
-	export const load = async ({fetch}) => {
+	export const load = async ({fetch, page}) => {
+		if (page.query.get('reload')) {}
 		const {data, success, debug} = await http.post(fetch, '/voucherApi/list_pending_voucher')
 		if (!success) return onFail(debug)
 		return {
@@ -20,6 +21,8 @@
 	import dayjs from "dayjs";
 	import utc from "dayjs/plugin/utc.js";
 	import VoucherTable from '$lib/voucher/voucher-table.svelte'
+	import {triggerReload} from "$lib/helper/trigger-reload.js";
+
 	dayjs.extend(utc)
 
 	const {openModal, closeModal} = getContext('simple-modal')
@@ -30,13 +33,8 @@
 	const onCreateVoucher = (option) => {
 		openModal(CreateVoucher, {
 			voucher_type: option,
-			onSuccess: refresh
+			onSuccess: triggerReload
 		})
-	}
-
-	const refresh = async () => {
-		const {data, success, debug} = await http.post(fetch, '/voucherApi/list_pending_voucher')
-		voucher_list = data
 	}
 </script>
 

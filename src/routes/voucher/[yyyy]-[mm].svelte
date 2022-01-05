@@ -3,6 +3,7 @@
 	import dayjs from "dayjs";
 
 	export const load = async ({page, fetch}) => {
+		if (page.query.get('reload')) {}
 		let start_date = `${page.params.yyyy}-${page.params.mm}-01 00:00:00`
 		const {data, success, debug} = await http.post(fetch, '/voucherApi/list_voucher', {
 			start_date: dayjs(start_date).format('YYYY-MM-DD HH:mm:ss'),

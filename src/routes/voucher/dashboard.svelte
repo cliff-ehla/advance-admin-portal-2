@@ -3,6 +3,7 @@
 	import dayjs from "dayjs";
 
 	export const load = async ({page, fetch}) => {
+		if (page.query.get('reload')) {}
 		let start_date = dayjs().subtract(6, 'month').format('YYYY-MM-DD HH:mm:ss')
 		let end_date = dayjs().add(1, 'day').format('YYYY-MM-DD HH:mm:ss')
 		const {data, success, debug} = await http.post(fetch, '/voucherApi/list_voucher', {
@@ -23,7 +24,6 @@
 
 <script>
 	export let voucher_list
-	console.log(voucher_list)
 	import VoucherTable from '$lib/voucher/voucher-table.svelte'
 </script>
 
