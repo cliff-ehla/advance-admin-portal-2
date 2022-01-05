@@ -14,6 +14,7 @@
 </script>
 
 {#if !created_student}
+	<h2 class="font-bold mb-4">Create new user</h2>
 	<CreateNewUser {parent_mobile} on:created={e => {created_student = e.detail}}/>
 {:else}
 	<div class="w-96 p-4">

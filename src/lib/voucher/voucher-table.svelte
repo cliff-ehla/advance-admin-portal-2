@@ -14,7 +14,10 @@
 	import {goto} from "$app/navigation";
 	import {notifications} from "$lib/store/notification.js";
 	import CreateTrialDialog from "$lib/option/create-trial-lesson.dialog.svelte";
+	import CreateUserDialog from '$lib/student/create-new-user-dialog.svelte'
 	import {triggerReload} from "$lib/helper/trigger-reload.js";
+	import {getContext} from 'svelte'
+	const {openModal, closeModal} = getContext('simple-modal')
 
 	dayjs.extend(utc)
 
@@ -129,6 +132,13 @@
 			})
 		}
 	}
+
+	const onCreateAccount = ({phone, reserved_grouper_id}) => {
+		openModal(CreateUserDialog, {
+			parent_mobile: phone,
+			onSuccess: triggerReload
+		})
+	}
 </script>
 
 <div class="overflow-x-scroll">
@@ -152,7 +162,7 @@
 
 		{#if voucher_list.length}
 			{#each voucher_list as r}
-				<tr class="align-middle">
+				<tr class="align-middle" class:invalid={r.is_invalid}>
 					<td class="text-left text-blue-800 whitespace-nowrap">
 						{#if !isTodo(r)}
 							<a href="/voucher/todo" class="relative hover:bg-blue-500 hover:text-white rounded px-2">
@@ -165,28 +175,34 @@
 					</td>
 					<td class="font-bold text-gray-700 whitespace-nowrap">{r.phone}</td>
 					<td class="text-gray-700 whitespace-nowrap">
-						{#each r.related_users as user}
-							<div class="flex">
-								<p use:tooltip={'parent'}>{user.nickname}</p>
-								{#if r.type === 'TICKET' && !r.reg_ticket_id}
-									<button use:tooltip={'入卷俾家長'} on:click={() => {openCreateTickerDialog(r, user)}} class="ml-2 bg-white border-red-500 text-red-500 border w-4 h-4 cc hover:bg-red-100">
-										<Icon name="add" className="w-2"/>
-									</button>
-								{/if}
-							</div>
-							<div class="pl-2 border-l border-gray-500">
-								{#each user.students as student}
-									<div class="flex">
-										<a use:tooltip={'child'} href="/students/{student.user_id}" class="text-xs hover:text-blue-500">{student.nickname}</a>
-										{#if (r.type === 'COURSE' || r.type === 'TRIAL') && !r.tutor_group_id}
-											<button use:tooltip={'開堂俾細路'} on:click={() => {onCreateCourse(r, student.user_id)}} class="ml-2 bg-white border-red-500 text-red-500 border w-4 h-4 cc hover:bg-red-100">
-												<Icon name="add" className="w-2"/>
-											</button>
-										{/if}
-									</div>
-								{/each}
-							</div>
-						{/each}
+						{#if r.related_users.length}
+							{#each r.related_users as user}
+								<div class="flex">
+									<p use:tooltip={'parent'}>{user.nickname}</p>
+									{#if r.type === 'TICKET' && !r.reg_ticket_id}
+										<button use:tooltip={'入卷俾家長'} on:click={() => {openCreateTickerDialog(r, user)}} class="ml-2 bg-white border-red-500 text-red-500 border w-4 h-4 cc hover:bg-red-100">
+											<Icon name="add" className="w-2"/>
+										</button>
+									{/if}
+								</div>
+								<div class="pl-2 border-l border-gray-500">
+									{#each user.students as student}
+										<div class="flex">
+											<a use:tooltip={'child'} href="/students/{student.user_id}" class="text-xs hover:text-blue-500">{student.nickname}</a>
+											{#if (r.type === 'COURSE' || r.type === 'TRIAL') && !r.tutor_group_id}
+												<button use:tooltip={'開堂俾細路'} on:click={() => {onCreateCourse(r, student.user_id)}} class="ml-2 bg-white border-red-500 text-red-500 border w-4 h-4 cc hover:bg-red-100">
+													<Icon name="add" className="w-2"/>
+												</button>
+											{/if}
+										</div>
+									{/each}
+								</div>
+							{/each}
+						{:else if !(r.reserved_grouper_ids && r.reserved_grouper_ids.length)}
+							<button class="button-secondary" on:click={() => {onCreateAccount(r)}}>Create account</button>
+						{:else}
+							<a href="/booking/option" class="text-blue-500">To option page</a>
+						{/if}
 					</td>
 					<td>
 						<p class="leading-tight">{dayjs(r.create_ts).format('DD MMM YYYY (ddd)')}</p>
@@ -260,5 +276,8 @@
 <style>
 	td, th {
 		@apply p-2 border-b border-gray-200 text-left text-sm;
+	}
+	.invalid {
+		@apply cursor-not-allowed pointer-events-none opacity-20;
 	}
 </style>
