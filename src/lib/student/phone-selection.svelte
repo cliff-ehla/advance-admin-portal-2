@@ -41,12 +41,14 @@
 	       bind:value={phone}
 	       class="px-1 flex-1 max-w-full focus:outline-none"/>
 
-	<div class="w-6 cc flex-shrink-0">
+	<div class="cc flex-shrink-0">
 		{#if phone && phone.length === 8}
 			{#if filtered_result.length > 0}
-				<div use:tooltip={'有幾多個用戶對應呢個電話'} class="w-4 h-4 cc bg-green-500 text-white text-xs rounded-full">
-					<p>{filtered_result.length}</p>
-				</div>
+				{#each filtered_result as result}
+					<div use:tooltip={`Student: ${result.student_nickname}`} class="h-4 cc bg-green-500 text-white text-xs px-1 py-3 rounded mr-1">
+						<p>{result.parent_nickname}</p>
+					</div>
+				{/each}
 			{:else}
 				<div use:tooltip={'呢個電話係全新'} class="w-4 h-4 cc bg-red-500 text-white text-xs rounded-full">
 					<p>新</p>
