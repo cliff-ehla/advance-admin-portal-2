@@ -5,7 +5,15 @@ import {convertToEvents} from "$lib/calendar/phase-to-events.js";
 
 const create_tutor_event_store = () => {
 	const store = writable({})
-	const callIfNoCache = async (fetch, {tutor_id, force}) => {
+	const cacheFirst = async (fetch, {tutor_id}) => {
+		const cache = get(store)[tutor_id]
+		if (cache) {
+			fetchData(fetch, {tutor_id})
+		} else {
+			await fetchData(fetch, {tutor_id})
+		}
+	}
+	const fetchData = async (fetch, {tutor_id}) => {
 		let start_time = dayjs().subtract(3, 'month').format('YYYY-MM-DD HH:mm:ss')
 		let end_time = dayjs().add(3, 'month').format('YYYY-MM-DD HH:mm:ss')
 		let p1 = http.post(fetch,'/zoomApi/list_teacher_available_time_in_calendar', {
@@ -36,14 +44,6 @@ const create_tutor_event_store = () => {
 		})
 		return events
 	}
-	const clearCache = (tutor_id) => {
-		store.update(v => {
-			return {
-				...v,
-				[tutor_id]: null
-			}
-		})
-	}
 	const getTutorEvents = (tutor_id, filters = {}) => {
 		const {skip_available, is_grid_view} = filters
 		let events = get(store)[tutor_id]
@@ -68,8 +68,8 @@ const create_tutor_event_store = () => {
 	}
 	return {
 		subscribe: store.subscribe,
-		callIfNoCache,
-		clearCache,
+		fetchData,
+		cacheFirst,
 		getTutorEvents
 	}
 }

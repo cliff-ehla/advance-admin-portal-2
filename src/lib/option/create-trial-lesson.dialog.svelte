@@ -67,7 +67,6 @@
 			notification: `已經為${student_store.getStudentName(student_id)}建立了$${teacher_name}的課堂, 於${date_display}`
 		})
 		calendar_store.clear()
-		tutor_event_store.clearCache(teacher_id)
 		if (success) onSuccess()
 		closeModal()
 	}

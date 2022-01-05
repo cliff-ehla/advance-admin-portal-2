@@ -52,9 +52,8 @@
 	const fetchAndReRender = async () => {
 		clearTBCSource()
 		clearTutorSource()
-		await tutor_event_store.callIfNoCache(fetch, {
-			tutor_id,
-			force: true
+		await tutor_event_store.fetchData(fetch, {
+			tutor_id
 		})
 		addSourcesToMonthCalendar()
 		addSourcesToDayCalendar()

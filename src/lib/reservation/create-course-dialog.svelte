@@ -78,7 +78,6 @@
 		}, {
 			notification: '已經建立課堂'
 		})
-		tutor_event_store.clearCache(teacher_id)
 		await goto(`/students/${student_id}`)
 
 		action_status.set('')
