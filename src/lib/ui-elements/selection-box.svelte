@@ -33,7 +33,9 @@
 	}
 
 	const setWidth = node => {
-		dropdown_menu_width = node.parentNode.offsetWidth
+		setTimeout(() => {
+			dropdown_menu_width = node.parentNode.offsetWidth
+		}, 100)
 	}
 </script>
 

@@ -27,9 +27,27 @@
 	import VoucherTable from '$lib/voucher/voucher-table.svelte'
 
 	export let voucher_list
-	console.log(voucher_list)
 	$: year = $page.params.yyyy
 	$: month = $page.params.mm
+	let total = {
+		alipay: 0,
+		bank_transfer: 0,
+		payme: 0,
+		all: 0
+	}
+
+	$: {
+		voucher_list.forEach(v => {
+			if (v.payment_method) {
+				if (!v.is_invalid) {
+					const _payment_method = v.payment_method.toLowerCase().replace(' ', '_')
+					const total_fee = (Number(v.app_fee) + Number(v.lesson_fee))
+					total[_payment_method] += total_fee
+					total.all += total_fee
+				}
+			}
+		})
+	}
 
 	const onMonthChange = e => {
 		let month = String(e.detail).padStart(2, "0")
@@ -41,14 +59,32 @@
 	}
 </script>
 
-<div class="grid grid-cols-2 gap-4 px-4 pt-4 max-w-screen-md">
+<div class="flex items-center p-4">
 	<div>
 		<p class="text-sm text-gray-500">Month</p>
 		<SelectionBox on:input={onMonthChange} options={['01','02','03','04','05','06','07','08','09','10','11','12']} selected_value={month} simple_array/>
 	</div>
-	<div>
+	<div class="ml-2">
 		<p class="text-sm text-gray-500">Year</p>
 		<SelectionBox on:input={onYearChange} options={[2021, 2022, 2023, 2024, 2025]} selected_value={year} simple_array/>
+	</div>
+	<div class="ml-auto flex items-center bg-gray-50 border border-gray-300 rounded">
+		<div class="ml-4">
+			<p class="text-sm text-gray-500">Alipay</p>
+			<p>${total.alipay}</p>
+		</div>
+		<div class="ml-4">
+			<p class="text-sm text-gray-500">Bank transfer</p>
+			<p>${total.bank_transfer}</p>
+		</div>
+		<div class="ml-4">
+			<p class="text-sm text-gray-500">PayMe</p>
+			<p>${total.payme}</p>
+		</div>
+		<div class="p-4 ml-4 font-bold border-l border-gray-300">
+			<p class="text-sm text-gray-500">Total</p>
+			<p>${total.all}</p>
+		</div>
 	</div>
 </div>
 
