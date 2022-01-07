@@ -15,7 +15,7 @@
 
 <div class="flex items-center px-4 border-b border-gray-300">
 	<div class="flex items-center">
-		<p class="font-bold mr-4">Monthly statement</p>
+		<p class="font-bold mr-4">Monthly statement </p>
 		<SelectionBox on:input={e => selected_month = e.detail} selected_value={selected_month} options={month_options}/>
 	</div>
 	<div class="ml-auto flex items-center">
