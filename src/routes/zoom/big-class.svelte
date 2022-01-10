@@ -64,6 +64,11 @@
 		reRenderEvents()
 	}
 
+	const onToggleIsFull = () => {
+		big_class_events.toggleIsFull()
+		reRenderEvents()
+	}
+
 	const reRenderEvents = () => {
 		const source = calendar.getEventSourceById(CLASSROOM)
 		if (source) {
@@ -102,7 +107,7 @@
 			</div>
 		</div>
 
-		<div class="bg-blue-100 border border-blue-200">
+		<div class="bg-blue-100 border border-blue-200 my-4">
 			<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
 				<input id="code" type="checkbox" bind:checked={$big_class_events.code_filter_off} on:input={onClearCodeFilter}>
 				<label for="code" class="ml-4 cursor-pointer">全部Course</label>
@@ -114,6 +119,13 @@
 						<label for={f.key} class="ml-4 cursor-pointer">{f.key} ({f.count})</label>
 					</div>
 				{/each}
+			</div>
+		</div>
+
+		<div class="bg-blue-100 border border-blue-200">
+			<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
+				<input id="is_full" type="checkbox" checked={$big_class_events.exclude_is_full} on:input={onToggleIsFull}>
+				<label for="is_full" class="ml-4 cursor-pointer">顯示滿員</label>
 			</div>
 		</div>
 	</div>

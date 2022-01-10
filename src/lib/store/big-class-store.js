@@ -34,6 +34,10 @@ export const big_class_store = create_big_class_store()
 const createBigClassEventStore = () => {
 	const selected_levels = writable([])
 	const selected_codes = writable([])
+	const exclude_is_full = writable(false)
+	const toggleIsFull = () => {
+		exclude_is_full.update(v => !v)
+	}
 	const toggleLevelFilter = (lv) => {
 		selected_levels.update(v => {
 			if (v.includes(lv)) {
@@ -68,6 +72,7 @@ const createBigClassEventStore = () => {
 				type: 'classroom',
 				reg_user_cnt: e.reg_user_cnt,
 				student_size: e.student_size,
+				is_full: e.reg_user_cnt === e.student_size,
 				cat: e.sub_cat_alter,
 				tutor_id: e.tutor_id,
 				tutor_group_id: e.tutor_group_id,
@@ -86,7 +91,8 @@ const createBigClassEventStore = () => {
 			}
 		})
 	})
-	const _store = derived([big_class_events, selected_levels, selected_codes], ([$events, $selected_levels, $selected_codes]) => {
+	const _store = derived([big_class_events, selected_levels, selected_codes, exclude_is_full],
+			([$events, $selected_levels, $selected_codes, $exclude_is_full]) => {
 		const code_filters = big_class_mapper.all_codes.map(c => ({
 			key: c,
 			count: 0,
@@ -110,6 +116,11 @@ const createBigClassEventStore = () => {
 				return $selected_codes.includes(e.extendedProps.code)
 			})
 		}
+		if ($exclude_is_full) {
+			$events = $events.filter(e => {
+				return !e.extendedProps.is_full
+			})
+		}
 		$events.forEach(e => {
 			let {code, levels} = e.extendedProps
 			let obj = code_filters.find(f => f.key === code)
@@ -124,7 +135,8 @@ const createBigClassEventStore = () => {
 			level_filter_off:  $selected_levels.length === 0,
 			code_filter_off: $selected_codes.length === 0,
 			code_filters,
-			level_filters
+			level_filters,
+			exclude_is_full: $exclude_is_full
 		}
 	})
 	return {
@@ -132,7 +144,8 @@ const createBigClassEventStore = () => {
 		toggleLevelFilter,
 		toggleCodeFilter,
 		clearLevelFilters,
-		clearCodeFilters
+		clearCodeFilters,
+		toggleIsFull
 	}
 }
 
