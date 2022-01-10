@@ -36,7 +36,7 @@
 		})
 		try {
 			let total_fee = app_fee + lesson_fee
-			slack.send(`新入賬記錄：#${data.voucher_number}，來自電話號碼${phone}，共HKD${total_fee}`)
+			slack.send(`新入賬記錄：#${data.voucher_number}，來自☎${phone}，共HKD${total_fee}`)
 		} catch (e) {
 			console.log('cliff: ', e)
 		}

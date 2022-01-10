@@ -5,7 +5,7 @@ import {get} from "svelte/store";
 const slack = (() => {
 	const send = (msg) => {
 		let _user_info = get(user_info)
-		const nickname = _user_info.user_info ? (_user_info.nickname || _user_info.username ) : '未登入'
+		const nickname = _user_info ? (_user_info.nickname || _user_info.username ) : '未登入'
 		return http.post(fetch,'/slack/post-message', {
 			text: `${nickname}: ${msg}`
 		})
