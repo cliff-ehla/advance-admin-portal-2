@@ -125,7 +125,7 @@
 		<div class="bg-blue-100 border border-blue-200">
 			<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
 				<input id="is_full" type="checkbox" checked={$big_class_events.exclude_is_full} on:input={onToggleIsFull}>
-				<label for="is_full" class="ml-4 cursor-pointer">顯示滿員</label>
+				<label for="is_full" class="ml-4 cursor-pointer">撇除滿員</label>
 			</div>
 		</div>
 	</div>
