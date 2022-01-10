@@ -6,6 +6,7 @@
 	import {getContext} from 'svelte'
 	const {openModal, closeModal} = getContext('simple-modal')
 	import PhoneSelection from '$lib/student/phone-selection.svelte'
+	import {slack} from "$lib/helper/slack.js";
 
 	export let voucher_type
 	export let onSuccess = () => {}
@@ -20,7 +21,7 @@
 	$: base_info_valid = typeof lesson_fee === 'number' && typeof app_fee === 'number' && !!phone
 
 	const onConfirm = async () => {
-		await http.post(fetch, '/voucherApi/create_voucher', {
+		const {data} =await http.post(fetch, '/voucherApi/create_voucher', {
 			voucher_type,
 			phone,
 			lesson_fee,
@@ -33,6 +34,12 @@
 		}, {
 			notification: `成功起左張 Voucher 俾呢個電話 ${phone}`
 		})
+		try {
+			let total_fee = app_fee + lesson_fee
+			slack.send(`新入賬記錄：#${data.voucher_number}，來自電話號碼${phone}，共HKD${total_fee}`)
+		} catch (e) {
+			console.log('cliff: ', e)
+		}
 		closeModal()
 		onSuccess()
 	}

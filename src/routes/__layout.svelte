@@ -2,28 +2,26 @@
 	import {http} from "$lib/http";
 	import {tutor_store} from "../store/tutor-store";
 	import {student_store} from "../store/student-store";
+	import {user_info, authorized} from "$lib/store/user_info.js";
+	import {get} from "svelte/store"
 
 	export const load = async ({fetch, session, page}) => {
-		if (session.user_info) {
-			console.log('call API')
-			const {data, success, debug} = await http.get(fetch, '/organizationApi/tutor_list')
-			if (success) {
-				data.sort((a,b) => {
-					return a.nickname > b.nickname ? 1 : -1
-				})
-				tutor_store.set(data)
-			}
-			await student_store.fetchData(fetch)
-			return {
-				props: {
-					user_info: session.user_info
-				}
-			}
+		if (!get(authorized)) {
+			user_info.set(session.user_info)
+		}
+		const {data, success, debug} = await http.get(fetch, '/organizationApi/tutor_list')
+		if (success) {
+			data.sort((a,b) => {
+				return a.nickname > b.nickname ? 1 : -1
+			})
+			tutor_store.set(data)
+			await student_store.fetchData(fetch);
+			return true
 		} else {
-			if (page.path !== '/login') {
+			if (debug && debug.err_code === 401 && page.path !== '/logout' && page.path !== '/login') {
 				return {
 					status: 302,
-					redirect: '/login'
+					redirect: '/logout'
 				}
 			} else {
 				return true
@@ -45,8 +43,6 @@
 	import {sentry} from "$lib/sentry";
 	import {navigating} from "$app/stores";
 
-	export let user_info
-
 	onMount(() => {
 		sentry.init()
 	})
@@ -62,8 +58,8 @@
 <Notification>
 	<Popper>
 		<Modal>
-			{#if user_info}
-				<TopBar {user_info}/>
+			{#if $authorized}
+				<TopBar/>
 			{/if}
 			<slot></slot>
 		</Modal>

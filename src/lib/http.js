@@ -2,6 +2,7 @@ import {sentry} from "$lib/sentry";
 import {is_loading} from "$lib/store/is_loading";
 import {notifications} from "$lib/store/notification";
 import {goto} from "$app/navigation";
+import {browser} from "$app/env";
 
 const http = (() => {
 	async function get (fetch, resource, query) {
@@ -36,7 +37,8 @@ const http = (() => {
 				body: body && JSON.stringify(body)
 			})
 			const {success, data, metadata, debug} = await res.json()
-			if (!success && debug && debug.err_code === 401) {
+			if (!success && debug && debug.err_code === 401 && browser) {
+				// note: could only redirect in client side (server side do not have history API)
 				goto('/logout')
 			}
 			const actually_not_success = data ? data.status === 'failure' : false

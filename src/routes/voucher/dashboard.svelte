@@ -10,10 +10,10 @@
 			start_date,
 			end_date
 		})
+		if (!success) return onFail(debug)
 		data.sort((a,b) => {
 			return a.start_date > b.start_date ? 1 : -1
 		})
-		if (!success) return onFail(debug)
 		return {
 			props: {
 				voucher_list: data
