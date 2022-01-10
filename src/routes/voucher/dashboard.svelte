@@ -4,7 +4,7 @@
 
 	export const load = async ({page, fetch}) => {
 		if (page.query.get('reload')) {}
-		let start_date = dayjs().subtract(6, 'month').format('YYYY-MM-DD HH:mm:ss')
+		let start_date = dayjs().subtract(1, 'month').format('YYYY-MM-DD HH:mm:ss')
 		let end_date = dayjs().add(1, 'day').format('YYYY-MM-DD HH:mm:ss')
 		const {data, success, debug} = await http.post(fetch, '/voucherApi/list_voucher', {
 			start_date,
@@ -28,6 +28,6 @@
 </script>
 
 <div class="p-4">
-	<h1 class="text-xl mb-4">最近六個月記錄</h1>
+	<h1 class="text-xl mb-4">最近1個月記錄</h1>
 	<VoucherTable {voucher_list}/>
 </div>
