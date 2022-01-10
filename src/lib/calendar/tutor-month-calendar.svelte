@@ -51,12 +51,9 @@
 
 	const fetchAndReRender = async () => {
 		clearTBCSource()
-		clearTutorSource()
 		await tutor_event_store.fetchData(fetch, {
 			tutor_id
 		})
-		addSourcesToMonthCalendar()
-		addSourcesToDayCalendar()
 	}
 
 	const clearTBCSource = () => {
@@ -77,7 +74,10 @@
 		const calendars = [month_calendar, day_calendar]
 		calendars.forEach(c => {
 			let source = c.getEventSourceById(EVENT_SOURCE_ID)
-			if (source) source.remove()
+			if (source) {
+				console.log('clear source')
+				source.remove()
+			}
 		})
 	}
 
