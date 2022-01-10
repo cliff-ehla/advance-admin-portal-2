@@ -1,4 +1,5 @@
 <script>
+	import {is_loading} from "$lib/store/is_loading";
 	import {http} from "$lib/http";
 	import {goto} from '$app/navigation'
 	import Button from '$lib/ui-elements/button.svelte'
@@ -11,6 +12,7 @@
 	let username = env === 'production' ? '' : local_production ? 'cliff.admin' : 'queeniedevadmin'
 	let password = env === 'production' ? '' : local_production ? '12345678' : 'q12345678'
 	let error = false
+	let waiting_for_redirect
 
 	const onLogin = async () => {
 		let {data, success} = await http.post(fetch, '/user/login', {
@@ -18,13 +20,20 @@
 			password
 		})
 		if (success) {
+			waiting_for_redirect = true
 			session.set({
 				user_info: {
 					username: data.username,
 					nickname: data.nickname
 				}
 			})
-			goto('/')
+			setTimeout(() => {
+				waiting_for_redirect = false
+				// Note: work-around to avoid trigger preloading from root layout
+				// I have tried subscribing loading store and redirect upon when loading turn to false,
+				// but that still trigger twice.
+				goto('/')
+			}, 3000)
 		} else {
 			error = true
 		}
@@ -53,6 +62,9 @@
 			<div class="mt-8 flex justify-end mb-4">
 				<Button on:click={onLogin}>登入</Button>
 			</div>
+			{#if waiting_for_redirect}
+				<p class="mt-2 text-right">redirecting...</p>
+			{/if}
 		</div>
 	</div>
 </div>

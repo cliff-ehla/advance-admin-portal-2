@@ -5,6 +5,7 @@
 
 	export const load = async ({fetch, session, page}) => {
 		if (session.user_info) {
+			console.log('call API')
 			const {data, success, debug} = await http.get(fetch, '/organizationApi/tutor_list')
 			if (success) {
 				data.sort((a,b) => {
