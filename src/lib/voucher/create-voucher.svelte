@@ -7,6 +7,7 @@
 	const {openModal, closeModal} = getContext('simple-modal')
 	import PhoneSelection from '$lib/student/phone-selection.svelte'
 	import {slack} from "$lib/helper/slack.js";
+	import {variables} from "$lib/env";
 
 	export let voucher_type
 	export let onSuccess = () => {}
@@ -26,6 +27,7 @@
 			phone,
 			lesson_fee,
 			lesson_count,
+			lesson_duration,
 			app_fee,
 			payment_method,
 			remark,
@@ -36,7 +38,9 @@
 		})
 		try {
 			let total_fee = app_fee + lesson_fee
-			slack.send(`新入賬記錄：#${data.voucher_number}，來自☎${phone}，共HKD${total_fee}`)
+			if (variables.env === 'production') {
+				slack.send(`新入賬記錄：#${data.voucher_number}，來自☎${phone}，共HKD${total_fee}`)
+			}
 		} catch (e) {
 			console.log('cliff: ', e)
 		}
@@ -68,7 +72,7 @@
 		{:else if voucher_type === 'COURSE' || voucher_type === 'TRIAL'}
 			<p class="text-xs font-bold uppercase mb-2">Course detail:</p>
 			{#if voucher_type === 'COURSE'}
-				<label>Lesson count</label>
+				<label>Lesson count {lesson_count}</label>
 				<input class="input block mb-2" type="number" placeholder="Lesson count" bind:value={lesson_count}/>
 			{/if}
 			<label>Lesson duration</label>

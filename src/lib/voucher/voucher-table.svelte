@@ -161,7 +161,7 @@
 
 <div class="">
 	<table>
-		<tr class="sticky top-0 bg-white z-50 shadow">
+		<tr class="sticky top-0 bg-white z-30 shadow">
 			<th style="min-width: 145px" class="text-left">Voucher No</th>
 			<th class="text-left">Phone</th>
 			<th>User</th>
@@ -201,7 +201,7 @@
 
 		{#if sorted_voucher_list.length}
 			{#each sorted_voucher_list as r}
-				<tr class="align-middle" class:invalid={r.is_invalid}>
+				<tr on:click={() => {console.log(r)}} class="align-middle" class:invalid={r.is_invalid}>
 					<td class="text-left text-blue-800 whitespace-nowrap">
 						<div class="relative">
 							<CopyMessageTextBox value={r.voucher_number}/>

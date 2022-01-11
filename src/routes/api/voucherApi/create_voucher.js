@@ -16,7 +16,7 @@ export const post = (req) => {
 		data.ticket_amt = req.body.ticket_amt
 		data.ticket_expiry_date = dayjs().add(6, 'month').format('YYYY-MM-DD 00:00:00')
 	} else if (voucher_type === 'COURSE' || voucher_type === 'TRIAL') {
-		data.lesson_count = req.body.lesson_count
+		data.lesson_cnt = req.body.lesson_count
 		data.lesson_duration = req.body.lesson_duration
 		data.teacher_id = req.body.teacher_id
 	}
