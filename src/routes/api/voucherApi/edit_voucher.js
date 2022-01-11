@@ -6,6 +6,7 @@ export const post = (req) => {
 		is_invalid: req.body.is_invalid,
 		lesson_fee: req.body.lesson_fee,
 		app_fee: req.body.app_fee,
-		remark: req.body.remark
+		remark: req.body.remark,
+		payment_method: req.body.payment_method
 	})
 }
