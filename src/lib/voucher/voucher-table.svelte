@@ -45,6 +45,17 @@
 		voucher_list = voucher_list
 	}
 
+	const onChangePayment = async (r, e) => {
+		await http.post(fetch, '/voucherApi/edit_voucher', {
+			id: r.id,
+			payment_method: e.detail
+		}, {
+			notification: '已更新了payment method'
+		})
+		r.payment_method = e.detail
+		voucher_list = voucher_list
+	}
+
 	const onEditField = (voucher, field = 'remark') => {
 		dialog.confirm({
 			title: `更改${field}`,
@@ -261,11 +272,7 @@
 						{/if}
 					</td>
 					<td>
-						{#if r.payment_method}
-							{r.payment_method}
-						{:else}
-							<span class="text-gray-300">n/a</span>
-						{/if}
+						<SelectionBox simple_array options={['Alipay', 'Bank Transfer', 'Payme']} selected_value={r.payment_method} on:input={e => onChangePayment(r, e)}/>
 					</td>
 					<td>
 						{#if r.remark}
