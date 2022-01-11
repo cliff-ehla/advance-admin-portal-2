@@ -20,6 +20,12 @@
 	import CopyMessageTextBox from '$lib/ui-elements/copy-text.svelte'
 	const {openModal, closeModal} = getContext('simple-modal')
 
+	let sort_by_field = 'create_ts'
+
+	$: sorted_voucher_list = voucher_list.sort((a,b) => {
+		return a[sort_by_field] > b[sort_by_field] ? 1 : -1
+	})
+
 	dayjs.extend(utc)
 
 	const isTodo = (r) => {
@@ -142,27 +148,48 @@
 	}
 </script>
 
-<div class="overflow-x-scroll">
+<div class="">
 	<table>
-		<tr class="sticky top-0 bg-white">
-			<th class="text-left">Voucher No</th>
+		<tr class="sticky top-0 bg-white z-50 shadow">
+			<th style="min-width: 145px" class="text-left">Voucher No</th>
 			<th class="text-left">Phone</th>
 			<th>User</th>
-			<th>Date</th>
+			<th class="cursor-pointer" on:click={() => {sort_by_field = 'create_ts'}}>
+				<div class="flex items-center">
+					<p>Date</p>
+					<button class="sort-button" class:active={sort_by_field === 'create_ts'}>
+						<Icon name="sort" className="w-3"/>
+					</button>
+				</div>
+			</th>
 			<th>Parent</th>
 			<th>Teacher</th>
 			<th>Detail</th>
-			<th>Payment</th>
+			<th on:click={() => {sort_by_field = 'payment_method'}}>
+				<div class="flex items-center cursor-pointer">
+					<p>Payment</p>
+					<button class="sort-button" class:active={sort_by_field === 'payment_method'}>
+						<Icon name="sort" className="w-3"/>
+					</button>
+				</div>
+			</th>
 			<th>Remark</th>
 			<th>Status</th>
-			<th>Lesson fee</th>
+			<th on:click={() => {sort_by_field = 'lesson_fee'}}>
+				<div class="flex items-center cursor-pointer">
+					<p>Lesson fee</p>
+					<button class="sort-button" class:active={sort_by_field === 'lesson_fee'}>
+						<Icon name="sort" className="w-3"/>
+					</button>
+				</div>
+			</th>
 			<th>App fee</th>
 			<th>Total fee</th>
 			<td></td>
 		</tr>
 
-		{#if voucher_list.length}
-			{#each voucher_list as r}
+		{#if sorted_voucher_list.length}
+			{#each sorted_voucher_list as r}
 				<tr class="align-middle" class:invalid={r.is_invalid}>
 					<td class="text-left text-blue-800 whitespace-nowrap">
 						<div class="relative">
@@ -284,7 +311,16 @@
 	td, th {
 		@apply p-2 border-b border-gray-200 text-left text-sm;
 	}
+	th {
+		@apply leading-tight;
+	}
 	.invalid {
 		@apply cursor-not-allowed pointer-events-none opacity-20;
+	}
+	.sort-button {
+		@apply ml-auto w-4 h-4 rounded-full flex items-center justify-center;
+	}
+	.sort-button.active {
+		@apply bg-gray-100 text-blue-500;
 	}
 </style>

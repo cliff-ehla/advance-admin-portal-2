@@ -88,6 +88,6 @@
 	</div>
 </div>
 
-<div class="p-4">
+<div class="py-4">
 	<VoucherTable {voucher_list}/>
 </div>
