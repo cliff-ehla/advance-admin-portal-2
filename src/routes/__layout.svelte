@@ -42,6 +42,7 @@
 	import {onMount} from "svelte";
 	import {sentry} from "$lib/sentry";
 	import {navigating} from "$app/stores";
+	import {page} from "$app/stores";
 
 	onMount(() => {
 		sentry.init()
@@ -58,7 +59,7 @@
 <Notification>
 	<Popper>
 		<Modal>
-			{#if $authorized}
+			{#if $authorized && !$page.path.startsWith('/item')}
 				<TopBar/>
 			{/if}
 			<slot></slot>
