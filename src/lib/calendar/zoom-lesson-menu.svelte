@@ -111,7 +111,7 @@
 				<div>
 					{#each days as d}
 						<div class="flex items-center">
-							<p class="text-left block  px-2 py-2 hover:text-blue-500 hover:bg-gray-100 mb-2">{d.title}</p>
+							<a href="/item/{d.item_id}" class="text-left block px-2 py-2 hover:text-blue-500 hover:bg-gray-100 mb-2">{d.title}</a>
 							<div on:click={() => {onRemoveClick(d.day_id)}} class="cursor-pointer w-10 h-10 flex justify-center items-center hover:bg-gray-100 hover:text-blue-500">
 								<Icon name="trash" className="w-4"/>
 							</div>
