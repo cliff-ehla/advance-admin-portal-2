@@ -27,7 +27,6 @@
 		password: PASSWORD,
 		level: '',
 		gender: '',
-		reminder: '',
 		is_username_valid: false
 	}
 	let childs = [
@@ -154,10 +153,6 @@
 						              selected_value={c.level}
 						              on:input={e => {c.level = e.detail}}/>
 					</div>
-				</div>
-				<div class="text-sm text-gray-400 mb-2">
-					<p class="mb-1">Student note</p>
-					<textarea class="p-2 w-full border border-gray-300" bind:value={c.reminder} rows="2" placeholder="Remark (optional)"></textarea>
 				</div>
 			</div>
 		{/each}
