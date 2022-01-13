@@ -14,7 +14,13 @@
 	export let error_message;
 	export let status;
 	import {sentry} from "$lib/sentry";
-	sentry.log(error_message)
+
+	if (error_message.includes('Failed to fetch dynamically imported module')) {
+		window.location.reload()
+		sentry.log('Trigger a full refresh from "Failed to fetch dynamically imported module"')
+	} else {
+		sentry.log(error_message)
+	}
 </script>
 
 <div class="container text-center py-12">
