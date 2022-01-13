@@ -18,7 +18,6 @@
 	export let level = undefined
 	export let gender = undefined
 	export let parent_mobile = undefined
-	export let remark = undefined
 	export let parent_nickname = undefined
 	let PASSWORD = '12345678'
 
@@ -67,8 +66,7 @@
 			parent_password: PASSWORD,
 			gender,
 			level,
-			parent_mobile,
-			reminder: remark || ' '
+			parent_mobile
 		}, {
 			notification: '成功創建用戶'
 		})
@@ -142,10 +140,6 @@
 		<div class="text-sm text-gray-400 mb-2">
 			<p class="mb-1">Parent mobile no</p>
 			<input bind:value={parent_mobile} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
-		</div>
-		<div class="text-sm text-gray-400 mb-2">
-			<p class="mb-1">Student note</p>
-			<textarea class="px-2 py-4 w-full border border-gray-300 my-2" bind:value={remark} rows="2" placeholder="Remark (optional)"></textarea>
 		</div>
 	</div>
 	<div>
