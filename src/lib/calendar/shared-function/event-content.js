@@ -86,7 +86,7 @@ export const eventContent = (arg) => {
 		wrapper.appendChild(title_el)
 	} else if (extendedProps.type === 'edit_temp') {
 		let title_el = document.createElement('div')
-		title_el.innerText = arg.event.title
+		title_el.innerText = 'Edit'
 		let time_el = genTimeEl(arg)
 		wrapper.appendChild(time_el)
 		wrapper.appendChild(title_el)

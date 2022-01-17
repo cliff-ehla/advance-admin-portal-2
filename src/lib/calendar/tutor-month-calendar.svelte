@@ -50,6 +50,7 @@
 	})
 
 	const fetchAndReRender = async () => {
+		console.log('fetchAndReRender')
 		clearTBCSource()
 		await tutor_event_store.fetchData(fetch, {
 			tutor_id

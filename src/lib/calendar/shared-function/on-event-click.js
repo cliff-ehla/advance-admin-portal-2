@@ -24,7 +24,7 @@ export const onEventClick = ({event, el}, openPopper, openModal, month_calendar,
 			syncTempEvents(month_calendar, day_calendar)
 		}
 		course_lesson_tbc_selection.remove(event.start)
-	} else if (event_type === 'edit_temp') {
+	} else if (event_type === 'edit_temp' || event_type === 'trial_option_temp') {
 		let _start_time = dayjs(event.start).format('HH:mm')
 		let _end_time = dayjs(event.end).format('HH:mm')
 		openPopper(el, FineTunePopup, {
@@ -46,15 +46,18 @@ export const onEventClick = ({event, el}, openPopper, openModal, month_calendar,
 				let calendars = [month_calendar, day_calendar]
 				calendars.forEach(calendar => {
 					calendar.getEvents().forEach(event => {
-						if (event.extendedProps.type === 'edit_temp') {
+						if (event.extendedProps.type === 'edit_temp' || event.extendedProps.type === 'trial_option_temp') {
 							event.remove()
 						}
 					})
-					calendar.addEventSource([genTempEditEvent({
-						start: start_date,
-						end: end_date,
-						title: event.title
-					})])
+					calendar.addEventSource({
+						id: 'tbc',
+						events: [genTempEditEvent({
+							start: start_date,
+							end: end_date,
+							title: event.title
+						})]
+					})
 				})
 			}
 		}, {
