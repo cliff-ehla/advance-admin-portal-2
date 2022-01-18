@@ -3,7 +3,13 @@
 	import dayjs from "dayjs";
 
 	export const load = async ({page, fetch}) => {
-		const week_count = page.query.get('week_count') || 1
+		const week_count = page.query.get('week_count')
+		if (!week_count) {
+			return {
+				status: 302,
+				redirect: '/students/analytic?week_count=1'
+			}
+		}
 		let start_date = dayjs().subtract(week_count, 'week').format('YYYY-MM-DD HH:mm:ss')
 		const {data, success, debug} = await http.post(fetch, '/adminApi/list_paid_user_level_distribution', {
 			start_date,
@@ -83,20 +89,22 @@
 			<a class:active={week_count == count} class="button-secondary mx-1" href="/students/analytic?week_count={count}">{count}星期</a>
 		{/each}
 	</div>
-	<div class="max-w-screen-lg">
-		<canvas use:initChart={all_levels}></canvas>
-	</div>
-	<div class="my-4 grid-cols-5 gap-8 grid">
-		{#each all_levels as level}
-			<div class="py-2">
-				<p>{level.level} ({level.users.length})</p>
-				{#each level.users as user}
-					<div class="my-2">
-						<p class="text-sm text-gray-500 leading-tight">{dayjs(user.v_date).format('DD MMM')}</p>
-						<div class="leading-tight flex justify-between">{user.phone} <span class="text-blue-500">${user.lesson_fee}</span></div>
-					</div>
-				{/each}
-			</div>
-		{/each}
-	</div>
+	{#if all_levels}
+		<div class="max-w-screen-lg">
+			<canvas use:initChart={all_levels}></canvas>
+		</div>
+		<div class="my-4 grid-cols-5 gap-8 grid">
+			{#each all_levels as level}
+				<div class="py-2">
+					<p>{level.level} ({level.users.length})</p>
+					{#each level.users as user}
+						<div class="my-2">
+							<p class="text-sm text-gray-500 leading-tight">{dayjs(user.v_date).format('DD MMM')}</p>
+							<div class="leading-tight flex justify-between">{user.phone} <span class="text-blue-500">${user.lesson_fee}</span></div>
+						</div>
+					{/each}
+				</div>
+			{/each}
+		</div>
+	{/if}
 </div>

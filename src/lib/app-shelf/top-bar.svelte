@@ -78,7 +78,7 @@
 				},
 				{
 					label: 'Analytic',
-					href: '/students/analytic'
+					href: '/students/analytic?week_count=1'
 				}
 			]
 		},
