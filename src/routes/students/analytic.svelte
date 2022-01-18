@@ -42,7 +42,7 @@
 
 	const gen_base_obj = () => {
 		return big_class_mapper.all_levels.map(lv => ({
-			level: capitalize(lv),
+			level: lv,
 			users: []
 		}))
 	}
@@ -51,8 +51,11 @@
 		if (start_date) {
 			all_levels = gen_base_obj()
 			list.forEach(user => {
-				let obj = all_levels.find(lv => lv.level === capitalize(user.levels))
+				let obj = all_levels.find(lv => {
+					return user.levels.includes(lv.level)
+				})
 				if (obj) obj.users.push(user)
+				else console.log(user.levels)
 			})
 		}
 	}
