@@ -3,17 +3,19 @@
 	import dayjs from "dayjs";
 
 	export const load = async ({page, fetch}) => {
-		const week_count = page.query.get('week_count')
-		if (!week_count) {
+		let start_date = page.query.get('start_date')
+		let end_date = page.query.get('end_date')
+		if (!(start_date && end_date)) {
+			start_date = dayjs().subtract(1, 'week').format('YYYY-MM-DD')
+			end_date = dayjs().format('YYYY-MM-DD')
 			return {
 				status: 302,
-				redirect: '/students/analytic?week_count=1'
+				redirect: `/students/analytic?start_date=${start_date}&end_date=${end_date}`
 			}
 		}
-		let start_date = dayjs().subtract(week_count, 'week').format('YYYY-MM-DD HH:mm:ss')
 		const {data, success, debug} = await http.post(fetch, '/adminApi/list_paid_user_level_distribution', {
-			start_date,
-			end_date: dayjs().format('YYYY-MM-DD HH:mm:ss')
+			start_date: start_date + ' 00:00:00',
+			end_date: end_date + ' 00:00:00'
 		})
 		if (!success) return onFail(debug)
 		return {
@@ -25,12 +27,16 @@
 </script>
 
 <script>
+	import {goto} from "$app/navigation";
 	export let list
 	import {big_class_mapper} from "$lib/store/big-class-mapper.js";
 	import {page} from "$app/stores";
 	import {capitalize} from "$lib/helper/capitalize.js";
+	import DatePicker from "$lib/ui-elements/date-picker/index.svelte";
 
-	$: week_count = $page.query.get('week_count')
+	$: start_date = $page.query.get('start_date')
+	$: end_date = $page.query.get('end_date')
+	$: diff = dayjs(end_date).diff(dayjs(start_date), 'day')
 
 	let all_levels
 
@@ -42,7 +48,7 @@
 	}
 
 	$: {
-		if (week_count) {
+		if (start_date) {
 			all_levels = gen_base_obj()
 			list.forEach(user => {
 				let obj = all_levels.find(lv => lv.level === capitalize(user.levels))
@@ -78,16 +84,32 @@
 			}
 		}
 	}
+	
+	const onStartDateChange = ({detail}) => {
+		goto(`/students/analytic?start_date=${dayjs(detail).format('YYYY-MM-DD')}&end_date=${end_date}`)
+	}
+
+	const onEndDateChange = ({detail}) => {
+		goto(`/students/analytic?start_date=${start_date}&end_date=${dayjs(detail).format('YYYY-MM-DD')}`)
+	}
 </script>
 
 <div class="p-4">
-	<h1 class="font-bold mb-4 mx-1 text-xl">
-		最近{week_count}星期新增用戶分佈
-	</h1>
-	<div class="mb-2">
-		{#each [1,2,3,4] as count}
-			<a class:active={week_count == count} class="button-secondary mx-1" href="/students/analytic?week_count={count}">{count}星期</a>
-		{/each}
+	<div class="mb-4 mx-1">
+		<h1 class="font-bold text-xl">
+			{dayjs(start_date).format('DD MMM')} - {dayjs(end_date).format('DD MMM')} 新增用戶分佈
+		</h1>
+		<p>{diff}日，新增共{list.length}人</p>
+	</div>
+	<div class="mb-2 flex">
+		<div>
+			<p>From:</p>
+			<DatePicker selected={dayjs(start_date).toDate()} on:datechange={onStartDateChange}/>
+		</div>
+		<div class="ml-4">
+			<p>To:</p>
+			<DatePicker selected={dayjs(end_date).toDate()} on:datechange={onEndDateChange}/>
+		</div>
 	</div>
 	{#if all_levels}
 		<div class="max-w-screen-lg">
