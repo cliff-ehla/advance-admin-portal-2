@@ -37,6 +37,12 @@
 	}
 
 	$: {
+		total = {
+			alipay: 0,
+			bank_transfer: 0,
+			payme: 0,
+			all: 0
+		}
 		voucher_list.forEach(v => {
 			if (v.payment_method) {
 				if (!v.is_invalid) {

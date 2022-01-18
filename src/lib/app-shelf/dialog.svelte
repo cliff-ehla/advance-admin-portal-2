@@ -10,6 +10,7 @@
 		let text_input = textarea_el ? textarea_el.value : null
 		await $dialog.onConfirm({checked, text_input})
 		$dialog.onSuccess({checked, text_input})
+		checked = false
 		dialog.close()
 	}
 </script>

@@ -161,7 +161,7 @@
 
 <div class="">
 	<table>
-		<tr class="sticky top-0 bg-white z-30 shadow">
+		<tr class="sticky top-12 z-10 bg-white shadow">
 			<th style="min-width: 145px" class="text-left">Voucher No</th>
 			<th class="text-left">Phone</th>
 			<th>User</th>

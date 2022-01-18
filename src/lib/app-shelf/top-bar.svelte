@@ -75,6 +75,10 @@
 				{
 					label: 'All students',
 					href: '/students'
+				},
+				{
+					label: 'Analytic',
+					href: '/students/analytic'
 				}
 			]
 		},
@@ -122,7 +126,7 @@
 					<a slot="activator" class="h-12 inline-flex items-center relative" href={item.href}>
 						{item.name}
 					</a>
-					<div class="bg-white shadow rounded text-gray-700 p-4 w-64">
+					<div class="bg-white shadow rounded text-gray-700 p-4 w-64 overflow-scroll" style="max-height: 400px">
 						{#each item.children as c}
 							<a href={c.href} class="block px-4 py-2 hover:bg-gray-200 hover:text-blue-500 flex items-center">
 								{#if c.image}
