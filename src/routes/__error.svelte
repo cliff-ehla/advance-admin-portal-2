@@ -16,8 +16,8 @@
 	import {sentry} from "$lib/sentry";
 
 	if (error_message.includes('Failed to fetch dynamically imported module')) {
+		status = 'The site has updated, reloading now, please wait...'
 		window.location.reload()
-		sentry.log('Trigger a full refresh from "Failed to fetch dynamically imported module"')
 	} else {
 		sentry.log(error_message)
 	}
