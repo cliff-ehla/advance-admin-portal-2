@@ -23,7 +23,8 @@
 	let sort_by_field = 'create_ts'
 
 	$: sorted_voucher_list = voucher_list.sort((a,b) => {
-		return a[sort_by_field] > b[sort_by_field] ? 1 : -1
+		if (a[sort_by_field] === b[sort_by_field]) return 1
+		return a[sort_by_field] < b[sort_by_field] ? 1 : -1
 	})
 
 	dayjs.extend(utc)
