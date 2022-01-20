@@ -5,12 +5,16 @@
 	export let zoom_id
 	export let tutor_group_id
 	import {onMount} from 'svelte'
+	import {tooltip} from "$lib/aciton/tooltip.js";
 	import Preview from '$lib/student/student-preview.svelte'
 	import Dropdown from '$lib/ui-elements/dropdown3.svelte'
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import StudentWithTickerSelectionBox from '$lib/student/user-with-ticket-selection-box.svelte'
 	import {getContext} from 'svelte'
 	import {dialog} from "$lib/store/dialog.js";
+	import dayjs from "dayjs";
+	import utc from "dayjs/plugin/utc.js";
+	dayjs.extend(utc)
 	const {openModal, closeModal} = getContext('simple-modal')
 
 	let students
@@ -24,7 +28,13 @@
 			wrapper_id: zoom_id
 		})
 		students = data.students
-		students = students.map(s => student_store.getStudent(s.user_id))
+		students = students.map(s => {
+			return {
+				date: dayjs.utc(s.reg_date).local().format('DD MMM YYYY'),
+				duration: dayjs().diff(dayjs.utc(s.reg_date).local(), 'day'),
+				student: student_store.getStudent(s.user_id)
+			}
+		})
 		students = students.filter(s => !!s)
 	}
 
@@ -60,16 +70,21 @@
 		{#if students}
 			{#if students.length}
 				{#each students as s}
-					<div class="flex items-center">
-						<Preview {s}/>
-						<Dropdown placement="bottom-end">
-							<button slot="activator" class="w-10 h-10 flex items-center justify-center">
-								<Icon className="w-4" name="more"/>
-							</button>
-							<div class="dropdown">
-								<div on:click={() => {onReg(s.student_id, false)}} class="px-4 py-2 hover:text-gray-100 hover:text-red-500 cursor-pointer">Un-Reg</div>
-							</div>
-						</Dropdown>
+					<div class="my-4">
+						<div class="flex items-center">
+							<Preview s={s.student}/>
+							<Dropdown placement="bottom-end">
+								<button slot="activator" class="w-10 h-10 flex items-center justify-center">
+									<Icon className="w-4" name="more"/>
+								</button>
+								<div class="dropdown">
+									<div on:click={() => {onReg(s.student_id, false)}} class="px-4 py-2 hover:text-gray-100 hover:text-red-500 cursor-pointer">Un-Reg</div>
+								</div>
+							</Dropdown>
+						</div>
+						<div class="-mt-4">
+							<div class="inline-block text-sm" use:tooltip={s.date}>Registered {s.duration} days before</div>
+						</div>
 					</div>
 				{/each}
 			{:else}
