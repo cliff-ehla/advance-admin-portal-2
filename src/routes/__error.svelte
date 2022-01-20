@@ -14,9 +14,12 @@
 	export let error_message;
 	export let status;
 	import {sentry} from "$lib/sentry";
+	import Spinner from '$lib/ui-elements/spinner.svelte'
+
+	let is_reload = false
 
 	if (error_message.includes('Failed to fetch dynamically imported module')) {
-		status = 'The site has updated, reloading now, please wait...'
+		is_reload = true
 		window.location.reload()
 	} else {
 		sentry.log(error_message)
@@ -24,6 +27,11 @@
 </script>
 
 <div class="container text-center py-12">
-	<p class="text-h1 mb-4">{status}</p>
-	<h1 class="text-t2 mb-8">{error_message}</h1>
+	{#if is_reload}
+		<p class="mb-2">The site has updated, reloading now, please wait...</p>
+		<Spinner/>
+	{:else}
+		<p class="text-h1 mb-4">{status}</p>
+		<h1 class="text-t2 mb-8">{error_message}</h1>
+	{/if}
 </div>
