@@ -4,6 +4,7 @@ export const category_list = readable([
 	"Reading & Speaking",
 	"Reading comprehension (Exam)",
 	"Writing (Exam)",
+	"Writing & Grammar",
 	"Cambridge YLE programme",
 	"UK curriculum",
 	"HK curriculum",
