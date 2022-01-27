@@ -5,7 +5,8 @@
 	import {createZoomOption, addZoomOption} from "../../api/zoom-api";
 	import dayjs from "dayjs";
 	import utc from "dayjs/plugin/utc.js"
-	import StudentSelectionBox from '../../lib/student/student-selection-box.svelte'
+	import StudentSelectionBox from '$lib/student/student-selection-box.svelte'
+	import PhoneSelection from '$lib/student/phone-selection.svelte'
 	dayjs.extend(utc)
 	import {getContext} from 'svelte'
 	const {closeModal} = getContext('simple-modal')
@@ -60,7 +61,7 @@
 		<p class="mb-4 text-t1 font-bold">{$editing_option.grouper_id ? 'Add' : 'Create' } {$course_lesson_tbc_selection.length} reservation for</p>
 
 		<div class="my-4">
-			<input type="tel" bind:value={tel} placeholder="Tel number" class="border px-4 py-2 border-gray-300 rounded w-full">
+			<PhoneSelection phone={tel} on:input={e => {tel = e.detail}} wrapper_class="mb-2"/>
 			<p class="my-2">- or -</p>
 			<StudentSelectionBox on:input={e => {selected_student_id = e.detail}} selected_value={selected_student_id}/>
 		</div>
