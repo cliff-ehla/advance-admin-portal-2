@@ -229,24 +229,6 @@ export async function createZoom ({tutor_group_id, teacher_id, start_date, title
 	} catch (e) {}
 }
 
-export async function editZoom ({wrapper_id, teacher_id, teacher_nickname, start_date, reminder_value, duration, title}, _fetch) {
-	try {
-		const {data} = await http.post('zoomApi/edit_zoom', {
-			wrapper_id,
-			duration,
-			f_repeat_zoom_link: true,
-			reminder_date: start_date,
-			reminder_value,
-			start_date,
-			teacher_id,
-			teacher_nickname,
-			title,
-			zoom_link: ""
-		}, _fetch)
-		return data
-	} catch (e) {}
-}
-
 export async function deleteZoom ({wrapper_id}, _fetch) {
 	try {
 		const {data} = await http.post('zoomApi/delete_zoom', {

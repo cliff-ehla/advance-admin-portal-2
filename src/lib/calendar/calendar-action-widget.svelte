@@ -12,7 +12,8 @@
 	import CreateBigClassDialog from "../reservation/create-big-class-dialog.svelte";
 	import CreateTrialLessonDialog from "$lib/option/create-trial-lesson.dialog.svelte";
 	import dayjs from "dayjs";
-	import {editZoom, createZoom} from "../../api/zoom-api";
+	import {createZoom} from "../../api/zoom-api";
+	import {http} from "$lib/http.js";
 	import {createEventDispatcher} from 'svelte'
 	import {student_store} from "../../store/student-store.js";
 	const dispatch = createEventDispatcher()
@@ -86,9 +87,8 @@
 
 	const onConfirmEditTime = async () => {
 		let d = $edit_lesson_tbc_to_date
-		if (!d.teacher_id) return alert('Error: teacher id is missing')
 		let duration = dayjs(d.to_end_date).diff(dayjs(d.to_start_date), 'minute')
-		let payload = {
+		await http.post(fetch, '/zoomApi/edit_zoom', {
 			wrapper_id: d.wrapper_id,
 			tutor_group_id: d.tutor_group_id,
 			duration,
@@ -96,10 +96,9 @@
 			title: d.title,
 			start_date: dayjs(d.to_start_date).utc().format('YYYY-MM-DD HH:mm:ss'),
 			end_date: dayjs(d.to_end_date).utc().format('YYYY-MM-DD HH:mm:ss')
-		}
-		loading = true
-		await editZoom(payload)
-		loading = false
+		}, {
+			notification: 'Edit time success'
+		})
 		action_status.set('')
 		calendar_store.clear()
 		edit_lesson_tbc_to_date.set({})
