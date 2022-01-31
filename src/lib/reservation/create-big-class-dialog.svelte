@@ -5,9 +5,10 @@
 	import {tutor_store} from "../../store/tutor-store";
 	import MaterialSelectionList from '$lib/material/material-selection-list.svelte'
 	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
+	import Button from '$lib/ui-elements/button.svelte'
 	let slot = $course_lesson_tbc_selection.length ? $course_lesson_tbc_selection[0] : {}
 	let selected_item_id
-	import {http} from "../../helpers/http";
+	import {http} from "$lib/http.js";
 	import {category_list} from "$lib/store/category-list";
 
 	export let onSuccess = () => {}
@@ -18,22 +19,21 @@
 	let selected_level
 	let selected_classroom_size
 	let selected_category
-	let loading
 	$: selected_code = code_list ? code_list.find(c => c.code_id === selected_code_id) : null
 	$: level_list = selected_code ? selected_code.course_levels : null
 	let classroom_size_list = [4,20,9999]
 	$: disabled = !(selected_code_id && selected_level && selected_classroom_size && selected_item_id)
 
 	onMount(async () => {
-		const {data} = await http.get('courseApi/list_all_course_description_code')
+		const {data} = await http.get(fetch, '/courseApi/list_all_course_description_code')
 		code_list = data
 	})
 
 	const onCreate = async () => {
-		if (disabled || loading) return
+		if (disabled) return
 		let start_date = dayjs(slot.start_date).utc().format('YYYY-MM-DD HH:mm:ss')
 		let duration = dayjs(slot.end_date).diff(slot.start_date, 'minute')
-		let payload = {
+		await http.post(fetch, '/courseApi/reg_course', {
 			item_id: selected_item_id,
 			rc_level: selected_level,
 			teacher_id: slot.teacher_id,
@@ -41,10 +41,9 @@
 			code_id: selected_code_id,
 			duration,
 			student_size: selected_classroom_size
-		}
-		loading = true
-		await http.post('courseApi/reg_course', payload)
-		loading = false
+		}, {
+			notification: '起左'
+		})
 		onSuccess()
 		closeModal()
 		setTimeout(() => {
@@ -102,8 +101,7 @@
 		<MaterialSelectionList category={selected_category} max_height="500px" on:input={e => selected_item_id = e.detail.item_id}/>
 	{/if}
 
-	<button
-					disabled={disabled || loading}
-					class="{disabled || loading ? 'bg-gray-300 text-white' : 'bg-blue-500 hover:bg-blue-700 text-white'} rounded-full mt-4 px-4 py-3 w-full"
-					on:click={onCreate}>Create</button>
+	<div class="mt-4 flex justify-end">
+		<Button disabled={disabled} on:click={onCreate}>Create</Button>
+	</div>
 </div>
