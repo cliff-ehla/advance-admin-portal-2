@@ -59,9 +59,9 @@
 	}
 
 	const onTeacherSickLeaveToggle = (e) => {
-		http.post('zoomApi/set_student_sick_leave', {
+		http.post('zoomApi/set_teacher_sick_leave', {
 			wrapper_id,
-			s_sick_leave: e.target.checked
+			t_sick_leave: e.target.checked
 		})
 	}
 
