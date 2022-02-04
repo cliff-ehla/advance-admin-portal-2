@@ -28,6 +28,7 @@
 	<table class="w-full">
 		<tr class="text-left border-b border-gray-300">
 			<th>Date</th>
+			<th>Type</th>
 			<th>Lesson</th>
 			<th>Student(s)</th>
 			<th>Duration (min)</th>
@@ -41,6 +42,7 @@
 						{dayjs(t.start_date).format('DD MMM')}
 					{/if}
 				</td>
+				<td>{t.is_big_classroom ? 'Classroom' : '1-on-1'}</td>
 				<td>{t.title}</td>
 				<td>
 					{#if t.students && t.students.length}
