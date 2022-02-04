@@ -55,10 +55,10 @@
 	<div>
 		<label>Phone</label>
 		<PhoneSelection {phone} on:input={e => {phone = e.detail}} wrapper_class="mb-2"/>
+		<label>Lesson fee</label>
+		<input class="input block mb-2 w-full" type="number" placeholder="Lesson fee" on:input={e => {ticket_amt = e.target.value}} bind:value={lesson_fee}/>
 		<label>App fee</label>
 		<input class="input block mb-2 w-full" type="number" placeholder="App fee" bind:value={app_fee}/>
-		<label>Lesson fee</label>
-		<input class="input block mb-2 w-full" type="number" placeholder="Lesson fee" bind:value={lesson_fee}/>
 		<label>Payment method</label>
 		<SelectionBox simple_array options={['Alipay', 'Bank Transfer', 'Payme']} selected_value={payment_method} on:input={e => {payment_method = e.detail}}/>
 		<label>Remark</label>

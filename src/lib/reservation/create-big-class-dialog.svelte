@@ -24,6 +24,24 @@
 	$: level_list = selected_code ? selected_code.course_levels : null
 	let classroom_size_list = [4,20,9999]
 	$: disabled = !(selected_code_id && selected_level && selected_classroom_size && selected_item_id)
+  const ticket_options = [
+	  {
+			value: 49,
+		  label: '小學（大班）'
+	  },
+	  {
+		  value: 98,
+		  label: '小學（4人班）'
+	  },
+	  {
+		  value: 68,
+		  label: '中學（大班）'
+	  },
+	  {
+		  value: 136,
+		  label: '中學 （4人班）'
+	  }
+  ]
 
 	onMount(async () => {
 		const {data} = await http.get(fetch, '/courseApi/list_all_course_description_code')
@@ -93,7 +111,10 @@
 	              simple_array/>
 
 	<label class="text-gray-500 text-sm mb-1 mt-2 block">Ticket</label>
-	<input class="input" type="number" bind:value={ticket} placeholder="Ticket"/>
+	<SelectionBox options={ticket_options}
+	              placeholder="Ticket price"
+	              selected_value={ticket}
+	              on:input={e => {ticket = e.detail}}/>
 
 	<label class="text-gray-500 text-sm mb-1 mt-2 block">Material category</label>
 	<SelectionBox options={$category_list}
