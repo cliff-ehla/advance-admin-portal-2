@@ -8,6 +8,7 @@ export const post = (req) => {
 		start_date: req.body.start_date,
 		code_id: req.body.code_id,
 		duration: req.body.duration,
-		student_size: req.body.student_size
+		student_size: req.body.student_size,
+		ticket: req.body.ticket
 	})
 }

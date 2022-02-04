@@ -19,6 +19,7 @@
 	let selected_level
 	let selected_classroom_size
 	let selected_category
+	let ticket
 	$: selected_code = code_list ? code_list.find(c => c.code_id === selected_code_id) : null
 	$: level_list = selected_code ? selected_code.course_levels : null
 	let classroom_size_list = [4,20,9999]
@@ -40,7 +41,8 @@
 			start_date,
 			code_id: selected_code_id,
 			duration,
-			student_size: selected_classroom_size
+			student_size: selected_classroom_size,
+			ticket
 		}, {
 			notification: '起左'
 		})
@@ -89,6 +91,9 @@
 	              selected_value={selected_classroom_size}
 	              on:input={e => {selected_classroom_size = e.detail}}
 	              simple_array/>
+
+	<label class="text-gray-500 text-sm mb-1 mt-2 block">Ticket</label>
+	<input class="input" type="number" bind:value={ticket} placeholder="Ticket"/>
 
 	<label class="text-gray-500 text-sm mb-1 mt-2 block">Material category</label>
 	<SelectionBox options={$category_list}
