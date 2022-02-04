@@ -28,7 +28,7 @@
 			<div class="px-2 py-1 ml-2 border-l border-gray-400">
 				<div class="flex items-center">
 					<img src="/ticket.jpg" alt="ticket" class="w-6 h-6 rounded-full">
-					<p class="ml-1">{s.r_t_amt}張</p>
+					<p class="ml-1">${s.r_t_amt}</p>
 				</div>
 				<p class="text-xs text-gray-500 mt-0.5">已用: {s.used_t_amt}, 總共: {s.tt_t_amt}</p>
 			</div>

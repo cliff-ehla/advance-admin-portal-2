@@ -17,13 +17,13 @@ export const student_analytic = derived(student_store, $student_store => {
 		const is_fake = fake_account_list.some(name => s.student_username.includes(name))
 		if (s.tt_t_amt > 0 && !is_fake) {
 			result.total_students++
-			if (s.tt_t_amt <= 6) {
+			if (s.tt_t_amt <= 6 * 49) {
 				result.new_user_count++
 				result.new_users.push(s)
-			} else if (s.r_t_amt  <= 6) {
+			} else if (s.r_t_amt  <= 6 * 49) {
 				result.few_ticker_user_count++
 				result.few_ticker_user.push(s)
-			} else if (s.r_t_amt > 6) {
+			} else if (s.r_t_amt > 6 * 49) {
 				result.many_ticker_user_count++
 				result.many_ticker_user.push(s)
 			}

@@ -70,11 +70,11 @@ const student_store = (() => {
 				const obj = result.find(r => r.level === level)
 				if (obj) {
 					obj.user_count++
-					if (s.tt_t_amt <= 6) {
+					if (s.tt_t_amt <= 6 * 49) {
 						obj.new_user_count++
-					} else if (s.r_t_amt  <= 6) {
+					} else if (s.r_t_amt  <= 6 * 49) {
 						obj.few_ticker_user_count++
-					} else if (s.r_t_amt > 6) {
+					} else if (s.r_t_amt > 6 * 49) {
 						obj.many_ticker_user_count++
 					}
 				} else {
