@@ -33,6 +33,7 @@
 						<a href="/tutor/{tutor.user_id}/{YYYY_MM}" class="block hover:text-blue-500 hover:bg-gray-100 px-4 py-2">Monthly Schedule</a>
 						<a href="/tutor/{tutor.user_id}/schedule" class="block hover:text-blue-500 hover:bg-gray-100 px-4 py-2">Weekly Schedule</a>
 						<a href="/tutor/{tutor.user_id}/available-timetable" class="block hover:text-blue-500 hover:bg-gray-100 px-4 py-2">Available</a>
+						<a href="/tutor/{tutor.user_id}/classroom" class="block hover:text-blue-500 hover:bg-gray-100 px-4 py-2">Classroom</a>
 					</div>
 				</Dropdown>
 			{/each}
