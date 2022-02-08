@@ -11,6 +11,7 @@
 	export let label_key_2 = ''
 	export let image_key = 'image'
 	export let subtitle_key = ''
+	export let subtitle_prefix = ''
 	export let disabled = false
 	export let simple_array = false
 	const dispatch = createEventDispatcher()
@@ -73,7 +74,7 @@
 							</div>
 							{#if subtitle_key && opt[subtitle_key]}
 								<p class="text-sm text-gray-500">
-									{opt[subtitle_key]}
+									{subtitle_prefix} {opt[subtitle_key]}
 								</p>
 							{/if}
 						</div>

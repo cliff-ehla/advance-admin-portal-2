@@ -17,6 +17,7 @@
 	import {createEventDispatcher} from 'svelte'
 	import {student_store} from "../../store/student-store.js";
 	const dispatch = createEventDispatcher()
+	import {page} from "$app/stores";
 
 	let loading
 	$: computed_status = $action_status || $calendar_store.status
@@ -67,7 +68,10 @@
 		openModal(CreateBigClassDialog, {
 			onSuccess: () => {
 				dispatch('refresh')
-			}
+			},
+			teacher_id: $page.params.user_id
+		}, {
+			overflow: 'initial'
 		})
 	}
 

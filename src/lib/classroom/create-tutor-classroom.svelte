@@ -20,7 +20,6 @@
 
 	onMount(async () => {
 		let {data} = await http.get(fetch, '/syllabusApi/list_syllabus_category')
-		console.log('cliff: ', data)
 		options = data
 	})
 
