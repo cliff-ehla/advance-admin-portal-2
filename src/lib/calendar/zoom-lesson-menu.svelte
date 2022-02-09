@@ -1,7 +1,8 @@
 <script>
-	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
-	import Icon from '../../lib/ui-elements/icon.svelte'
-	import Datepicker from '../../lib/ui-elements/date-picker/calendar.svelte'
+	import Dropdown from '$lib/ui-elements/dropdown3.svelte'
+	import Icon from '$lib/ui-elements/icon.svelte'
+	import Datepicker from '$lib/ui-elements/date-picker/calendar.svelte'
+	import CreateBigClassDialog from '$lib/classroom/create-big-class-dialog.svelte'
 	export let zoom = {}
 	export let selected = new Date()
 	export let onEdit = () => {}
@@ -15,6 +16,8 @@
 	import {student_store} from "../../store/student-store";
 	import {category_list} from "$lib/store/category-list";
 	import {big_class_mapper} from "$lib/store/big-class-mapper.js";
+	import {getContext} from 'svelte'
+	const {openModal, closeModal} = getContext('simple-modal')
 
 	const is_big_class = !!zoom.rc_type
 	let material_history
@@ -45,6 +48,15 @@
 		student_notes = await listStudentNote({
 			student_id
 		})
+	}
+
+	const onAddBigClassMaterial = () => {
+		console.log('cliff: ', zoom)
+		/*
+		openModal(CreateBigClassDialog, {
+			teacher_id
+		})
+		*/
 	}
 </script>
 
@@ -105,46 +117,50 @@
 				</div>
 			</Dropdown>
 		{/if}
-		<Dropdown caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
-			<button slot="activator">Material(s)</button>
-			<div class="shadow-lg bg-white border border-gray-300 p-2">
-				<div>
-					{#each days as d}
-						<div class="flex items-center">
-							<div on:click={() => {open(`/item/${d.item_id}`,'Preview', "popup")}} class="text-left block px-2 py-2 hover:text-blue-500 hover:bg-gray-100 mb-2 cursor-pointer">{d.title}</div>
-							<div on:click={() => {onRemoveClick(d.day_id)}} class="cursor-pointer w-10 h-10 flex justify-center items-center hover:bg-gray-100 hover:text-blue-500">
-								<Icon name="trash" className="w-4"/>
+		{#if is_big_class}
+			<button on:click={onAddBigClassMaterial} class="item">Edit big class</button>
+		{:else}
+			<Dropdown caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
+				<button slot="activator">Material(s)</button>
+				<div class="shadow-lg bg-white border border-gray-300 p-2">
+					<div>
+						{#each days as d}
+							<div class="flex items-center">
+								<div on:click={() => {open(`/item/${d.item_id}`,'Preview', "popup")}} class="text-left block px-2 py-2 hover:text-blue-500 hover:bg-gray-100 mb-2 cursor-pointer">{d.title}</div>
+								<div on:click={() => {onRemoveClick(d.day_id)}} class="cursor-pointer w-10 h-10 flex justify-center items-center hover:bg-gray-100 hover:text-blue-500">
+									<Icon name="trash" className="w-4"/>
+								</div>
 							</div>
-						</div>
-					{/each}
-					<Dropdown on:show={onMaterialMenuOpen} caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
-						<button slot="activator">Add Material</button>
-						<div class="shadow-lg bg-white border border-gray-300 p-2 flex">
-							<div class="w-56">
-								{#each $category_list as item}
-									<button on:click={() => onAddMaterial(item)} class="text-left block px-2 py-2 hover:text-blue-500 hover:bg-gray-100 w-64">{item}</button>
-								{/each}
-							</div>
-							<div class="w-56 border-gray-300 border-l">
-								{#if !material_history}
-									loading history...
-								{:else}
-									{#each material_history as day}
-										<div class="flex text-sm leading-none py-2 items-center border-b border-gray-200">
-											<div class="flex-shrink-0 text-xs text-center w-8 h-8 bg-gray-100 mr-4">{dayjs(day.start_date).format('DD MMM')}</div>
-											<div class="flex-1">{day.title}</div>
-											{#if day.t_difficulty_rate}
-												<div class="flex-shrink-0 w-4 h-4 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center">{day.t_difficulty_rate}</div>
-											{/if}
-										</div>
+						{/each}
+						<Dropdown on:show={onMaterialMenuOpen} caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
+							<button slot="activator">Add Material</button>
+							<div class="shadow-lg bg-white border border-gray-300 p-2 flex">
+								<div class="w-56">
+									{#each $category_list as item}
+										<button on:click={() => onAddMaterial(item)} class="text-left block px-2 py-2 hover:text-blue-500 hover:bg-gray-100 w-64">{item}</button>
 									{/each}
-								{/if}
+								</div>
+								<div class="w-56 border-gray-300 border-l">
+									{#if !material_history}
+										loading history...
+									{:else}
+										{#each material_history as day}
+											<div class="flex text-sm leading-none py-2 items-center border-b border-gray-200">
+												<div class="flex-shrink-0 text-xs text-center w-8 h-8 bg-gray-100 mr-4">{dayjs(day.start_date).format('DD MMM')}</div>
+												<div class="flex-1">{day.title}</div>
+												{#if day.t_difficulty_rate}
+													<div class="flex-shrink-0 w-4 h-4 rounded-full bg-blue-500 text-white font-bold flex items-center justify-center">{day.t_difficulty_rate}</div>
+												{/if}
+											</div>
+										{/each}
+									{/if}
+								</div>
 							</div>
-						</div>
-					</Dropdown>
+						</Dropdown>
+					</div>
 				</div>
-			</div>
-		</Dropdown>
+			</Dropdown>
+		{/if}
 		<Dropdown caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
 			<button slot="activator">Students</button>
 			<div class="shadow-lg bg-white border border-gray-300 p-2 flex">

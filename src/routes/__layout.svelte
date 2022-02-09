@@ -57,12 +57,12 @@
 <Toast/>
 <Dialog/>
 <Notification>
-	<Popper>
-		<Modal>
+	<Modal>
+		<Popper>
 			{#if $authorized && !$page.path.startsWith('/item')}
 				<TopBar/>
 			{/if}
 			<slot></slot>
-		</Modal>
-	</Popper>
+		</Popper>
+	</Modal>
 </Notification>

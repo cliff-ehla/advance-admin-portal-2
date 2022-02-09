@@ -7,40 +7,38 @@
 	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
 	import Button from '$lib/ui-elements/button.svelte'
 	let slot = $course_lesson_tbc_selection.length ? $course_lesson_tbc_selection[0] : {}
-	let selected_item_id
 	import {http} from "$lib/http.js";
 	import {category_list} from "$lib/store/category-list";
+	const {closeModal} = getContext('simple-modal')
 
 	export let onSuccess = () => {}
 	export let teacher_id
+	export let classroom_id = undefined
+	export let selected_item_id = undefined
+	export let selected_classroom_size = undefined // size
+	export let ticket = undefined // price
 
-	const {closeModal} = getContext('simple-modal')
-	let selected_code_id
-	let selected_level
-	let selected_classroom_size
 	let selected_category
-	let ticket
 	let classroom_list = []
-	let classroom_id
 	let material_list
 	let classroom_size_list = [4,20,9999]
-	$: disabled = !(selected_code_id && selected_level && selected_classroom_size && selected_item_id)
+	$: disabled = !(selected_classroom_size && selected_item_id && classroom_id && ticket)
   const ticket_options = [
 	  {
 			value: 49,
-		  label: '小學（大班）'
+		  label: '$49 小學（大班）'
 	  },
 	  {
 		  value: 98,
-		  label: '小學（4人班）'
+		  label: '$98 小學（4人班）'
 	  },
 	  {
 		  value: 68,
-		  label: '中學（大班）'
+		  label: '$68 中學（大班）'
 	  },
 	  {
 		  value: 136,
-		  label: '中學 （4人班）'
+		  label: '$136 中學 （4人班）'
 	  }
   ]
 
@@ -57,10 +55,8 @@
 		let duration = dayjs(slot.end_date).diff(slot.start_date, 'minute')
 		const {data} = await http.post(fetch, '/courseApi/reg_course', {
 			item_id: selected_item_id,
-			rc_level: selected_level,
 			teacher_id: slot.teacher_id,
 			start_date,
-			code_id: selected_code_id,
 			duration,
 			student_size: selected_classroom_size,
 			ticket
