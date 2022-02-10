@@ -4,6 +4,7 @@
 
 	export let zoom_id
 	export let tutor_group_id
+	export let selected
 	import {onMount} from 'svelte'
 	import {tooltip} from "$lib/aciton/tooltip.js";
 	import Preview from '$lib/student/student-preview.svelte'
@@ -14,6 +15,8 @@
 	import {dialog} from "$lib/store/dialog.js";
 	import dayjs from "dayjs";
 	import utc from "dayjs/plugin/utc.js";
+	import {big_class_events} from "$lib/store/big-class-store.js";
+
 	dayjs.extend(utc)
 	const {openModal, closeModal} = getContext('simple-modal')
 
@@ -62,9 +65,19 @@
 			}
 		})
 	}
+
+	const toggleSelection = () => {
+		if (!selected) {
+			big_class_events.addSelection(zoom_id)
+		} else {
+			big_class_events.removeSelection(zoom_id)
+		}
+		closeModal()
+	}
 </script>
 
 <div class="bg-white shadow-lg p-4" style="min-width: 400px">
+	<div class="item" on:click={toggleSelection}>{!selected ? 'Select' : 'Unselect'}</div>
 	<h1 class="font-bold mb-4">報了這堂的學生：</h1>
 	<div class="overflow-auto mb-4" style="max-height: 600px">
 		{#if students}

@@ -9,6 +9,7 @@
 
 <script>
 	import BigClassLessonMenu from '$lib/calendar/big-class-leson-menu.svelte'
+	import SelectedClassroom from '$lib/calendar/selected-classroom.svelte'
 	import {getContext, onMount} from 'svelte'
 	import {eventContent} from "$lib/calendar/shared-function/event-content.js";
 	const {openModal, closeModal} = getContext('simple-modal')
@@ -28,6 +29,7 @@
 			eventContent,
 			eventClick: async ({el, event}) => {
 				openModal(BigClassLessonMenu, {
+					selected: event.extendedProps.selected,
 					zoom_id: event.extendedProps.zoom_id,
 					tutor_group_id: event.extendedProps.tutor_group_id
 				}, {
@@ -86,10 +88,22 @@
 		await big_class_store.callIfNoCache(fetch, {force: true})
 		reRenderEvents()
 	}
+
+	const showSelectedEvents = () => {
+		openModal(SelectedClassroom, {}, {
+			width: '600px'
+		})
+	}
 </script>
 
 <div>
 	<div class="absolute w-48 left-0 p-2">
+		<div class="bg-blue-100 border border-blue-200 mt-4">
+			<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
+				<button on:click={showSelectedEvents}>推介信息 ({$big_class_events.selected_events.length})</button>
+			</div>
+		</div>
+
 		<div class="my-4">
 			<div class="bg-blue-100 border border-blue-200">
 				<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">

@@ -35,6 +35,18 @@ const createBigClassEventStore = () => {
 	const selected_levels = writable([])
 	const selected_codes = writable([])
 	const exclude_is_full = writable(false)
+	const selected_zoom_ids = writable([])
+
+	const addSelection = (zoom_id) => {
+		selected_zoom_ids.update(v => {
+			return [...v, zoom_id]
+		})
+	}
+	const removeSelection = (zoom_id) => {
+		selected_zoom_ids.update(v => {
+			return v.filter(v => v !== zoom_id)
+		})
+	}
 	const toggleIsFull = () => {
 		exclude_is_full.update(v => !v)
 	}
@@ -66,9 +78,10 @@ const createBigClassEventStore = () => {
 	const clearCodeFilters = () => {
 		selected_codes.set([])
 	}
-	const big_class_events = derived(big_class_store, $big_class_store => {
+	const big_class_events = derived([big_class_store, selected_zoom_ids], ([$big_class_store, $selected_zoom_ids]) => {
 		return $big_class_store.map(e => {
 			const extendedProps = {
+				selected: $selected_zoom_ids.includes(e.zoom_id),
 				type: 'classroom',
 				reg_user_cnt: e.reg_user_cnt,
 				student_size: e.student_size,
@@ -83,7 +96,9 @@ const createBigClassEventStore = () => {
 				level: e.rc_level,
 				levels: big_class_mapper.getLevels(e.rc_level),
 				material: e.name,
-				code: e.description_code_short_id
+				code: e.description_code_short_id,
+				sub_cat_alter: e.sub_cat_alter || 'NA',
+				duration: e.duration || 'NA',
 			}
 			return {
 				start: e.start_date,
@@ -91,8 +106,8 @@ const createBigClassEventStore = () => {
 			}
 		})
 	})
-	const _store = derived([big_class_events, selected_levels, selected_codes, exclude_is_full],
-			([$events, $selected_levels, $selected_codes, $exclude_is_full]) => {
+	const _store = derived([big_class_events, selected_levels, selected_codes, exclude_is_full, selected_zoom_ids],
+			([$events, $selected_levels, $selected_codes, $exclude_is_full, $selected_zoom_ids]) => {
 		const code_filters = big_class_mapper.all_codes.map(c => ({
 			key: c,
 			count: 0,
@@ -130,8 +145,10 @@ const createBigClassEventStore = () => {
 				if (obj) obj.count++
 			})
 		})
+		const selected_events = $events.filter(e => $selected_zoom_ids.includes(e.extendedProps.zoom_id))
 		return {
 			events: $events,
+			selected_events,
 			level_filter_off:  $selected_levels.length === 0,
 			code_filter_off: $selected_codes.length === 0,
 			code_filters,
@@ -145,7 +162,9 @@ const createBigClassEventStore = () => {
 		toggleCodeFilter,
 		clearLevelFilters,
 		clearCodeFilters,
-		toggleIsFull
+		toggleIsFull,
+		addSelection,
+		removeSelection
 	}
 }
 

@@ -60,6 +60,9 @@ export const renderClassroomEvent = (wrapper, start, extendedProps) => {
 	tippy(img_el, {
 		content: extendedProps.tutor_name
 	})
+	if (extendedProps.selected) {
+		wrapper.classList.add('bg-red-50')
+	}
 	wrapper.appendChild(img_el)
 	wrapper.appendChild(content)
 }
