@@ -51,17 +51,20 @@
 	}
 
 	const onEditClassroom = () => {
-		// console.log('cliff: ', zoom)
-		openModal(CreateBigClassDialog, {
+		const big_classroom_type = zoom.big_classroom_type
+		const _student_size = big_classroom_type === 'SMALL' ? 4 : big_classroom_type === 'BIG' ? 20 : 9999
+		const _ticket = _student_size === 4 ? 98 : 49
+		const payload = {
 			teacher_id: zoom.teacher_id,
 			tutor_course_id: zoom.tutor_course_id,
 			selected_item_id: zoom.days[0].item_id,
-			selected_classroom_size: zoom.student_size,
-			ticket: zoom.ticket,
+			selected_classroom_size: zoom.student_size || _student_size,
+			ticket: zoom.ticket || _ticket,
 			zoom_id: zoom.zoom_id,
 			start_time: zoom.start_time,
 			duration: zoom.duration
-		}, {
+		}
+		openModal(CreateBigClassDialog, payload, {
 			width: '400px'
 		})
 	}
