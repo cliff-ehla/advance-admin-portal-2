@@ -61,7 +61,7 @@ export const renderClassroomEvent = (wrapper, start, extendedProps) => {
 		content: extendedProps.tutor_name
 	})
 	if (extendedProps.selected) {
-		wrapper.classList.add('bg-red-50')
+		wrapper.classList.add('bg-yellow-100', 'px-1', 'border-2', 'border-yellow-500')
 	}
 	wrapper.appendChild(img_el)
 	wrapper.appendChild(content)

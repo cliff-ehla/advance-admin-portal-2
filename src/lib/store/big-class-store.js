@@ -47,6 +47,10 @@ const createBigClassEventStore = () => {
 			return v.filter(v => v !== zoom_id)
 		})
 	}
+	const clearAllSelection = () => {
+		selected_zoom_ids.set([])
+	}
+
 	const toggleIsFull = () => {
 		exclude_is_full.update(v => !v)
 	}
@@ -164,7 +168,8 @@ const createBigClassEventStore = () => {
 		clearCodeFilters,
 		toggleIsFull,
 		addSelection,
-		removeSelection
+		removeSelection,
+		clearAllSelection
 	}
 }
 

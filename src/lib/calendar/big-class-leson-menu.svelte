@@ -78,8 +78,15 @@
 	}
 </script>
 
-<div class="bg-white shadow-lg p-4" style="min-width: 400px">
-	<div class="item" on:click={toggleSelection}>{!selected ? 'Select' : 'Unselect'}</div>
+<div style="min-width: 400px">
+	<div class="item mb-4" on:click={toggleSelection}>
+		{#if selected}
+			<Icon name="trash" className="w-4"/>
+		{:else}
+			<Icon name="add" className="w-3"/>
+		{/if}
+		<p class="ml-2">{!selected ? '加入推介' : '剔除推介'}</p>
+	</div>
 	<h1 class="font-bold mb-4">報了這堂的學生：</h1>
 	<div class="overflow-auto mb-4" style="max-height: 600px">
 		{#if students}

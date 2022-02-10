@@ -12,6 +12,7 @@
 	import SelectedClassroom from '$lib/calendar/selected-classroom.svelte'
 	import {getContext, onMount} from 'svelte'
 	import {eventContent} from "$lib/calendar/shared-function/event-content.js";
+	import Icon from '$lib/ui-elements/icon.svelte'
 	const {openModal, closeModal} = getContext('simple-modal')
 	let calendar
 
@@ -95,14 +96,22 @@
 			width: '600px'
 		})
 	}
-</script>
+
+	const onClearAllSelection = () => {
+		big_class_events.clearAllSelection()
+		reRenderEvents()
+	}
+ </script>
 
 <div>
 	<div class="absolute w-48 left-0 p-2">
-		<div class="bg-blue-100 border border-blue-200 mt-4">
-			<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
-				<button on:click={showSelectedEvents}>推介信息 ({$big_class_events.selected_events.length})</button>
-			</div>
+		<div class="p-2 {$big_class_events.selected_events.length ? 'cursor-pointer bg-yellow-50 border-yellow-400 hover:bg-yellow-100' : 'bg-gray-200'} border-2 flex items-center mt-2">
+			<div class="flex-1" on:click={showSelectedEvents}>推介信息 ({$big_class_events.selected_events.length})</div>
+			{#if $big_class_events.selected_events.length}
+				<button on:click={onClearAllSelection} class="ml-auto flex-shrink-0 hover:text-red-500">
+					<Icon name="close" className="w-3"/>
+				</button>
+			{/if}
 		</div>
 
 		<div class="my-4">
