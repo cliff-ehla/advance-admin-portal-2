@@ -32,6 +32,10 @@ const create_tutor_event_store = () => {
 				if (z.zoom_id == _z.wrapper_id) {
 					z.days = _z.days
 					z.big_classroom_type = _z.big_classroom_type
+					z.tutor_course_id = _z.tutor_course_id
+					z.ticket = _z.ticket
+					z.teacher_id = _z.teacher_id
+					z.student_size = _z.student_size
 				}
 			})
 		})

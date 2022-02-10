@@ -13,11 +13,17 @@
 
 	export let onSuccess = () => {}
 	export let teacher_id
+
+	// for edit
+	export let zoom_id = undefined
 	export let tutor_course_id = undefined
 	export let selected_item_id = undefined
 	export let selected_classroom_size = undefined // size
 	export let ticket = undefined // price
+	export let start_time = undefined // price
+	export let duration = undefined // price
 
+	$: is_edit = !!zoom_id
 	let selected_category
 	let classroom_list = []
 	let material_list
@@ -47,7 +53,28 @@
 			teacher_id
 		})
 		classroom_list = res.data
+		if (tutor_course_id) {
+			await getMaterialList()
+		}
 	})
+
+	const onEdit = async () => {
+		await http.post(fetch, '/courseApi/edit_course_material', {
+			item_id: selected_item_id,
+			wrapper_id: zoom_id,
+			student_size: selected_classroom_size,
+			teacher_id: teacher_id,
+			start_date: start_time,
+			duration
+		}, {
+			notification: '成功更新Classroom'
+		})
+		closeModal()
+		document.dispatchEvent(new CustomEvent('refresh-calendar', {
+			bubbles: true,
+			cancelable: true
+		}))
+	}
 
 	const onCreate = async () => {
 		if (disabled) return
@@ -64,7 +91,7 @@
 			notification: '起左'
 		})
 
-		let zoom_id = data.zoom_id // TODO, backend need to return this
+		let zoom_id = data.zoom_id
 		if (tutor_course_id && zoom_id) {
 			await http.post(fetch, '/tutorCourseApi/bind_tutor_course_with_zoom', {
 				tutor_course_id,
@@ -82,8 +109,12 @@
 		}, 100)
 	}
 
-	const onClassroomSelected = async e => {
+	const onClassroomSelected = e => {
 		tutor_course_id = e.detail
+		getMaterialList()
+	}
+
+	const getMaterialList = async () => {
 		const {data} = await http.post(fetch, '/tutorCourseApi/list_tutor_course_by_id', {
 			tutor_course_id
 		})
@@ -93,9 +124,11 @@
 </script>
 
 <div class="max-w-screen-md w-full">
-	<h2 class="font-bold text-lg mb-2">Create big/small lesson</h2>
-	<p class="text-blue-500 font-bold text-xl">Tutor: {tutor_store.getTutorName(slot.teacher_id) || 'noname'}</p>
-	<p class="border-b-2 border-black inline-block">{dayjs(slot.start_date).format('MMM DD (ddd)@ h:mma')} - {dayjs(slot.end_date).format('h:mma')} ({dayjs(slot.end_date).diff(slot.start_date, 'minute')}min)</p>
+	<h2 class="font-light text-xl mb-2">{is_edit ? 'Edit' : 'Create'} classroom</h2>
+	{#if !is_edit}
+		<p class="text-blue-500 font-bold text-xl">Tutor: {tutor_store.getTutorName(slot.teacher_id) || 'noname'}</p>
+		<p class="border-b-2 border-black inline-block">{dayjs(slot.start_date).format('MMM DD (ddd)@ h:mma')} - {dayjs(slot.end_date).format('h:mma')} ({dayjs(slot.end_date).diff(slot.start_date, 'minute')}min)</p>
+	{/if}
 	<label class="text-gray-500 text-sm mb-1 mt-2 block">Classroom size</label>
 	<SelectionBox options={classroom_size_list}
 	              placeholder="Classroom size"
@@ -136,6 +169,10 @@
 <!--	{/if}-->
 
 	<div class="mt-4 flex justify-end">
-		<Button disabled={disabled} on:click={onCreate}>Create</Button>
+		{#if is_edit}
+			<Button on:click={onEdit}>Edit</Button>
+		{:else}
+			<Button disabled={disabled} on:click={onCreate}>Create</Button>
+		{/if}
 	</div>
 </div>

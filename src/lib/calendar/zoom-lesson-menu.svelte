@@ -50,17 +50,32 @@
 		})
 	}
 
-	const onAddBigClassMaterial = () => {
-		console.log('cliff: ', zoom)
-		/*
+	const onEditClassroom = () => {
+		// console.log('cliff: ', zoom)
 		openModal(CreateBigClassDialog, {
-			teacher_id
+			teacher_id: zoom.teacher_id,
+			tutor_course_id: zoom.tutor_course_id,
+			selected_item_id: zoom.days[0].item_id,
+			selected_classroom_size: zoom.student_size,
+			ticket: zoom.ticket,
+			zoom_id: zoom.zoom_id,
+			start_time: zoom.start_time,
+			duration: zoom.duration
+		}, {
+			width: '400px'
 		})
-		*/
+	}
+
+	const onBind = () => {
+
 	}
 </script>
 
 <div class="shadow-lg border border-gray-300 rounded bg-white text-sm text-left">
+
+	{#if is_big_class && !zoom.tutor_course_id}
+		<div on:click={onBind} class="item">Bind this classroom to tutor course</div>
+	{/if}
 
 	{#if is_big_class}
 		<div class="px-4 pt-4">
@@ -118,7 +133,7 @@
 			</Dropdown>
 		{/if}
 		{#if is_big_class}
-			<button on:click={onAddBigClassMaterial} class="item">Edit big class</button>
+			<button on:click={onEditClassroom} class="item">Edit classroom</button>
 		{:else}
 			<Dropdown caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
 				<button slot="activator">Material(s)</button>
