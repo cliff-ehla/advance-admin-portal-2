@@ -31,7 +31,8 @@
 				openModal(BigClassLessonMenu, {
 					selected: event.extendedProps.selected,
 					zoom_id: event.extendedProps.zoom_id,
-					tutor_group_id: event.extendedProps.tutor_group_id
+					tutor_group_id: event.extendedProps.tutor_group_id,
+					onToggle: reRenderEvents
 				}, {
 					overflow: 'initial'
 				})

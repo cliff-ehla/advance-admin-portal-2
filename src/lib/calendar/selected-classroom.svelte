@@ -6,7 +6,7 @@
 {#each $big_class_events.selected_events as e}
 	<div class="mb-4">
 		{e.extendedProps.student_size > 4 ? '大班課' : '小組課'}:
-		{dayjs(e.start_date).format('MMMDD日  (ddd) h:mma')}
+		{dayjs(e.start_date).format('M月DD日  (星期d) h:mma')}
 		{e.extendedProps.sub_cat_alter}
 		({e.extendedProps.duration}分鐘)
 	</div>

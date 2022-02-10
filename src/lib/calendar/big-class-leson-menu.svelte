@@ -4,7 +4,8 @@
 
 	export let zoom_id
 	export let tutor_group_id
-	export let selected
+	export let selected = false
+	export let onToggle = () => {}
 	import {onMount} from 'svelte'
 	import {tooltip} from "$lib/aciton/tooltip.js";
 	import Preview from '$lib/student/student-preview.svelte'
@@ -72,6 +73,7 @@
 		} else {
 			big_class_events.removeSelection(zoom_id)
 		}
+		onToggle()
 		closeModal()
 	}
 </script>
