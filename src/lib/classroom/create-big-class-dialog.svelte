@@ -24,6 +24,7 @@
 	export let duration = undefined // price
 
 	$: is_edit = !!zoom_id
+	let is_edit_old_classroom = !!zoom_id && !tutor_course_id
 	let selected_category
 	let classroom_list = []
 	let material_list
@@ -59,6 +60,14 @@
 	})
 
 	const onEdit = async () => {
+		if (is_edit_old_classroom) {
+			await http.post(fetch, '/tutorCourseApi/bind_tutor_course_with_zoom', {
+				tutor_course_id,
+				zoom_id
+			}, {
+				notification: 'Bind 左classroom'
+			})
+		}
 		await http.post(fetch, '/courseApi/edit_course_material', {
 			item_id: selected_item_id,
 			wrapper_id: zoom_id,

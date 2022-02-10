@@ -18,6 +18,7 @@
 	import {big_class_mapper} from "$lib/store/big-class-mapper.js";
 	import {getContext} from 'svelte'
 	const {openModal, closeModal} = getContext('simple-modal')
+	import {tooltip} from "$lib/aciton/tooltip.js";
 
 	const is_big_class = !!zoom.rc_type
 	let material_history
@@ -65,21 +66,13 @@
 			duration: zoom.duration
 		}
 		openModal(CreateBigClassDialog, payload, {
-			width: '400px'
+			width: '400px',
+			overflow: 'initial'
 		})
-	}
-
-	const onBind = () => {
-
 	}
 </script>
 
 <div class="shadow-lg border border-gray-300 rounded bg-white text-sm text-left">
-
-	{#if is_big_class && !zoom.tutor_course_id}
-		<div on:click={onBind} class="item">Bind this classroom to tutor course</div>
-	{/if}
-
 	{#if is_big_class}
 		<div class="px-4 pt-4">
 			<p class="text-xs text-gray-400 text-center mb-1">ID:{zoom.tutor_group_id}</p>
@@ -136,7 +129,12 @@
 			</Dropdown>
 		{/if}
 		{#if is_big_class}
-			<button on:click={onEditClassroom} class="item">Edit classroom</button>
+			<button on:click={onEditClassroom} class="item">
+				修改大課堂
+				{#if !zoom.tutor_course_id}
+					<div use:tooltip={'請加番入個課程入面'} class="ml-2 bg-red-500 text-white text-xs rounded px-1">補番入課程</div>
+				{/if}
+			</button>
 		{:else}
 			<Dropdown caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">
 				<button slot="activator">Material(s)</button>
