@@ -1,15 +1,28 @@
 <script>
 	import {big_class_events} from "$lib/store/big-class-store.js";
 	import dayjs from "dayjs";
+	import CopyText from '$lib/option/copy-message-textbox.svelte'
+	import {onMount} from "svelte";
+
+	let copy_text = ''
+
+	onMount(() => {
+		dayjs.locale('zh-hk')
+		$big_class_events.selected_events.forEach(e => {
+			copy_text += e.extendedProps.student_size > 4 ? '大班課' : '小組課'
+			copy_text += dayjs(e.start).format('LLL')
+			copy_text += '\n'
+			copy_text += e.extendedProps.sub_cat_alter
+			copy_text += ` (${e.extendedProps.duration}分鐘)`
+			copy_text += '\n'
+			copy_text += '----------'
+			copy_text += '\n'
+		})
+		return () => {
+			dayjs.locale('en')
+		}
+	})
 </script>
 
-{#each $big_class_events.selected_events as e}
-	<div class="mb-4">
-		{e.extendedProps.student_size > 4 ? '大班課' : '小組課'}:
-		{dayjs(e.start_date).format('M月DD日  (星期d) h:mma')}
-		{e.extendedProps.sub_cat_alter}
-		({e.extendedProps.duration}分鐘)
-	</div>
-<!--	大班課：2月14日 星期一 晚7:50分 小四預備程度 /小五呈分試 《閱讀理解解題技巧提升課堂》 （50-60分鐘課堂）-->
-<!--	小組課：2月13日 星期日 下午 2:45分 小三四程度 《外籍老師寫作補底增強班》-->
-{/each}
+<h1 class="text-xl mb-4 font-light">課程推介</h1>
+<CopyText msg={copy_text}/>
