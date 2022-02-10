@@ -3,7 +3,7 @@
 
 	export const load = async ({page, fetch}) => {
 		if (page.query.get('reload')) {}
-		const {data, success, debug} = await http.post(fetch, '/classroomApi/list_tutor_classroom', {
+		const {data, success, debug} = await http.post(fetch, '/tutorCourseApi/list_tutor_course', {
 			teacher_id: page.params.user_id
 		})
 		if (!success) return onFail(debug)
@@ -19,7 +19,6 @@
 	import {dialog} from "$lib/store/dialog.js";
 
 	export let classroom_list = []
-	console.log('cliff: ', classroom_list)
 	import {getContext} from 'svelte'
 	const {openModal, closeModal} = getContext('simple-modal')
 	import CreateTutorClassroom from '$lib/classroom/create-tutor-classroom.svelte'
@@ -36,12 +35,12 @@
 		})
 	}
 
-	const onDelete = async (classroom_id) => {
+	const onDelete = async (tutor_course_id) => {
 		dialog.confirm({
 			message: 'delete classroom and all zoom inside?',
 			onConfirm: () => {
-				return http.post(fetch, '/classroomApi/delete_tutor_classroom', {
-					classroom_id
+				return http.post(fetch, '/tutorCourseApi/delete_tutor_course', {
+					tutor_course_id
 				}, {
 					notification: 'deleted'
 				})
@@ -56,7 +55,7 @@
 		<div class="p-4 flex items-center">
 			<p>{classroom.title}</p>
 			<p>{classroom.syllabus_id}</p>
-			<button class="ml-4 text-red-500" on:click={() => {onDelete(classroom.classroom_id)}}>
+			<button class="ml-4 text-red-500" on:click={() => {onDelete(classroom.tutor_course_id)}}>
 				<Icon className="w-4" name="trash"/>
 			</button>
 		</div>

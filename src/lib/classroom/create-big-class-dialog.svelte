@@ -13,7 +13,7 @@
 
 	export let onSuccess = () => {}
 	export let teacher_id
-	export let classroom_id = undefined
+	export let tutor_course_id = undefined
 	export let selected_item_id = undefined
 	export let selected_classroom_size = undefined // size
 	export let ticket = undefined // price
@@ -22,7 +22,7 @@
 	let classroom_list = []
 	let material_list
 	let classroom_size_list = [4,20,9999]
-	$: disabled = !(selected_classroom_size && selected_item_id && classroom_id && ticket)
+	$: disabled = !(selected_classroom_size && selected_item_id && tutor_course_id && ticket)
   const ticket_options = [
 	  {
 			value: 49,
@@ -43,7 +43,7 @@
   ]
 
 	onMount(async () => {
-		const res = await http.post(fetch, '/classroomApi/list_tutor_classroom', {
+		const res = await http.post(fetch, '/tutorCourseApi/list_tutor_course', {
 			teacher_id
 		})
 		classroom_list = res.data
@@ -65,9 +65,9 @@
 		})
 
 		let zoom_id = data.zoom_id // TODO, backend need to return this
-		if (classroom_id && zoom_id) {
-			await http.post(fetch, '/classroomApi/bind_tutor_classroom_with_zoom', {
-				classroom_id,
+		if (tutor_course_id && zoom_id) {
+			await http.post(fetch, '/tutorCourseApi/bind_tutor_course_with_zoom', {
+				tutor_course_id,
 				zoom_id
 			}, {
 				notification: 'Bind 左classroom'
@@ -83,9 +83,9 @@
 	}
 
 	const onClassroomSelected = async e => {
-		classroom_id = e.detail
-		const {data} = await http.post(fetch, '/classroomApi/list_tutor_classroom_by_id', {
-			classroom_id
+		tutor_course_id = e.detail
+		const {data} = await http.post(fetch, '/tutorCourseApi/list_tutor_course_by_id', {
+			tutor_course_id
 		})
 		data.material_status.forEach(m => m.used_cnt = String(m.used_cnt))
 		material_list = data.material_status
@@ -112,8 +112,8 @@
 	{#if classroom_list}
 		<label class="text-gray-500 text-sm mb-1 mt-2 block">Classroom</label>
 		<SelectionBox options={classroom_list} on:input={onClassroomSelected}
-		              selected_value={classroom_id}
-		              value_key="classroom_id" label_key="title"/>
+		              selected_value={tutor_course_id}
+		              value_key="tutor_course_id" label_key="title"/>
 	{/if}
 
 	{#if material_list}

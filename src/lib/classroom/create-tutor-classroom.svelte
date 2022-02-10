@@ -24,7 +24,7 @@
 	})
 
 	const onCreate = async () => {
-		await http.post(fetch, '/classroomApi/create_tutor_classroom', {
+		await http.post(fetch, '/tutorCourseApi/create_tutor_course', {
 			teacher_id,
 			title,
 			syllabus_id
