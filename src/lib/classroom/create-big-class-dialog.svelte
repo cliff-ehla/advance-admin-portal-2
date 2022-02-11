@@ -29,7 +29,8 @@
 	let classroom_list = []
 	let material_list
 	let classroom_size_list = [4,20,9999]
-	$: disabled = !(selected_classroom_size && selected_item_id && tutor_course_id && ticket)
+	let is_out_of_syllabus = false
+	$: disabled = !(selected_classroom_size && selected_item_id && ticket)
   const ticket_options = [
 	  {
 			value: 49,
@@ -138,6 +139,8 @@
 		<p class="text-blue-500 font-bold text-xl">Tutor: {tutor_store.getTutorName(slot.teacher_id) || 'noname'}</p>
 		<p class="border-b-2 border-black inline-block">{dayjs(slot.start_date).format('MMM DD (ddd)@ h:mma')} - {dayjs(slot.end_date).format('h:mma')} ({dayjs(slot.end_date).diff(slot.start_date, 'minute')}min)</p>
 	{/if}
+
+	<div class="overflow-scroll" style="max-height: calc(100vh - 300px);">
 	<label class="text-gray-500 text-sm mb-1 mt-2 block">Classroom size</label>
 	<SelectionBox options={classroom_size_list}
 	              placeholder="Classroom size"
@@ -151,31 +154,38 @@
 	              selected_value={ticket}
 	              on:input={e => {ticket = e.detail}}/>
 
-	{#if classroom_list}
-		<label class="text-gray-500 text-sm mb-1 mt-2 block">Classroom</label>
-		<SelectionBox options={classroom_list} on:input={onClassroomSelected}
-		              selected_value={tutor_course_id}
-		              value_key="tutor_course_id" label_key="title"/>
+	<div class="flex items-center my-2">
+		<p class="text-gray-500 text-sm">Out of syllabus?</p>
+		<input class="ml-2" type="checkbox" bind:checked={is_out_of_syllabus}>
+	</div>
+	{#if !is_out_of_syllabus}
+		{#if classroom_list}
+			<label class="text-gray-500 text-sm mb-1 mt-2 block">Classroom</label>
+			<SelectionBox options={classroom_list} on:input={onClassroomSelected}
+			              selected_value={tutor_course_id}
+			              value_key="tutor_course_id" label_key="title"/>
+		{/if}
+
+		{#if material_list}
+			<div class="mt-4">
+				<SelectionBox options={material_list} on:input={e => {selected_item_id = e.detail}}
+				              selected_value={selected_item_id}
+				              value_key="item_id" label_key="name" subtitle_prefix="Used count:" subtitle_key="used_cnt" image_key="thumbnail_path"/>
+			</div>
+		{/if}
+	{:else}
+		<label class="text-gray-500 text-sm mb-1 mt-2 block">Material category</label>
+		<SelectionBox options={$category_list}
+		              placeholder="Material category"
+		              selected_value={selected_category}
+		              on:input={e => {selected_category = e.detail}}
+		              simple_array/>
+
+		{#if selected_category}
+			<MaterialSelectionList category={selected_category} max_height="500px" on:input={e => selected_item_id = e.detail.item_id}/>
+		{/if}
 	{/if}
-
-	{#if material_list}
-		<div class="mt-4">
-			<SelectionBox options={material_list} on:input={e => {selected_item_id = e.detail}}
-			              selected_value={selected_item_id}
-			              value_key="item_id" label_key="name" subtitle_prefix="Used count:" subtitle_key="used_cnt" image_key="thumbnail_path"/>
-		</div>
-	{/if}
-
-<!--	<label class="text-gray-500 text-sm mb-1 mt-2 block">Material category</label>-->
-<!--	<SelectionBox options={$category_list}-->
-<!--	              placeholder="Material category"-->
-<!--	              selected_value={selected_category}-->
-<!--	              on:input={e => {selected_category = e.detail}}-->
-<!--	              simple_array/>-->
-
-<!--	{#if selected_category}-->
-<!--		<MaterialSelectionList category={selected_category} max_height="500px" on:input={e => selected_item_id = e.detail.item_id}/>-->
-<!--	{/if}-->
+	</div>
 
 	<div class="mt-4 flex justify-end">
 		{#if is_edit}
