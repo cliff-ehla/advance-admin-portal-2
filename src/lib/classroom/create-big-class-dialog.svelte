@@ -75,7 +75,8 @@
 			student_size: selected_classroom_size,
 			teacher_id: teacher_id,
 			start_date: start_time,
-			duration
+			duration,
+			tutor_course_id
 		}, {
 			notification: '成功更新Classroom'
 		})
