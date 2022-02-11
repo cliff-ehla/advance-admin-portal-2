@@ -12,9 +12,10 @@
 	export let teacher_id
 	let options
 	let name_en
+	let code_id
 	let syllabus_id
 	let title
-	$: obj = options ? options.find(opt => opt.name_en === name_en) : undefined
+	$: obj = options ? options.find(opt => opt.code_id === code_id) : undefined
 	$: levels = obj && obj.levels
 	$: disabled = !(syllabus_id && title)
 
@@ -40,9 +41,9 @@
 	<h2 class="mb-4 text-xl">建立{tutor_store.getTutorName(teacher_id)}的課程框架</h2>
 	<input type="text" class="input w-full mb-2" bind:value={title} placeholder="Course Title">
 	{#if options}
-		<SelectionBox {options} on:input={e => {name_en = e.detail}}
-		              selected_value={name_en}
-		              value_key="name_en" label_key="name_en"/>
+		<SelectionBox {options} on:input={e => {code_id = e.detail}}
+		              selected_value={code_id}
+		              value_key="code_id" label_key="sub_cat_hk"/>
 	{/if}
 	{#if levels}
 		<div class="mt-4">
