@@ -97,7 +97,8 @@
 			start_date,
 			duration,
 			student_size: selected_classroom_size,
-			ticket
+			ticket,
+			tutor_course_id
 		}, {
 			notification: '起左'
 		})
