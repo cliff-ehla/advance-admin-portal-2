@@ -17,13 +17,29 @@ const sentry = (() => {
 
 	const log = (error) => {
 		if (['production', 'staging'].includes(env)) {
+			if (typeof error !== "string") error = JSON.stringify(error)
 			Sentry.captureException(new Error(error))
 		}
 	}
 
+	const setUser = ({username, nickname}) => {
+		Sentry.setUser({
+			username,
+			nickname
+		})
+	}
+
+	const clearUser = () => {
+		Sentry.configureScope(scope => {
+			scope.setUser(null)
+		})
+	}
+
 	return {
 		log,
-		init
+		init,
+		setUser,
+		clearUser
 	}
 })()
 
