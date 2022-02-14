@@ -30,7 +30,7 @@ export const createLevelMapper = () => {
 		"p4-p6": ['p4', 'p5', 'p6'],
 		"p4-p5": ['p4', 'p5'],
 		"p5-p6": ['p5', 'p6'],
-		"p6-S1": ['p6', 's1'],
+		"p6-s1": ['p6', 's1'],
 		"s1-s3-foundation": ['s1', 's2', 's3'],
 		"p4-to-p5-exam-prep": ['p4', 'p5'],
 		"p4-to-p6-exam-prep": ['p4', 'p5', 'p6'],

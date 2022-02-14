@@ -54,8 +54,12 @@
 	{#if classroom_list.length}
 		{#each classroom_list as classroom}
 			<div class="p-4 flex items-center">
-				<p>{classroom.title}</p>
-				<p>{classroom.syllabus_id}</p>
+				<div>
+					<p class="leading-tight">{classroom.title}</p>
+					<p class="bg-gray-100 border-gray-300 border px-1 text-xs inline-block">{classroom.code_id}</p>
+					<p class="text-gray-500 text-sm">{classroom.level}</p>
+					<p class="text-gray-500 text-sm">{classroom.sub_cat_hk}</p>
+				</div>
 				<button class="ml-4 text-red-500" on:click={() => {onDelete(classroom.tutor_course_id)}}>
 					<Icon className="w-4" name="trash"/>
 				</button>
