@@ -66,7 +66,8 @@
 				tutor_course_id,
 				zoom_id
 			}, {
-				notification: 'Bind 左classroom'
+				notification: 'Bind 左classroom',
+				timeout: 800
 			})
 		}
 		await http.post(fetch, '/courseApi/edit_course_material', {
@@ -78,7 +79,8 @@
 			duration,
 			tutor_course_id
 		}, {
-			notification: '成功更新Classroom'
+			notification: '成功更新Classroom',
+			timeout: 800
 		})
 		closeModal()
 		document.dispatchEvent(new CustomEvent('refresh-calendar', {

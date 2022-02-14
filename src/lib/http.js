@@ -25,7 +25,7 @@ const http = (() => {
 	}
 
 	async function post (fetch, resource, body = {}, config = {}) {
-		const {notification} = config
+		const {notification, timeout} = config
 		// an empty object is necessary, otherwise result fatal error when not passing body params
 		try {
 			is_loading.set(true)
@@ -48,7 +48,7 @@ const http = (() => {
 					const message = actually_not_success ? data.debug_msg : debug.debug_msg
 					notifications.alert('哎！錯誤發生了: ' + message)
 				} else {
-					notifications.success(notification)
+					notifications.success(notification, timeout)
 				}
 			}
 			return {success, data, metadata, debug}
