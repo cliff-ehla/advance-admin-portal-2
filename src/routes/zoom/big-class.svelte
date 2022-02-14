@@ -117,7 +117,7 @@
 		<div class="my-4">
 			<div class="bg-blue-100 border border-blue-200">
 				<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
-					<input id="big-class" type="checkbox" bind:checked={$big_class_events.level_filter_off} on:input={onToggleBigClass}>
+					<input id="big-class" type="checkbox" checked={$big_class_events.level_filter_off} on:input={onToggleBigClass}>
 					<label for="big-class" class="ml-4 cursor-pointer">全部程度</label>
 				</div>
 				<div class="p-1 bg-blue-100">
@@ -133,7 +133,7 @@
 
 		<div class="bg-blue-100 border border-blue-200 my-4">
 			<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
-				<input id="code" type="checkbox" bind:checked={$big_class_events.code_filter_off} on:input={onClearCodeFilter}>
+				<input id="code" type="checkbox" checked={$big_class_events.code_filter_off} on:input={onClearCodeFilter}>
 				<label for="code" class="ml-4 cursor-pointer">全部Course</label>
 			</div>
 			<div class="p-1 bg-blue-100">
