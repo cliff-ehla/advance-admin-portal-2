@@ -161,6 +161,9 @@
 		{#if computed_status === 'create_big_class'}
 			<p class="font-bold">建立大課堂</p>
 		{/if}
+		{#if computed_status === 'batch_create_big_class'}
+			Batch建立大課堂: 請Click一個起始日子
+		{/if}
 		{#if computed_status === 'create_multiple_big_class'}
 			<p>Batch建立大課堂</p>
 		{/if}

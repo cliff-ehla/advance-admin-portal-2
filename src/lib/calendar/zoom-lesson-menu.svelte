@@ -3,6 +3,7 @@
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import Datepicker from '$lib/ui-elements/date-picker/calendar.svelte'
 	import CreateBigClassDialog from '$lib/classroom/create-big-class-dialog.svelte'
+	import BatchCreateClassroom from '$lib/classroom/batch-create-classroom.svelte'
 	export let zoom = {}
 	export let selected = new Date()
 	export let onEdit = () => {}
@@ -70,6 +71,15 @@
 			overflow: 'initial'
 		})
 	}
+
+	const onAddBatchClassroom = () => {
+		openModal(BatchCreateClassroom, {
+			teacher_id: zoom.teacher_id,
+			tutor_course_id: zoom.tutor_course_id
+		}, {
+			width: '800px'
+		})
+	}
 </script>
 
 <div class="shadow-lg border border-gray-300 rounded bg-white text-sm text-left">
@@ -134,6 +144,9 @@
 				{#if !zoom.tutor_course_id}
 					<div use:tooltip={'請加番入個課程入面'} class="ml-2 bg-red-500 text-white text-xs rounded px-1">補番入課程</div>
 				{/if}
+			</button>
+			<button on:click={onAddBatchClassroom} class="item">
+				建立更多課堂
 			</button>
 		{:else}
 			<Dropdown caveat_visible placement="right" activator_active_style="bg-gray-100 text-blue-500" activator_style="text-left block  px-2 py-2 mb-2">

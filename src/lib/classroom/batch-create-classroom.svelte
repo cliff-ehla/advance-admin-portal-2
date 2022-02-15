@@ -6,9 +6,9 @@
 	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
 	import Button from '$lib/ui-elements/button.svelte'
 
-	export let start_date
 	export let teacher_id
-	let tutor_course_id
+	export let start_date = undefined // create classroom to an empty course => pass start_date to anchor the first lesson
+	export let tutor_course_id = undefined // add more classroom, pass tutor_course_id => get existing classroom setting
 	let start_time = '08:00'
 	let end_time = '08:30'
 	let duration = 30
@@ -24,9 +24,10 @@
 			teacher_id
 		})
 		classroom_list = res.data
+		if (tutor_course_id) getTutorCourseDetail()
 	})
 
-	const getMaterialList = async () => {
+	const getTutorCourseDetail = async () => {
 		const {data} = await http.post(fetch, '/tutorCourseApi/list_tutor_course_by_id', {
 			tutor_course_id
 		})
@@ -34,10 +35,12 @@
 		material_list = data.material_status
 		existing_classroom = data.existing_classroom
 		const first_classroom = existing_classroom[0]
+		const last_classroom = existing_classroom[existing_classroom.length - 1]
 		if (first_classroom) {
 			duration = first_classroom.duration
 			start_time = dayjs(first_classroom.start_date).format('HH:mm')
 			end_time = dayjs(first_classroom.start_date).add(duration, 'minute').format('HH:mm')
+			start_date = dayjs(last_classroom.start_date).add(1, 'week').format('YYYY-MM-DD')
 		}
 	}
 
@@ -66,7 +69,7 @@
 
 	const onClassroomSelected = e => {
 		tutor_course_id = e.detail
-		getMaterialList()
+		getTutorCourseDetail()
 	}
 
 	const onCreate = async () => {
@@ -96,50 +99,52 @@
 	              value_key="tutor_course_id" label_key="title"/>
 {/if}
 
-<div class="my-2">
-	<p class="text-label">課堂數量</p>
-	<input class="text-sm w-20 px-2 py-1 border border-gray-300 bg-gray-100" type="number" bind:value={lesson_count}>
-</div>
-<div class="my-2">
-	<p class="text-label">長度(min)</p>
-	<input bind:value={duration} on:input={onDurationInput} type="number" class="text-sm w-20 px-2 py-1 border border-gray-300 bg-gray-100">
-</div>
-<div class="flex my-2">
-	<div>
-		<p class="text-label">開始時間</p>
-		<TimePicker hh_mm={start_time} on:input={onStartTimeInput}/>
+{#if tutor_course_id}
+	<div class="flex my-2">
+		<div class="mr-1">
+			<p class="text-label">長度(min)</p>
+			<input bind:value={duration} on:input={onDurationInput} type="number" class="text-sm w-20 px-2 py-1 border border-gray-300 bg-gray-100">
+		</div>
+		<div>
+			<p class="text-label">開始時間</p>
+			<TimePicker hh_mm={start_time} on:input={onStartTimeInput}/>
+		</div>
+		<div class="ml-1">
+			<p class="text-label">完結時間</p>
+			<TimePicker hh_mm={end_time} on:input={onEndTimeInput}/>
+		</div>
 	</div>
-	<div class="ml-1">
-		<p class="text-label">完結時間</p>
-		<TimePicker hh_mm={end_time} on:input={onEndTimeInput}/>
-	</div>
-</div>
 
-<div class="my-4">
-	<p class="text-label">已建立的班房</p>
-	{#if existing_classroom}
-		{#each existing_classroom as classroom}
-			<div class="my-2 flex items-center">
-				<p class="text-sm w-64">{dayjs(classroom.start_date).format('DD MMM YYYY (dddd) h:mma')}</p>
-				<p>{classroom.title}</p>
+	<div class="my-4">
+		<p class="text-label">已建立的班房</p>
+		{#if existing_classroom}
+			{#each existing_classroom as classroom}
+				<div class="my-2 flex items-start">
+					<p class="text-sm w-48 flex-shrink-0">{dayjs(classroom.start_date).format('DD MMM YYYY (ddd) h:mma')}</p>
+					<p class="ml-4 text-sm">{classroom.title}</p>
+				</div>
+			{/each}
+		{/if}
+		<div class="flex items-center">
+			<p class="text-label">將新增的班房 (數量：</p>
+			<input class="text-sm w-12 px-2 py-1 border border-gray-300 bg-gray-100 ml-0.5 mr-1" type="number" bind:value={lesson_count}>
+			<div class="text-label">)</div>
+		</div>
+		{#each computed_dates as date,i}
+			<div class="flex items-center my-1">
+				<p class="text-sm w-48 flex-shrink-0">{dayjs(date).format('DD MMM YYYY (ddd) h:mma')}</p>
+				{#if material_list}
+					<div class="ml-4">
+						<SelectionBox options={material_list} on:input={e => {selected_item_ids[i] = e.detail}}
+						              selected_value={selected_item_ids[i]}
+						              value_key="item_id" label_key="name" subtitle_prefix="Used count:" subtitle_key="used_cnt" image_key="thumbnail_path"/>
+					</div>
+				{/if}
 			</div>
 		{/each}
-	{/if}
-	<p class="text-label">將新增的班房</p>
-	{#each computed_dates as date,i}
-		<div class="flex items-center my-1">
-			<p class="text-sm w-64">{dayjs(date).format('DD MMM YYYY (dddd) h:mma')}</p>
-			{#if material_list}
-				<div class="ml-4">
-					<SelectionBox options={material_list} on:input={e => {selected_item_ids[i] = e.detail}}
-					              selected_value={selected_item_ids[i]}
-					              value_key="item_id" label_key="name" subtitle_prefix="Used count:" subtitle_key="used_cnt" image_key="thumbnail_path"/>
-				</div>
-			{/if}
-		</div>
-	{/each}
-</div>
+	</div>
 
-<div class="flex mt-6 justify-end">
-	<Button on:click={onCreate}>Create</Button>
-</div>
+	<div class="flex mt-6 justify-end">
+		<Button on:click={onCreate}>Create</Button>
+	</div>
+{/if}

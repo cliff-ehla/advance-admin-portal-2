@@ -132,7 +132,8 @@
 						start_date: e.start,
 						teacher_id: tutor_id
 					}, {
-						width: '600px'
+						width: '600px',
+						overflow: 'initial'
 					})
 				}
 				createCourseOnDateSelect(e, month_calendar, day_calendar, tutor_id)
