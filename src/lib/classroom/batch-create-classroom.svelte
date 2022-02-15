@@ -116,7 +116,7 @@
 		</div>
 	</div>
 
-	<div class="my-4">
+	<div class="my-4 overflow-y-scroll" style="max-height: calc(100vh - 340px)">
 		<p class="text-label">已建立的班房</p>
 		{#if existing_classroom}
 			{#each existing_classroom as classroom}
@@ -141,7 +141,7 @@
 			<div class="flex items-center my-1">
 				<p class="text-sm w-48 flex-shrink-0">{dayjs(date).format('DD MMM YYYY (ddd) h:mma')}</p>
 				{#if material_list}
-					<div class="ml-4">
+					<div class="ml-4 w-full">
 						<SelectionBox options={material_list} on:input={e => {selected_item_ids[i] = e.detail}}
 						              selected_value={selected_item_ids[i]}
 						              value_key="item_id" label_key="name" subtitle_prefix="Used count:" subtitle_key="used_cnt" image_key="thumbnail_path"/>
