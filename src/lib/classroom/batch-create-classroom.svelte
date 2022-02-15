@@ -4,6 +4,7 @@
 	import {onMount} from "svelte";
 	import {http} from "$lib/http.js";
 	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
+	import DatePicker from '$lib/ui-elements/date-picker/index.svelte'
 	import Button from '$lib/ui-elements/button.svelte'
 
 	export let teacher_id
@@ -129,6 +130,12 @@
 			<p class="text-label">將新增的班房 (數量：</p>
 			<input class="text-sm w-12 px-2 py-1 border border-gray-300 bg-gray-100 ml-0.5 mr-1" type="number" bind:value={lesson_count}>
 			<div class="text-label">)</div>
+		</div>
+		<div class="flex items-center mt-2">
+			<p class="text-label">於這日開始：</p>
+			<div class="ml-4">
+				<DatePicker on:datechange={(e) => {start_date = dayjs(e.detail).format('YYYY-MM-DD')}} selected={dayjs(start_date, 'YYYY-MM-DD HH:mm:ss').toDate()}/>
+			</div>
 		</div>
 		{#each computed_dates as date,i}
 			<div class="flex items-center my-1">
