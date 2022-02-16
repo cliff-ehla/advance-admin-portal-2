@@ -10,6 +10,8 @@
 	import Button from '$lib/ui-elements/button.svelte'
 	import {triggerReload} from "$lib/helper/trigger-reload.js";
 	import {getContext} from 'svelte'
+	import {action_status} from "../../store/calendar-action-status-store.js";
+
 	const {closeModal} = getContext('simple-modal')
 
 	export let teacher_id
@@ -67,6 +69,8 @@
 			start_time = dayjs.utc(last_classroom.start_date).local().format('HH:mm')
 			end_time = dayjs.utc(last_classroom.start_date).local().add(duration, 'minute').format('HH:mm')
 			start_date = dayjs.utc(last_classroom.start_date).local().add(1, 'week').format('YYYY-MM-DD')
+			ticket = last_classroom.ticket
+			student_size = last_classroom.student_size
 		}
 	}
 
@@ -118,6 +122,7 @@
 		})
 		triggerReload()
 		closeModal()
+		action_status.set('')
 	}
 </script>
 
@@ -162,7 +167,7 @@
 		{#if existing_classroom}
 			{#each existing_classroom as classroom}
 				<div class="my-2 flex items-start">
-					<p class="text-sm w-48 flex-shrink-0">{dayjs(classroom.start_date).format('DD MMM YYYY (ddd) h:mma')}</p>
+					<p class="text-sm w-48 flex-shrink-0">{dayjs.utc(classroom.start_date).local().format('DD MMM YYYY (ddd) h:mma')}</p>
 					<p class="ml-4 text-sm">{classroom.title}</p>
 				</div>
 			{/each}
@@ -180,7 +185,7 @@
 		</div>
 		{#each computed_dates as date,i}
 			<div class="flex items-center my-1">
-				<p class="text-sm w-48 flex-shrink-0">{dayjs(date).format('DD MMM YYYY (ddd) h:mma')}</p>
+				<p class="text-sm w-48 flex-shrink-0">{dayjs.utc(date).local().format('DD MMM YYYY (ddd) h:mma')}</p>
 				{#if material_list}
 					<div class="ml-4 w-full">
 						<SelectionBox options={material_list} on:input={e => {selected_item_ids[i] = e.detail}}
