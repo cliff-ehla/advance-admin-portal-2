@@ -1,6 +1,8 @@
 <script>
 	import TimePicker from '$lib/ui-elements/time-picker-2.svelte'
 	import dayjs from "dayjs";
+	import utc from "dayjs/plugin/utc.js";
+	dayjs.extend(utc)
 	import {onMount} from "svelte";
 	import {http} from "$lib/http.js";
 	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
@@ -19,6 +21,27 @@
 	let material_list
 	let selected_item_ids = []
 	let existing_classroom
+	let ticket = 98
+	let student_size = 4
+
+	const ticket_options = [
+		{
+			value: 49,
+			label: '$49 小學（大班）'
+		},
+		{
+			value: 98,
+			label: '$98 小學（4人班）'
+		},
+		{
+			value: 68,
+			label: '$68 中學（大班）'
+		},
+		{
+			value: 136,
+			label: '$136 中學 （4人班）'
+		}
+	]
 
 	onMount(async () => {
 		const res = await http.post(fetch, '/tutorCourseApi/list_tutor_course', {
@@ -49,7 +72,7 @@
 		if (duration || start_time || lesson_count) {
 			computed_dates = []
 			for (let i = 0; i < lesson_count; i++){
-			  computed_dates[i] = dayjs(start_date).add(i, 'week').format('YYYY-MM-DD ') + start_time + ':00'
+			  computed_dates[i] = dayjs(start_date).utc().add(i, 'week').format('YYYY-MM-DD ') + start_time + ':00'
 			}
 		}
 	}
@@ -81,8 +104,8 @@
 				start_date: date,
 				duration,
 				tutor_course_id,
-				ticket: 999, // TODO
-				student_size: 4 // TODO
+				ticket,
+				student_size
 			}
 		})
 		const {data} = await http.post(fetch, '/courseApi/batch_reg_course', payload, {
@@ -113,6 +136,17 @@
 		<div class="ml-1">
 			<p class="text-label">完結時間</p>
 			<TimePicker hh_mm={end_time} on:input={onEndTimeInput}/>
+		</div>
+		<div class="ml-8">
+			<p class="text-label">Ticket</p>
+			<SelectionBox options={ticket_options}
+			              placeholder="Ticket price"
+			              selected_value={ticket}
+			              on:input={e => {ticket = e.detail}}/>
+		</div>
+		<div class="ml-1">
+			<p class="text-label">Student size</p>
+			<input bind:value={student_size} type="number" class="text-sm w-20 px-2 py-1 border border-gray-300 bg-gray-100">
 		</div>
 	</div>
 
