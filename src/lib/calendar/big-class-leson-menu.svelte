@@ -88,7 +88,7 @@
 		<p class="ml-2">{!selected ? '加入推介' : '剔除推介'}</p>
 	</div>
 	<h1 class="font-bold mb-4">報了這堂的學生：</h1>
-	<div class="overflow-auto mb-4" style="max-height: 600px">
+	<div class="overflow-auto mb-4" style="max-height: 400px">
 		{#if students}
 			{#if students.length}
 				{#each students as s}

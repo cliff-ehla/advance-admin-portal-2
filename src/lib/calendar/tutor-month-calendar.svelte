@@ -16,6 +16,8 @@
 	import {CALENDAR_HEIGHT} from "./shared-function/calendar-height";
 	import StudentListDialog from '../student/student-list-dialog.svelte'
 	import Dropdown from '../../lib/ui-elements/dropdown3.svelte'
+	import BatchCreateClassroom from '$lib/classroom/batch-create-classroom.svelte'
+	import {action_status} from "../../store/calendar-action-status-store.js";
 
 	const {openPopper} = getContext('popper')
 	const {openModal} = getContext('simple-modal')
@@ -125,6 +127,15 @@
 				})
 			},
 			select: e => {
+				if ($action_status === 'batch_create_big_class') {
+					return openModal(BatchCreateClassroom, {
+						start_date: e.start,
+						teacher_id: tutor_id
+					}, {
+						width: '600px',
+						overflow: 'initial'
+					})
+				}
 				createCourseOnDateSelect(e, month_calendar, day_calendar, tutor_id)
 				// select a day and the day time calendar will show the day details
 				day_calendar.changeView('timeGridOneDay', e.start)

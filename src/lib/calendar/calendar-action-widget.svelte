@@ -159,7 +159,13 @@
 			<p>Create Leave</p>
 		{/if}
 		{#if computed_status === 'create_big_class'}
-			<p class="font-bold">Create big/small class</p>
+			<p class="font-bold">建立大課堂</p>
+		{/if}
+		{#if computed_status === 'batch_create_big_class'}
+			Batch建立大課堂: 請Click一個起始日子
+		{/if}
+		{#if computed_status === 'create_multiple_big_class'}
+			<p>Batch建立大課堂</p>
 		{/if}
 	</div>
 {/if}
@@ -250,7 +256,10 @@
 					Options
 				</div>
 				<div on:click={() => {action_status.set('create_big_class')}} class="cursor-pointer px-4 py-2 hover:text-blue-500 hover:bg-gray-100">
-					Create big/small class
+					建立大課堂
+				</div>
+				<div on:click={() => {action_status.set('batch_create_big_class')}} class="cursor-pointer px-4 py-2 hover:text-blue-500 hover:bg-gray-100">
+					Batch建立大課堂
 				</div>
 				<div on:click={() => {action_status.set('create_leave')}} class="cursor-pointer px-4 py-2 hover:text-blue-500 hover:bg-gray-100">
 					Create leave

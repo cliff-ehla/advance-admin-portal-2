@@ -3,6 +3,8 @@
 	import {goto} from '$app/navigation'
 	import Button from '$lib/ui-elements/button.svelte'
 	import {user_info} from "$lib/store/user_info.js";
+	import {sentry} from "$lib/sentry.js";
+
 	let env = import.meta.env.VITE_ENV
 	let base_url = import.meta.env.VITE_API_BASE
 	let local_production = base_url === 'https://usermodel.ehlacademy.org'
@@ -18,6 +20,10 @@
 		})
 		if (success) {
 			user_info.set({
+				username: data.username,
+				nickname: data.nickname
+			})
+			sentry.setUser({
 				username: data.username,
 				nickname: data.nickname
 			})
