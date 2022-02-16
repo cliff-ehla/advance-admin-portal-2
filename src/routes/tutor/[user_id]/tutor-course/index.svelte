@@ -53,7 +53,7 @@
 <div class="p-4">
 	{#if classroom_list.length}
 		{#each classroom_list as classroom}
-			<div class="p-4 flex items-center">
+			<a href="tutor-course/{classroom.tutor_course_id}" class="block p-4 flex items-center hover:text-blue-500">
 				<div>
 					<p class="leading-tight">{classroom.title}</p>
 					<p class="bg-gray-100 border-gray-300 border px-1 text-xs inline-block">{classroom.code_id}</p>
@@ -63,7 +63,7 @@
 				<button class="ml-4 text-red-500" on:click={() => {onDelete(classroom.tutor_course_id)}}>
 					<Icon className="w-4" name="trash"/>
 				</button>
-			</div>
+			</a>
 		{/each}
 	{:else}
 		No data
