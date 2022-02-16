@@ -8,6 +8,9 @@
 	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
 	import DatePicker from '$lib/ui-elements/date-picker/index.svelte'
 	import Button from '$lib/ui-elements/button.svelte'
+	import {triggerReload} from "$lib/helper/trigger-reload.js";
+	import {getContext} from 'svelte'
+	const {closeModal} = getContext('simple-modal')
 
 	export let teacher_id
 	export let start_date = undefined // create classroom to an empty course => pass start_date to anchor the first lesson
@@ -58,21 +61,21 @@
 		data.material_status.forEach(m => m.used_cnt = String(m.used_cnt))
 		material_list = data.material_status
 		existing_classroom = data.existing_classroom
-		const first_classroom = existing_classroom[0]
 		const last_classroom = existing_classroom[existing_classroom.length - 1]
-		if (first_classroom) {
-			duration = first_classroom.duration
-			start_time = dayjs(first_classroom.start_date).format('HH:mm')
-			end_time = dayjs(first_classroom.start_date).add(duration, 'minute').format('HH:mm')
-			start_date = dayjs(last_classroom.start_date).add(1, 'week').format('YYYY-MM-DD')
+		if (last_classroom) {
+			duration = last_classroom.duration
+			start_time = dayjs.utc(last_classroom.start_date).local().format('HH:mm')
+			end_time = dayjs.utc(last_classroom.start_date).local().add(duration, 'minute').format('HH:mm')
+			start_date = dayjs.utc(last_classroom.start_date).local().add(1, 'week').format('YYYY-MM-DD')
 		}
 	}
 
 	$: {
 		if (duration || start_time || lesson_count) {
 			computed_dates = []
-			for (let i = 0; i < lesson_count; i++){
-			  computed_dates[i] = dayjs(start_date).utc().add(i, 'week').format('YYYY-MM-DD ') + start_time + ':00'
+			for (let i = 0; i < lesson_count; i++) {
+				const _date = dayjs.utc(start_date).local().add(i, 'week').format('YYYY-MM-DD ') + start_time + ':00'
+			  computed_dates[i] = dayjs(_date).utc().format('YYYY-MM-DD HH:mm:ss')
 			}
 		}
 	}
@@ -97,7 +100,7 @@
 	}
 
 	const onCreate = async () => {
-		const payload = computed_dates.map((date,i) => {
+		const course_data = computed_dates.map((date,i) => {
 			return {
 				item_id: selected_item_ids[i],
 				teacher_id,
@@ -108,9 +111,13 @@
 				student_size
 			}
 		})
-		const {data} = await http.post(fetch, '/courseApi/batch_reg_course', payload, {
+		const {data} = await http.post(fetch, '/courseApi/batch_reg_course', {
+			course_data
+		}, {
 			notification: '起左'
 		})
+		triggerReload()
+		closeModal()
 	}
 </script>
 
