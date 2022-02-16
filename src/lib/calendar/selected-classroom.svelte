@@ -11,11 +11,12 @@
 	onMount(() => {
 		dayjs.locale('zh-hk')
 		$big_class_events.selected_events.forEach(e => {
+			console.log('cliff: ', e)
 			copy_text += e.extendedProps.student_size > 4 ? '大班課' : '小組課'
 			copy_text += dayjs.utc(e.start).local().format('LLL')
 			copy_text += '\n'
 			copy_text += e.extendedProps.sub_cat_alter
-			copy_text += ` (${e.extendedProps.duration}分鐘)`
+			copy_text += ` (${e.extendedProps.is_native_teacher ? '外籍老師' : '雙語課堂'} ${e.extendedProps.duration}分鐘)`
 			copy_text += '\n'
 			copy_text += '----------'
 			copy_text += '\n'

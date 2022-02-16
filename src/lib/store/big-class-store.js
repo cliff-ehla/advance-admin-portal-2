@@ -103,6 +103,7 @@ const createBigClassEventStore = () => {
 				code: e.description_code_short_id,
 				sub_cat_alter: e.sub_cat_alter || 'NA',
 				duration: e.duration || 'NA',
+				is_native_teacher: e.is_native_teacher,
 			}
 			return {
 				start: e.start_date,
