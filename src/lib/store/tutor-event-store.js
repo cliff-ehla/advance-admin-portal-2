@@ -14,7 +14,7 @@ const create_tutor_event_store = () => {
 		}
 	}
 	const fetchData = async (fetch, {tutor_id}) => {
-		let start_time = dayjs().subtract(6, 'week').format('YYYY-MM-DD HH:mm:ss')
+		let start_time = dayjs().subtract(3, 'month').format('YYYY-MM-DD HH:mm:ss')
 		let end_time = dayjs().add(6, 'month').format('YYYY-MM-DD HH:mm:ss')
 		let p1 = http.post(fetch,'/zoomApi/list_teacher_available_time_in_calendar', {
 			start_time,
