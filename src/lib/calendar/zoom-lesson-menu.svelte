@@ -82,7 +82,7 @@
 	}
 </script>
 
-<div class="shadow-lg border border-gray-300 rounded bg-white text-sm text-left">
+<div class="shadow-lg border border-gray-300 rounded bg-white text-sm text-left" style="min-width: 200px">
 	{#if is_big_class}
 		<div class="px-4 pt-4">
 			<p class="text-xs text-gray-400 text-center mb-1">ID:{zoom.tutor_group_id}</p>
@@ -139,6 +139,9 @@
 			</Dropdown>
 		{/if}
 		{#if is_big_class}
+			<div on:click={() => {open(`/item/${zoom.days[0].item_id}`,'Preview', "popup")}} class="item max-w-sm">
+				{zoom.days[0].title} <button class="button-secondary ml-2">Preview</button>
+			</div>
 			<button on:click={onEditClassroom} class="item">
 				修改大課堂
 				{#if !zoom.tutor_course_id}

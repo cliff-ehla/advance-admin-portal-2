@@ -171,10 +171,15 @@
 		{/if}
 
 		{#if material_list}
-			<div class="mt-4">
-				<SelectionBox options={material_list} on:input={e => {selected_item_id = e.detail}}
-				              selected_value={selected_item_id}
-				              value_key="item_id" label_key="name" subtitle_prefix="Used count:" subtitle_key="used_cnt" image_key="thumbnail_path"/>
+			<div class="mt-4 flex items-center">
+				<div class="w-full" style="max-width: 300px">
+					<SelectionBox options={material_list} on:input={e => {selected_item_id = e.detail}}
+					              selected_value={selected_item_id}
+					              value_key="item_id" label_key="name" subtitle_prefix="Used count:" subtitle_key="used_cnt" image_key="thumbnail_path"/>
+				</div>
+				{#if selected_item_id}
+					<button on:click={() => {open(`/item/${selected_item_id}`,'Preview', "popup")}} class="button-secondary ml-2">Preview</button>
+				{/if}
 			</div>
 		{/if}
 	{:else}
