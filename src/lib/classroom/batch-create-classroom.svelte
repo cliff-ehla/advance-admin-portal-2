@@ -187,10 +187,15 @@
 			<div class="flex items-center my-1">
 				<p class="text-sm w-48 flex-shrink-0">{dayjs.utc(date).local().format('DD MMM YYYY (ddd) h:mma')}</p>
 				{#if material_list}
-					<div class="ml-4 w-full">
+					<div class="ml-4 w-full" style="max-width: 480px">
 						<SelectionBox options={material_list} on:input={e => {selected_item_ids[i] = e.detail}}
 						              selected_value={selected_item_ids[i]}
 						              value_key="item_id" label_key="name" subtitle_prefix="Used count:" subtitle_key="used_cnt" image_key="thumbnail_path"/>
+					</div>
+					<div class="w-16 ml-2 flex-shrink-0">
+						{#if selected_item_ids[i]}
+							<button on:click={() => {open(`/item/${selected_item_ids[i]}`,'Preview', "popup")}} class="button-secondary">Preview</button>
+						{/if}
 					</div>
 				{/if}
 			</div>

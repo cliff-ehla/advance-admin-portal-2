@@ -41,7 +41,7 @@
 </script>
 
 <Dropdown full_width {caveat_visible} open_on_hover={false} offset={0} placement="bottom-start" activator_style="bg-white border border-gray-300 rounded px-4 py-2 w-full">
-	<div use:setWidth slot="activator" class="flex items-center whitespace-nowrap w-full" class:opacity-40={!selected_label} class:cursor-not-allowed={disabled}>
+	<div use:setWidth slot="activator" class="flex items-center whitespace-nowrap overflow-hidden w-full" class:opacity-40={!selected_label} class:cursor-not-allowed={disabled}>
 		{#if selected_label}
 			{#if simple_array}
 				{selected_value}
