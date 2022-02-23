@@ -72,6 +72,7 @@
 			start_date = dayjs.utc(last_classroom.start_date).local().add(1, 'week').format('YYYY-MM-DD')
 			ticket = last_classroom.ticket
 			student_size = last_classroom.student_size
+			is_always_open = last_classroom.is_always_open || true
 		}
 	}
 
@@ -105,6 +106,7 @@
 	}
 
 	const onCreate = async () => {
+		console.log('is_always_open', is_always_open)
 		const course_data = computed_dates.map((date,i) => {
 			return {
 				item_id: selected_item_ids[i],
@@ -164,7 +166,7 @@
 		</div>
 		<div class="ml-2">
 			<p class="text-label">即出？</p>
-			<input bind:value={is_always_open} type="checkbox" class="text-sm border border-gray-300 bg-gray-100">
+			<input bind:checked={is_always_open} type="checkbox" class="text-sm border border-gray-300 bg-gray-100">
 		</div>
 	</div>
 
