@@ -25,13 +25,14 @@
 	<div class="p-4 bg-white border border-gray-300">
 		<h2 class="font-bold mb-4">大班課記錄：</h2>
 		{#each classroom_list as c}
-			<div class="flex items-center">
+			<div class="flex items-center mb-4">
 				<img src={c.thumbnail_path_square} alt={c.sub_cat} class="w-36 rounded">
 				<div class="ml-4">
 					<p class="text-blue-500 italic text-sm">{c.sub_cat}</p>
 					<p>{c.name}</p>
 					<p>Level: {c.rc_level}</p>
 					<p>{dayjs(c.start_date).format('DD MMM YYYY')}</p>
+					<p class="text-gray-600 text-sm">試水温? {!c.is_always_open}</p>
 				</div>
 			</div>
 		{/each}
