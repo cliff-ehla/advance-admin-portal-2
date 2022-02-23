@@ -19,7 +19,9 @@ export const createLevelMapper = () => {
 	const all_codes = Object.keys(get(course_code_store))
 	let level_map_store = readable({
 		"6yro-or-below": ['k1', 'k2', 'k3'],
-		"7yro-to-9yro": ['p1', 'p2', 'p3'],
+		"6yro-to-8yro": ['p1', 'p2', 'p3'],
+		"7yro-to-9yro": ['p2', 'p3', 'p4'],
+		"9yro-to-12yro": ['p4','p5','p6'],
 		"ks1-of-primary": ['p1', 'p2', 'p3'],
 		"k2-k3": ['k2', 'k3'],
 		"ks2-of-primary": ['p4', 'p5', 'p6'],
@@ -37,6 +39,7 @@ export const createLevelMapper = () => {
 		"p1": ['p1'],
 		"k3-p1": ['k3', 'p1'],
 		"s1-s3-foundation": ['s1', 's2', 's3'],
+		"s1-s3-intermediate": ['s1', 's2', 's3'],
 		"p4-to-p5-exam-prep": ['p4', 'p5'],
 		"p4-to-p6-exam-prep": ['p4', 'p5', 'p6'],
 	})

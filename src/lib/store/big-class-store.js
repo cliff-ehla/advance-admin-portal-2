@@ -104,6 +104,7 @@ const createBigClassEventStore = () => {
 				sub_cat_alter: e.sub_cat_alter || 'NA',
 				duration: e.duration || 'NA',
 				is_native_teacher: e.is_native_teacher,
+				is_always_open: e.is_always_open
 			}
 			return {
 				start: e.start_date,

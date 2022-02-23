@@ -53,6 +53,8 @@ export const renderClassroomEvent = (wrapper, start, extendedProps) => {
 	}
 	content.appendChild(content_upper)
 	content.appendChild(content_bottom)
+	let left_div = document.createElement('div')
+	left_div.classList.add('relative')
 	let img_el = document.createElement('img')
 	img_el.src = tutor_store.getTutorProfilePic(extendedProps.tutor_id)
 	img_el.classList.add('h-8', 'w-8', 'rounded-full')
@@ -60,9 +62,16 @@ export const renderClassroomEvent = (wrapper, start, extendedProps) => {
 	tippy(img_el, {
 		content: extendedProps.tutor_name
 	})
+	left_div.appendChild(img_el)
+	if (extendedProps.is_always_open) {
+		const is_always_open_icon = document.createElement('div')
+		is_always_open_icon.classList.add('absolute', 'left-0', 'top-0', 'w-4', 'h-4', 'rounded-full', 'cc', 'bg-red-500', 'text-white', 'shadow')
+		is_always_open_icon.innerHTML = '?'
+		left_div.appendChild(is_always_open_icon)
+	}
 	if (extendedProps.selected) {
 		wrapper.classList.add('bg-yellow-100', 'px-1', 'border-2', 'border-yellow-500')
 	}
-	wrapper.appendChild(img_el)
+	wrapper.appendChild(left_div)
 	wrapper.appendChild(content)
 }
