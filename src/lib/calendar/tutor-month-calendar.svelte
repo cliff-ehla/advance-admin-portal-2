@@ -132,7 +132,7 @@
 						start_date: e.start,
 						teacher_id: tutor_id
 					}, {
-						width: '600px',
+						width: '800px',
 						overflow: 'initial'
 					})
 				}

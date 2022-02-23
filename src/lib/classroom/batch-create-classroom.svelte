@@ -28,6 +28,7 @@
 	let existing_classroom
 	let ticket = 98
 	let student_size = 4
+	let is_always_open = true
 
 	const ticket_options = [
 		{
@@ -112,7 +113,8 @@
 				duration,
 				tutor_course_id,
 				ticket,
-				student_size
+				student_size,
+				is_always_open
 			}
 		})
 		const {data} = await http.post(fetch, '/courseApi/batch_reg_course', {
@@ -149,7 +151,7 @@
 			<p class="text-label">完結時間</p>
 			<TimePicker hh_mm={end_time} on:input={onEndTimeInput}/>
 		</div>
-		<div class="ml-8">
+		<div class="ml-4">
 			<p class="text-label">Ticket</p>
 			<SelectionBox options={ticket_options}
 			              placeholder="Ticket price"
@@ -157,8 +159,12 @@
 			              on:input={e => {ticket = e.detail}}/>
 		</div>
 		<div class="ml-1">
-			<p class="text-label">Student size</p>
+			<p class="text-label">人數</p>
 			<input bind:value={student_size} type="number" class="text-sm w-20 px-2 py-1 border border-gray-300 bg-gray-100">
+		</div>
+		<div class="ml-2">
+			<p class="text-label">即出？</p>
+			<input bind:value={is_always_open} type="checkbox" class="text-sm border border-gray-300 bg-gray-100">
 		</div>
 	</div>
 

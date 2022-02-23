@@ -30,6 +30,7 @@
 	let material_list
 	let classroom_size_list = [4,20,9999]
 	let is_out_of_syllabus = false
+	let is_always_open = true
 	$: disabled = !(selected_classroom_size && selected_item_id && ticket)
   const ticket_options = [
 	  {
@@ -77,7 +78,8 @@
 			teacher_id: teacher_id,
 			start_date: start_time,
 			duration,
-			tutor_course_id
+			tutor_course_id,
+			is_always_open
 		}, {
 			notification: '成功更新Classroom',
 			timeout: 800
@@ -100,7 +102,8 @@
 			duration,
 			student_size: selected_classroom_size,
 			ticket,
-			tutor_course_id
+			tutor_course_id,
+			is_always_open
 		}, {
 			notification: '起左'
 		})
@@ -161,6 +164,10 @@
 	<div class="flex items-center my-2">
 		<p class="text-gray-500 text-sm">Out of syllabus?</p>
 		<input class="ml-2" type="checkbox" bind:checked={is_out_of_syllabus}>
+	</div>
+	<div class="flex items-center my-2">
+		<p class="text-gray-500 text-sm">即出?</p>
+		<input class="ml-2" type="checkbox" bind:checked={is_always_open}>
 	</div>
 	{#if !is_out_of_syllabus}
 		{#if classroom_list}

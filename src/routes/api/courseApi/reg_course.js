@@ -8,6 +8,7 @@ export const post = (req) => {
 		duration: req.body.duration,
 		student_size: req.body.student_size,
 		ticket: req.body.ticket,
-		tutor_course_id: req.body.tutor_course_id
+		tutor_course_id: req.body.tutor_course_id,
+		is_always_open: req.body.is_always_open
 	})
 }

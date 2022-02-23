@@ -8,6 +8,7 @@ import {usermodel} from "$lib/usermodal";
  * "duration":40,
  * "ticket":2,
  * "student_size":4,
+ * is_always_open: Boolean
  * @param req
  * @returns {Promise<{body: any, status: number}>}
  */
