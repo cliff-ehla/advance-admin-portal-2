@@ -64,7 +64,8 @@
 			ticket: zoom.ticket || _ticket,
 			zoom_id: zoom.zoom_id,
 			start_time: zoom.start_time,
-			duration: zoom.duration
+			duration: zoom.duration,
+			is_always_open: zoom.is_always_open
 		}
 		openModal(CreateBigClassDialog, payload, {
 			width: '400px',

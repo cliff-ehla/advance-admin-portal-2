@@ -22,6 +22,7 @@
 	export let ticket = undefined // price
 	export let start_time = undefined // price
 	export let duration = undefined // price
+	export let is_always_open = true
 
 	$: is_edit = !!zoom_id
 	let is_edit_old_classroom = !!zoom_id && !tutor_course_id
@@ -30,7 +31,6 @@
 	let material_list
 	let classroom_size_list = [4,20,9999]
 	let is_out_of_syllabus = false
-	let is_always_open = true
 	$: disabled = !(selected_classroom_size && selected_item_id && ticket)
   const ticket_options = [
 	  {

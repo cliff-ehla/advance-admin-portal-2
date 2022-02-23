@@ -69,7 +69,7 @@ export const eventContent = (arg) => {
 			no_material_icon_el.style.color = '#ffe100'
 			wrapper.appendChild(no_material_icon_el)
 		}
-		if (extendedProps.is_always_open) {
+		if (!extendedProps.is_always_open && extendedProps.big_classroom_type) {
 			const is_always_open_icon = document.createElement('div')
 			is_always_open_icon.classList.add('mx-0.5', 'text-white')
 			is_always_open_icon.innerHTML = '?'

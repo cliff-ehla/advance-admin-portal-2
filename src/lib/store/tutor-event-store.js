@@ -36,6 +36,7 @@ const create_tutor_event_store = () => {
 					z.ticket = _z.ticket
 					z.teacher_id = _z.teacher_id
 					z.student_size = _z.student_size
+					z.is_always_open = _z.is_always_open
 				}
 			})
 		})

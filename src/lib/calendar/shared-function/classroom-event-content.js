@@ -63,7 +63,7 @@ export const renderClassroomEvent = (wrapper, start, extendedProps) => {
 		content: extendedProps.tutor_name
 	})
 	left_div.appendChild(img_el)
-	if (extendedProps.is_always_open) {
+	if (!extendedProps.is_always_open) {
 		const is_always_open_icon = document.createElement('div')
 		is_always_open_icon.classList.add('absolute', 'left-0', 'top-0', 'w-4', 'h-4', 'rounded-full', 'cc', 'bg-red-500', 'text-white', 'shadow')
 		is_always_open_icon.innerHTML = '?'
