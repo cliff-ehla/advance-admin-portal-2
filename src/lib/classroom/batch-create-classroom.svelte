@@ -177,6 +177,9 @@
 				<div class="my-2 flex items-start">
 					<p class="text-sm w-48 flex-shrink-0">{dayjs.utc(classroom.start_date).local().format('DD MMM YYYY (ddd) h:mma')}</p>
 					<p class="ml-4 text-sm">{classroom.title}</p>
+					{#if classroom.is_always_open === '0'}
+						<p class="ml-2 text-sm text-red-500">水温堂</p>
+					{/if}
 				</div>
 			{/each}
 		{/if}
