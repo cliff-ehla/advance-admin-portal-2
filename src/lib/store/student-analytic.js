@@ -15,7 +15,7 @@ export const student_analytic = derived(student_store, $student_store => {
 	$student_store.forEach(s => {
 		const fake_account_list = ['Louischild', 'spiderman', 'KeungB', 'queenie', 'Queenie']
 		const is_fake = fake_account_list.some(name => s.student_username.includes(name))
-		if (s.tt_t_amt > 0 && !is_fake) {
+		if ((s.tt_t_amt > 0 || s.used_t_amt > 0) && !is_fake) {
 			result.total_students++
 			if (s.tt_t_amt <= 6 * 49) {
 				result.new_user_count++
