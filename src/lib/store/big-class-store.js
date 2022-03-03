@@ -11,7 +11,7 @@ const create_big_class_store = () => {
 			return get(store)
 		}
 		let {data, success, debug} = await http.post(fetch,'/courseApi/list_registrable_classroom_for_admin', {
-			start_date: dayjs().subtract(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
+			start_date: dayjs().subtract(1, 'month').format('YYYY-MM-DD HH:mm:ss'),
 			end_date: dayjs().add(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
 		})
 		if (success) {
