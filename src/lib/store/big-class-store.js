@@ -6,8 +6,7 @@ import {http} from "$lib/http.js";
 const create_big_class_store = () => {
 	const store = writable([])
 	const month_log = writable([])
-	const callIfNoCache = async (fetch, option) => {
-		const month = option && option.month
+	const callIfNoCache = async (fetch, {month}) => {
 		if (get(month_log).includes(month)) return console.log(`Use cache: ${month} is already fetched`)
 		month_log.update(arr => [...arr, month])
 		const key = month + '-01'

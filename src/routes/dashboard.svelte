@@ -6,6 +6,12 @@
 		await big_class_store.callIfNoCache(fetch, {
 			month: dayjs().format('YYYY-MM')
 		})
+		const diff = dayjs(dayjs().endOf('month')).diff(dayjs(),'day')
+		if (diff < 7) {
+			await big_class_store.callIfNoCache(fetch, {
+				month: dayjs().add(1,'month').format('YYYY-MM')
+			})
+		}
 		return true
 	}
 </script>
@@ -90,6 +96,20 @@
 			content: '細戶即Ticket數少於6張'
 		})
 	}
+	
+	const onRangeClick = (option) => {
+		if (option.days > 7) {
+			big_class_store.callIfNoCache(fetch, {
+				month: dayjs().add(1,'month').format('YYYY-MM')
+			})
+		}
+		if (option.days > 50) {
+			big_class_store.callIfNoCache(fetch, {
+				month: dayjs().add(2,'month').format('YYYY-MM')
+			})
+		}
+		classroom_analytic.setRange(option.days)
+	}
 </script>
 
 <div class="bg-gray-100">
@@ -125,7 +145,7 @@
 			<p class="text-gray-500 ml-2">{dayjs().format('DD MMM YYYY')} - {dayjs().add($classroom_analytic.time_range, 'day').format('DD MMM YYYY')}</p>
 			<div class="ml-auto">
 				{#each $classroom_analytic.time_range_options as option}
-					<button on:click={() => {classroom_analytic.setRange(option.days)}}
+					<button on:click={() => {onRangeClick(option)}}
 					        class:active={option.days === $classroom_analytic.time_range}
 					        class="normal button-secondary mx-1">
 						{option.label}
