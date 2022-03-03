@@ -1,10 +1,11 @@
 <script context="module">
-	import {http, onFail} from "$lib/http";
 	import dayjs from "dayjs";
 	import {big_class_store} from "$lib/store/big-class-store.js";
 
 	export const load = async ({page, fetch}) => {
-		await big_class_store.callIfNoCache(fetch)
+		await big_class_store.callIfNoCache(fetch, {
+			month: dayjs().format('YYYY-MM')
+		})
 		return true
 	}
 </script>

@@ -1,8 +1,11 @@
 <script context="module">
 	import {big_class_store, big_class_events, classroom_analytic} from "$lib/store/big-class-store.js";
+	import dayjs from "dayjs";
 
 	export const load = async ({fetch}) => {
-		await big_class_store.callIfNoCache(fetch)
+		await big_class_store.callIfNoCache(fetch, {
+			month: dayjs().format('YYYY-MM')
+		})
 		return true
 	}
 </script>
@@ -15,6 +18,7 @@
 	import Icon from '$lib/ui-elements/icon.svelte'
 	const {openModal, closeModal} = getContext('simple-modal')
 	let calendar
+	let calendar_month = dayjs().format('MMMM YYYY')
 
 	const CLASSROOM = 'classroom'
 
@@ -27,6 +31,7 @@
 	const init = async (node) => {
 		calendar = new FullCalendar.Calendar(node, {
 			initialView: 'dayGridMonth',
+			headerToolbar: false,
 			eventContent,
 			eventClick: async ({el, event}) => {
 				openModal(BigClassLessonMenu, {
@@ -87,7 +92,10 @@
 	const fetchAndReRender = async () => {
 		const source = calendar.getEventSourceById(CLASSROOM)
 		if (source) source.remove()
-		await big_class_store.callIfNoCache(fetch, {force: true})
+		big_class_store.clear()
+		await big_class_store.callIfNoCache(fetch, {
+			month: dayjs(calendar.getDate()).format('YYYY-MM')
+		})
 		reRenderEvents()
 	}
 
@@ -99,6 +107,19 @@
 
 	const onClearAllSelection = () => {
 		big_class_events.clearAllSelection()
+		reRenderEvents()
+	}
+
+	const onChangeMonth = async (type) => {
+		if (type === 'next') {
+			calendar.next()
+		} else {
+			calendar.prev()
+		}
+		calendar_month = dayjs(calendar.getDate()).format('MMMM YYYY')
+		await big_class_store.callIfNoCache(fetch, {
+			month: dayjs(calendar.getDate()).format('YYYY-MM')
+		})
 		reRenderEvents()
 	}
  </script>
@@ -153,5 +174,19 @@
 			</div>
 		</div>
 	</div>
-	<div class="py-4 px-2 ml-48" use:init></div>
+
+	<div class="py-2 px-2 ml-48">
+		<div class="flex-1 flex items-center justify-between px-2 mb-2">
+			<button class="transform rotate-180 w-12 h-12 hover:bg-blue-500 hover:text-white rounded-full bg-gray-100 border border-gray-300 flex items-center justify-center" on:click={() => {onChangeMonth('prev')}}>
+				<Icon className="w-4" name="right"/>
+			</button>
+			<div class="flex-1 flex items-center justify-center" style="font-size: 1.6em">
+				<p class="ml-2 leading-none">{calendar_month}</p>
+			</div>
+			<button class="w-12 h-12 hover:bg-blue-500 hover:text-white rounded-full bg-gray-100 border border-gray-300 flex items-center justify-center" on:click={() => {onChangeMonth('next')}}>
+				<Icon className="w-4" name="right"/>
+			</button>
+		</div>
+		<div use:init></div>
+	</div>
 </div>

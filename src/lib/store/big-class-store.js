@@ -5,27 +5,35 @@ import {http} from "$lib/http.js";
 
 const create_big_class_store = () => {
 	const store = writable([])
+	const month_log = writable([])
 	const callIfNoCache = async (fetch, option) => {
-		const force = option && option.force
-		if (get(store).length && !force) {
-			return get(store)
-		}
+		const month = option && option.month
+		if (get(month_log).includes(month)) return console.log(`Use cache: ${month} is already fetched`)
+		month_log.update(arr => [...arr, month])
+		const key = month + '-01'
 		let {data, success, debug} = await http.post(fetch,'/courseApi/list_registrable_classroom_for_admin', {
-			start_date: dayjs().subtract(1, 'month').format('YYYY-MM-DD HH:mm:ss'),
-			end_date: dayjs().add(3, 'month').format('YYYY-MM-DD HH:mm:ss'),
+			start_date: dayjs(key).startOf('month').format('YYYY-MM-DD HH:mm:ss'),
+			end_date: dayjs(key).endOf('month').format('YYYY-MM-DD HH:mm:ss'),
 		})
 		if (success) {
 			data = data.filter(d => !!d.start_date)
-			store.set(data)
+			store.update(v => {
+				return [...v, ...data]
+			})
 			return data
 		} else {
 			console.log(debug.error_message)
 		}
 	}
+	const clear = () => {
+		store.set([])
+		month_log.set([])
+	}
 	return {
 		subscribe: store.subscribe,
 		set: store.set,
-		callIfNoCache
+		callIfNoCache,
+		clear
 	}
 }
 
