@@ -94,6 +94,7 @@ const createBigClassEventStore = () => {
 			const extendedProps = {
 				selected: $selected_zoom_ids.includes(e.zoom_id),
 				type: 'classroom',
+				ticket: e.ticket,
 				reg_user_cnt: e.reg_user_cnt,
 				student_size: e.student_size,
 				is_full: e.reg_user_cnt === e.student_size,
