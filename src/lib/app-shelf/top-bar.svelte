@@ -111,6 +111,11 @@
 					href: '/voucher/todo'
 				}
 			]
+		},
+		{
+			segment: 'syllabus',
+			name: 'Syllabus',
+			href: '/syllabus'
 		}
 	]
 </script>
