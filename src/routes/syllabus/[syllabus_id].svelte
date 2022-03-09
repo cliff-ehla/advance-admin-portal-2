@@ -2,6 +2,7 @@
 	import {http, onFail} from "$lib/http";
 
 	export const load = async ({page, fetch}) => {
+		if (page.query.get('reload')) {}
 		const {data, success, debug} = await http.post(fetch, '/syllabusApi/list_syllabus_category_detail', {
 			syllabus_id: page.params.syllabus_id
 		})
@@ -16,11 +17,33 @@
 
 <script>
 	import Icon from '$lib/ui-elements/icon.svelte'
+	import {getContext} from 'svelte'
+	import {page} from "$app/stores";
+	const {openModal, closeModal} = getContext('simple-modal')
+	import LinkMaterialToSyllabus from '$lib/material/link-material-to-syllabus.svelte'
+	import {dialog} from "$lib/store/dialog.js";
 	export let syllabus
-	console.log('cliff: ', syllabus)
+	import {triggerReload} from "$lib/helper/trigger-reload.js";
+
+	const onDelete = (item_id) => {
+		dialog.confirm({
+			message: 'Remove this item from syllabus',
+			onConfirm: () => {
+				http.post(fetch, '/syllabusApi/delete_syllabus_item', {
+					syllabus_id: $page.params.syllabus_id,
+					item_id
+				}, {
+					notification: 'Removed'
+				})
+			},
+			onSuccess: triggerReload
+		})
+	}
 	
-	const onDelete = (id) => {
-		console.log('cliff: ', id)
+	const onAddItem = () => {
+		openModal(LinkMaterialToSyllabus, {
+			syllabus_id: $page.params.syllabus_id
+		})
 	}
 </script>
 
@@ -36,4 +59,10 @@
 			</div>
 		{/each}
 	</div>
+</div>
+
+<div class="fixed right-2 bottom-2">
+	<button on:click={onAddItem} class="button">
+		Add item
+	</button>
 </div>
