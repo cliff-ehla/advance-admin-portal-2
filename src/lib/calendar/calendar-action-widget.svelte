@@ -60,6 +60,7 @@
 				dispatch('refresh')
 			}
 		}, {
+			closeButton: false,
 			width: '960px'
 		})
 	}
