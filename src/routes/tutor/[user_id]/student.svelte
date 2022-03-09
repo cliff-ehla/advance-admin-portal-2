@@ -21,6 +21,10 @@
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import Selection from '$lib/ui-elements/selection-box.svelte'
 	import {tooltip} from "$lib/aciton/tooltip.js";
+	import {tutor_store} from "../../../store/tutor-store.js";
+	import {page} from "$app/stores";
+
+	$: tutor_name = $tutor_store ? tutor_store.getTutorName($page.params.user_id) : ''
 
 	$: active_student_count = student_list.filter(s => s.upcoming_zoom_cnt > 0).length
 	$: sorted_student_list = student_list.sort((a,b) => {
@@ -54,7 +58,7 @@
 	<div class="container pb-8">
 		<div class="flex items-center justify-between py-4">
 			<div>
-				<h1 class="page-title">My Students</h1>
+				<h1 class="page-title text-xl">{tutor_name}'s Students</h1>
 				<div class="flex items-center">
 					<div class="w-2.5 h-2.5 rounded-full bg-green-500 mx-0.5 mt-0.5"></div>
 					<p use:tooltip={'Students with upcoming lessons'} class="text-gray-700 ml-1 text-green-700">Active students
