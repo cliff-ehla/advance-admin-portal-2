@@ -79,6 +79,10 @@
 				{
 					label: 'Analytic',
 					href: '/students/analytic?week_count=1'
+				},
+				{
+					label: 'Membership',
+					href: '/students/membership'
 				}
 			]
 		},
