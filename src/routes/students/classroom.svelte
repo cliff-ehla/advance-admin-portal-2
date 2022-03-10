@@ -8,7 +8,7 @@
 </div>
 <div class="flex bg-gray-100 p-4">
 	<div class="p-4 bg-white">
-		<p class="font-bold mb-4" style="font-size: 2em">需跟進戶: {$student_analytic.few_ticker_user.length}</p>
+		<p class="font-bold mb-4" style="font-size: 2em">大戶(需提醒續費): {$student_analytic.few_ticker_user.length}</p>
 		{#each $student_analytic.few_ticker_user as s}
 			<Preview {s}/>
 		{/each}

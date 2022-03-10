@@ -80,6 +80,7 @@
 
 <div style="min-width: 400px">
 	<p class="text-xs text-gray-500 mb-2">Zoom ID: {zoom_id}</p>
+	<p class="text-xs text-gray-500 mb-2">Tutor group ID: {tutor_group_id}</p>
 	<div class="item mb-4" on:click={toggleSelection}>
 		{#if selected}
 			<Icon name="trash" className="w-4"/>
