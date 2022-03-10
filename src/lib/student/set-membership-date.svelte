@@ -3,6 +3,10 @@
 	import Button from '$lib/ui-elements/button.svelte'
 	import dayjs from "dayjs";
 	import {capitalize} from "$lib/helper/capitalize.js";
+	import {triggerReload} from "$lib/helper/trigger-reload.js";
+	import {http} from "$lib/http.js";
+	import {getContext} from 'svelte'
+	const {openModal, closeModal} = getContext('simple-modal')
 
 	export let start_date
 	export let end_date
@@ -15,8 +19,17 @@
 	const onDateChangeEnd = (e) => {
 		end_date = dayjs(e.detail).format('YYYY-MM-DD')
 	}
-	const onClick = () => {
-		console.log('cliff: ', start_date)
+	const onClick = async () => {
+		await http.post(fetch, '/aiMembershipForceOpen/set_membership', {
+			start_date: start_date + ' 00:00:00',
+			end_date: end_date + ' 00:00:00',
+			user_id,
+			type
+		}, {
+			notification: '掂'
+		})
+		triggerReload()
+		closeModal()
 	}
 </script>
 

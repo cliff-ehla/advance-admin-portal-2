@@ -2,6 +2,7 @@
 	import {http, onFail} from "$lib/http";
 
 	export const load = async ({page, fetch}) => {
+		if (page.query.get('reload')) {}
 		const {data, success, debug} = await http.get(fetch, '/aiMembershipForceOpen/list_all')
 		if (!success) return onFail(debug)
 		return {
