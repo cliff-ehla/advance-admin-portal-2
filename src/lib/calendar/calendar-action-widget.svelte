@@ -229,7 +229,7 @@
 				</button>
 			{/if}
 			{#if $action_status === 'edit_time'}
-				{#if $edit_lesson_tbc_to_date.teacher_id}
+				{#if !$edit_lesson_tbc_to_date.teacher_id}
 					<div class="absolute inset-0 bg-red-500 text-white p-2 rounded">冇tutor id 改唔到堂的！</div>
 				{/if}
 				<p class="font-bold text-xs mb-1">Edit: From {dayjs($edit_lesson_tbc_to_date.from_start_date).format('DD MMM h:mm a')} ({$edit_lesson_tbc_to_date.teacher_id})</p>
