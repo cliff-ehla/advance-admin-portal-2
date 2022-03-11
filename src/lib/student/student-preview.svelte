@@ -6,6 +6,8 @@
 	const onAddChild = (s) => {
 		openModal(CreateNewChildToParent, {
 			parent_id: s.parent_id
+		}, {
+			overflow: 'initial'
 		})
 	}
 </script>
