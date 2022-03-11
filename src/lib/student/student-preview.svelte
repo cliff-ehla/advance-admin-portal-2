@@ -1,5 +1,13 @@
 <script>
 	export let s
+	import {getContext} from 'svelte'
+	const {openModal, closeModal} = getContext('simple-modal')
+	import CreateNewChildToParent from '$lib/student/create-new-child-to-parent.svelte'
+	const onAddChild = (s) => {
+		openModal(CreateNewChildToParent, {
+			parent_id: s.parent_id
+		})
+	}
 </script>
 
 <div class="flex items-center mb-4">
@@ -32,6 +40,7 @@
 				</div>
 				<p class="text-xs text-gray-500 mt-0.5">已用: {s.used_t_amt}, 總共: {s.tt_t_amt}</p>
 			</div>
+			<button class="ml-1 px-2 py-1 ml-2 border-l border-gray-400 text-xs hover:text-blue-500 py-2 leading-tight" style="width: 26px" on:click={() => {onAddChild(s)}}>加仔</button>
 		</div>
 	</div>
 </div>
