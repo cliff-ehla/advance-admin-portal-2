@@ -13,6 +13,7 @@
 	export let type
 	export let user_id
 	export let nickname
+	export let onSuccess = () => {}
 	const onDateChange = (e) => {
 		start_date = dayjs(e.detail).format('YYYY-MM-DD')
 	}
@@ -20,16 +21,17 @@
 		end_date = dayjs(e.detail).format('YYYY-MM-DD')
 	}
 	const onClick = async () => {
-		await http.post(fetch, '/aiMembershipForceOpen/set_membership', {
+		let payload = {
 			start_date: start_date + ' 00:00:00',
 			end_date: end_date + ' 00:00:00',
 			user_id,
 			type
-		}, {
+		}
+		await http.post(fetch, '/aiMembershipForceOpen/set_membership', payload, {
 			notification: '掂'
 		})
-		triggerReload()
 		closeModal()
+		onSuccess(payload)
 	}
 </script>
 

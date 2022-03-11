@@ -2,7 +2,6 @@
 	import {http, onFail} from "$lib/http";
 
 	export const load = async ({page, fetch}) => {
-		if (page.query.get('reload')) {}
 		const {data, success, debug} = await http.get(fetch, '/aiMembershipForceOpen/list_all')
 		if (!success) return onFail(debug)
 		return {
@@ -21,8 +20,7 @@
 
 	export let list
 
-	const onEdit = (user_id, nickname, type, obj) => {
-		console.log('cliff: ', user_id, type)
+	const onEdit = (user_id, nickname, type, obj, student) => {
 		let start_date = obj ? obj.start_date : dayjs().format('YYYY-MM-DD')
 		let end_date = obj ? obj.end_date : dayjs().format('YYYY-MM-DD')
 		openModal(SetMembershipDate, {
@@ -30,7 +28,14 @@
 			user_id,
 			nickname,
 			start_date,
-			end_date
+			end_date,
+			onSuccess: ({start_date, end_date}) => {
+				student[type] = {}
+				student[type] = {
+					start_date, end_date
+				}
+				list = list
+			}
 		}, {
 			overflow: 'initial'
 		})
@@ -44,7 +49,7 @@
 				<p class="text-sm text-gray-500">{s.parent_nickname || 'No name'} <span class="px-1 leading py-0.5 text-xs text-gray-500 bg-gray-100 ml-1">{s.parent_id}</span></p>
 			</div>
 			{#each ['vocab','dictation','speak'] as type}
-				<div on:click={() => {onEdit(s.user_id, s.nickname, type, s[type])}} class="flex mx-1">
+				<div on:click={() => {onEdit(s.user_id, s.nickname, type, s[type], s)}} class="flex mx-1">
 					<div class="{s[type] ? dayjs(s[type].end_date).isAfter(dayjs()) ? 'bg-blue-500 text-white hover:bg-blue-400' : 'bg-gray-100 border border-gray-300 hover:bg-gray-200' : 'bg-gray-50 text-gray-300 hover:bg-gray-100 hover:text-gray-500'} rounded p-2 cursor-pointer">
 						<p class="text-xs">{type}</p>
 						{#if s[type]}
