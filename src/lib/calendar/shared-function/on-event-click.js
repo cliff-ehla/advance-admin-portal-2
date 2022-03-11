@@ -118,6 +118,9 @@ export const onEventClick = ({event, el}, openPopper, openModal, month_calendar,
 				let z = event.extendedProps
 				let duration = dayjs(event.end).diff(dayjs(event.start), 'minute')
 
+				if (!tutor_id) {
+					return alert('冇 tutor id 改唔到時間的！')
+				}
 				edit_lesson_tbc_to_date.set({
 					event_title: z.students.map(s => s.nickname).join(', '),
 					wrapper_id: z.zoom_id,
