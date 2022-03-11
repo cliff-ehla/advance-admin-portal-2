@@ -13,6 +13,7 @@
 	$: filtered_many_ticker_user = $student_analytic.many_ticker_user.filter(s => {
 		return selected_levels.indexOf(s.level) > -1
 	})
+	$: total = filtered_few_ticker_user.length + filtered_new_users.length + filtered_many_ticker_user.length
 	const checkAll = () => {
 		selected_levels = $level_options_store.map(lv => lv.value)
 	}
@@ -31,7 +32,7 @@
 </script>
 
 <div class="bg-gray-100 p-4">
-	<p class="font-bold" style="font-size: 2em">大細班學生總數: {$student_analytic.total_students}</p>
+	<p class="font-bold" style="font-size: 2em">大細班學生總數: {total}</p>
 </div>
 
 <div class="py-2">
