@@ -17,6 +17,7 @@
 	import dayjs from "dayjs";
 	import utc from "dayjs/plugin/utc.js";
 	import {big_class_events} from "$lib/store/big-class-store.js";
+	import {sentry} from "$lib/sentry.js";
 
 	dayjs.extend(utc)
 	const {openModal, closeModal} = getContext('simple-modal')
@@ -36,10 +37,16 @@
 			return {
 				date: dayjs.utc(s.reg_date).local().format('DD MMM YYYY'),
 				duration: dayjs().diff(dayjs.utc(s.reg_date).local(), 'day'),
-				student: student_store.getStudent(s.user_id)
+				student: student_store.getStudent(s.user_id),
+				user_id: s.user_id
 			}
 		})
-		students = students.filter(s => !!s)
+		students = students.filter(s => {
+			if (!s.student) {
+				sentry.log(`big-class-lesson-menu： map 唔到呢個學生ID: ${s.user_id}`)
+			}
+			return s.student
+		})
 	}
 
 	const onReg = async (student_id, is_reg) => {
