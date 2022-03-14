@@ -5,7 +5,8 @@
 
 	export let themes = {
 		alert: "bg-red-500",
-		success: "bg-green-500"
+		success: "bg-green-500",
+		info: "bg-yellow-500"
 	};
 </script>
 

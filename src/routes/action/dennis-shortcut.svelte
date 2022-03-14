@@ -11,7 +11,6 @@
 	import {level_options_store} from "../../store/level-options";
 	import {student_store} from "../../store/student-store.js";
 	import {is_loading} from "$lib/store/is_loading";
-	import {capitalize} from "$lib/helper/capitalize.js";
 	import {notifications} from "$lib/store/notification.js";
 
 	dayjs.extend(utc)
@@ -36,6 +35,7 @@
 	let lesson_fee, app_fee = 0, remark
 	let ticket_amt
 	let payment_method
+	let is_vip = true
 
 	let gender_options = [
 		{
@@ -51,7 +51,13 @@
 			value: 'na'
 		}
 	]
-	$: disabled = !(parent_mobile && parent_nickname)
+	$: disabled = !(ticket_amt && payment_method && parent_mobile && parent_nickname && parent_username)
+	$: {
+		if (ticket_amt > 900) {
+			is_vip = false
+			notifications.info('多過900蚊就不需特別關注，自動off左先')
+		}
+	}
 
 	const callApi = debounce(async () => {
 		let promise_array = []
@@ -221,6 +227,10 @@
 					<label>App fee</label>
 					<input class="input block mb-2 w-full" type="number" placeholder="App fee" bind:value={app_fee}/>
 				</div>
+			</div>
+			<div class="my-2">
+				<input type="checkbox" bind:checked={is_vip} id="extra_option" class="cursor-pointer">
+				<label for="extra_option" class="cursor-pointer ml-2">特別關注</label>
 			</div>
 			<label>Payment method</label>
 			<SelectionBox simple_array options={['Alipay', 'Bank Transfer', 'Payme']} selected_value={payment_method} on:input={e => {payment_method = e.detail}}/>
