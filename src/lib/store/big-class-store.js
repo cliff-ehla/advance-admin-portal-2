@@ -2,6 +2,7 @@ import {writable, get, derived, readable} from "svelte/store";
 import {big_class_mapper} from "$lib/store/big-class-mapper.js";
 import dayjs from "dayjs";
 import {http} from "$lib/http.js";
+import {tutor_store} from "../../store/tutor-store.js";
 
 const create_big_class_store = () => {
 	const store = writable([])
@@ -41,6 +42,7 @@ export const big_class_store = create_big_class_store()
 const createBigClassEventStore = () => {
 	const selected_levels = writable([])
 	const selected_codes = writable([])
+	const selected_tutors = writable([])
 	const exclude_is_full = writable(false)
 	const selected_zoom_ids = writable([])
 
@@ -74,6 +76,17 @@ const createBigClassEventStore = () => {
 	}
 	const toggleCodeFilter = (code) => {
 		selected_codes.update(v => {
+			if (v.includes(code)) {
+				v.splice(v.indexOf(code),1)
+				return v
+			} else {
+				v.push(code)
+				return v
+			}
+		})
+	}
+	const toggleTutorFilter = (code) => {
+		selected_tutors.update(v => {
 			if (v.includes(code)) {
 				v.splice(v.indexOf(code),1)
 				return v
@@ -120,8 +133,8 @@ const createBigClassEventStore = () => {
 			}
 		})
 	})
-	const _store = derived([big_class_events, selected_levels, selected_codes, exclude_is_full, selected_zoom_ids],
-			([$events, $selected_levels, $selected_codes, $exclude_is_full, $selected_zoom_ids]) => {
+	const _store = derived([big_class_events, selected_levels, selected_codes, selected_tutors, exclude_is_full, selected_zoom_ids],
+			([$events, $selected_levels, $selected_codes, $selected_tutors, $exclude_is_full, $selected_zoom_ids]) => {
 		const code_filters = big_class_mapper.all_codes.map(c => ({
 			key: c,
 			count: 0,
@@ -132,7 +145,12 @@ const createBigClassEventStore = () => {
 			count: 0,
 			selected: $selected_levels.includes(c)
 		}))
-
+		const tutor_filters = get(tutor_store).map(t => ({
+			key: t.user_id,
+			label: t.nickname,
+			count: 0,
+			selected: $selected_tutors.includes(t)
+		}))
 		if ($selected_levels.length) {
 			$events = $events.filter(e => {
 				return e.extendedProps.levels.some(lv => {
@@ -145,15 +163,22 @@ const createBigClassEventStore = () => {
 				return $selected_codes.includes(e.extendedProps.code)
 			})
 		}
+		if ($selected_tutors.length) {
+			$events = $events.filter(e => {
+				return $selected_tutors.includes(e.extendedProps.tutor_id)
+			})
+		}
 		if ($exclude_is_full) {
 			$events = $events.filter(e => {
 				return !e.extendedProps.is_full
 			})
 		}
 		$events.forEach(e => {
-			let {code, levels} = e.extendedProps
+			let {code, levels, tutor_id} = e.extendedProps
 			let obj = code_filters.find(f => f.key === code)
 			if (obj) obj.count++
+			let obj2 = tutor_filters.find(f => f.key === tutor_id)
+			if (obj2) obj2.count++
 			levels.forEach(lv => {
 				let obj = level_filters.find(f => f.key === lv)
 				if (obj) obj.count++
@@ -167,6 +192,7 @@ const createBigClassEventStore = () => {
 			code_filter_off: $selected_codes.length === 0,
 			code_filters,
 			level_filters,
+			tutor_filters,
 			exclude_is_full: $exclude_is_full
 		}
 	})
@@ -174,6 +200,7 @@ const createBigClassEventStore = () => {
 		subscribe: _store.subscribe,
 		toggleLevelFilter,
 		toggleCodeFilter,
+		toggleTutorFilter,
 		clearLevelFilters,
 		clearCodeFilters,
 		toggleIsFull,

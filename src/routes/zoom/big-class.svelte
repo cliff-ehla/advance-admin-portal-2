@@ -73,6 +73,11 @@
 		reRenderEvents()
 	}
 
+	const onToggleTutor = (key) => {
+		big_class_events.toggleTutorFilter(key)
+		reRenderEvents()
+	}
+
 	const onToggleIsFull = () => {
 		big_class_events.toggleIsFull()
 		reRenderEvents()
@@ -162,6 +167,17 @@
 					<div class="flex items-center px-2 py-0.5 cursor-pointer hover:bg-white">
 						<input id={f.key} type="checkbox" checked={f.selected} on:input={() => {onToggleCode(f.key)}}>
 						<label for={f.key} class="ml-4 cursor-pointer">{f.key} ({f.count})</label>
+					</div>
+				{/each}
+			</div>
+		</div>
+
+		<div class="bg-blue-100 border border-blue-200 my-4">
+			<div class="p-1 bg-blue-100">
+				{#each $big_class_events.tutor_filters as f}
+					<div class="flex items-center px-2 py-0.5 cursor-pointer hover:bg-white">
+						<input id={f.key} type="checkbox" checked={f.selected} on:input={() => {onToggleTutor(f.key)}}>
+						<label for={f.key} class="ml-4 cursor-pointer">{f.label} ({f.count})</label>
 					</div>
 				{/each}
 			</div>
