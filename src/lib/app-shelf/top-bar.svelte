@@ -83,6 +83,10 @@
 				{
 					label: 'Membership',
 					href: '/students/membership'
+				},
+				{
+					label: '新學生+Voucher+Book堂',
+					href: '/action/dennis-shortcut'
 				}
 			]
 		},
