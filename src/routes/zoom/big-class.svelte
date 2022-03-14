@@ -130,7 +130,7 @@
  </script>
 
 <div>
-	<div class="absolute w-48 left-0 p-2">
+	<div class="absolute w-56 left-0 p-2 overflow-y-scroll" style="max-height: calc(100vh - 72px)">
 		<div class="p-2 {$big_class_events.selected_events.length ? 'cursor-pointer bg-yellow-50 border-yellow-400 hover:bg-yellow-100' : 'bg-gray-200'} border-2 flex items-center mt-2">
 			<div class="flex-1" on:click={showSelectedEvents}>推介信息 ({$big_class_events.selected_events.length})</div>
 			{#if $big_class_events.selected_events.length}
@@ -138,6 +138,13 @@
 					<Icon name="close" className="w-3"/>
 				</button>
 			{/if}
+		</div>
+
+		<div class="bg-blue-100 border border-blue-200 my-4">
+			<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
+				<input id="is_full" type="checkbox" checked={$big_class_events.exclude_is_full} on:input={onToggleIsFull}>
+				<label for="is_full" class="ml-4 cursor-pointer">撇除滿員</label>
+			</div>
 		</div>
 
 		<div class="my-4">
@@ -173,25 +180,23 @@
 		</div>
 
 		<div class="bg-blue-100 border border-blue-200 my-4">
+			<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
+				<input id="code" type="checkbox" checked={$big_class_events.tutor_filter_off} on:input={onClearCodeFilter}>
+				<label for="code" class="ml-4 cursor-pointer">全部Tutor</label>
+			</div>
 			<div class="p-1 bg-blue-100">
 				{#each $big_class_events.tutor_filters as f}
 					<div class="flex items-center px-2 py-0.5 cursor-pointer hover:bg-white">
 						<input id={f.key} type="checkbox" checked={f.selected} on:input={() => {onToggleTutor(f.key)}}>
-						<label for={f.key} class="ml-4 cursor-pointer">{f.label} ({f.count})</label>
+						<label for={f.key} class="ml-4 cursor-pointer text-sm">{f.label} ({f.count})</label>
 					</div>
 				{/each}
 			</div>
 		</div>
-
-		<div class="bg-blue-100 border border-blue-200">
-			<div class="p-2 bg-blue-50 border border-blue-200 flex items-center">
-				<input id="is_full" type="checkbox" checked={$big_class_events.exclude_is_full} on:input={onToggleIsFull}>
-				<label for="is_full" class="ml-4 cursor-pointer">撇除滿員</label>
-			</div>
-		</div>
 	</div>
 
-	<div class="py-2 px-2 ml-48">
+
+	<div class="py-2 px-2 ml-56">
 		<div class="flex-1 flex items-center justify-between px-2 mb-2">
 			<button class="transform rotate-180 w-12 h-12 hover:bg-blue-500 hover:text-white rounded-full bg-gray-100 border border-gray-300 flex items-center justify-center" on:click={() => {onChangeMonth('prev')}}>
 				<Icon className="w-4" name="right"/>

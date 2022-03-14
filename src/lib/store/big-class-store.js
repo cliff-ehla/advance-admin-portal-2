@@ -190,6 +190,7 @@ const createBigClassEventStore = () => {
 			selected_events,
 			level_filter_off:  $selected_levels.length === 0,
 			code_filter_off: $selected_codes.length === 0,
+			tutor_filter_off: $selected_tutors.length === 0,
 			code_filters,
 			level_filters,
 			tutor_filters,
