@@ -13,13 +13,18 @@
 
 	dayjs.extend(utc)
 
-	export let username = undefined
-	export let nickname = undefined
-	export let level = undefined
-	export let gender = undefined
-	export let parent_mobile = undefined
-	export let parent_nickname = undefined
+	let username = undefined
+	let nickname = undefined
+	let level = undefined
+	let gender = undefined
+	let parent_mobile = undefined
+	let parent_nickname = undefined
+	let is_vip_student = undefined
 	let PASSWORD = '12345678'
+
+	let lesson_fee, app_fee = 0, remark
+	let ticket_amt
+	let payment_method
 
 	let gender_options = [
 		{
@@ -143,8 +148,30 @@
 				<input bind:value={parent_mobile} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
 			</div>
 		</div>
-		<div>
-			<Button button_class="w-full py-2" disabled={disabled || loading} on:click={onConfirm}>建立用戶</Button>
-		</div>
+
+	</div>
+
+	<label>Lesson fee</label>
+	<input class="input block mb-2 w-full" type="number" placeholder="Lesson fee" on:input={e => {ticket_amt = e.target.value}} bind:value={lesson_fee}/>
+	<label>App fee</label>
+	<input class="input block mb-2 w-full" type="number" placeholder="App fee" bind:value={app_fee}/>
+	<label>Payment method</label>
+	<SelectionBox simple_array options={['Alipay', 'Bank Transfer', 'Payme']} selected_value={payment_method} on:input={e => {payment_method = e.detail}}/>
+	<label>Remark</label>
+	<textarea class="input block mb-2 w-full" placeholder="Remark" bind:value={remark}/>
+
+	<div class="mb-2">
+		<input type="checkbox" bind:checked={is_vip_student} id="extra_option" class="cursor-pointer">
+		<label for="extra_option" class="cursor-pointer ml-2">是否特別關注學生</label>
+	</div>
+
+	<div>
+		<Button button_class="w-full py-2" disabled={disabled || loading} on:click={onConfirm}>建立用戶</Button>
 	</div>
 </div>
+
+<style>
+	label {
+		@apply text-sm text-gray-400 mb-2;
+	}
+</style>
