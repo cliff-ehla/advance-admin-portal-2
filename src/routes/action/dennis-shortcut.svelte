@@ -25,6 +25,7 @@
 	let lesson_fee, app_fee = 0, remark
 	let ticket_amt
 	let payment_method
+	let tutor_group_id
 
 	let gender_options = [
 		{
@@ -159,17 +160,16 @@
 	<SelectionBox simple_array options={['Alipay', 'Bank Transfer', 'Payme']} selected_value={payment_method} on:input={e => {payment_method = e.detail}}/>
 	<label>Remark</label>
 	<textarea class="input block mb-2 w-full" placeholder="Remark" bind:value={remark}/>
-
 	<div class="mb-2">
 		<input type="checkbox" bind:checked={is_vip_student} id="extra_option" class="cursor-pointer">
 		<label for="extra_option" class="cursor-pointer ml-2">是否特別關注學生</label>
 	</div>
-
-	<div>
+	<label>Tutor group id</label>
+	<input class="input block mb-2 w-full" type="number" placeholder="Tutor group id" bind:value={tutor_group_id}/>
+	<div class="mt-4">
 		<Button button_class="w-full py-2" disabled={disabled || loading} on:click={onConfirm}>建立用戶</Button>
 	</div>
 </div>
-
 <style>
 	label {
 		@apply text-sm text-gray-400 mb-2;
