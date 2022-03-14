@@ -1,7 +1,8 @@
 <script>
 	import dayjs from "dayjs";
 	import utc from 'dayjs/plugin/utc.js'
-	import {debounce} from 'debounce'
+	import pkg from 'debounce';
+	const { debounce } = pkg;
 	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
 	import Button from '$lib/ui-elements/button.svelte'
 	import Icon from '$lib/ui-elements/icon.svelte'
