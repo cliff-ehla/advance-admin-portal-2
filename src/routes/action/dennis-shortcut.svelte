@@ -33,6 +33,9 @@
 	let childs = [
 		{...child_obj}
 	]
+	let lesson_fee, app_fee = 0, remark
+	let ticket_amt
+	let payment_method
 
 	let gender_options = [
 		{
@@ -60,8 +63,6 @@
 		let results = await Promise.all(promise_array)
 		results.forEach((res, i) => {
 			childs[i].is_username_valid = res.success
-			// childs[i].nickname = capitalize(childs[i].username)
-			// parent_nickname = capitalize(childs[i].username) + ' Parent'
 		})
 		childs = childs
 	}, 500)
@@ -105,15 +106,25 @@
 	}
 
 	const onNicknameInput = (e, child) => {
-		child.username = e.target.value.toLowerCase().replace(' ', '') + (parent_mobile && parent_mobile.substring(0,4))
-		parent_nickname = e.target.value + ' Parent'
+		child.username = e.target.value.toLowerCase().replace(' ', '')
+		if (parent_mobile) {
+			child.username += parent_mobile.substring(0,4)
+		}
+		if (childs.length > 1) {
+			let first_child = childs[0].nickname
+			let second_child = e.target.value
+			parent_nickname = first_child.split(' ')[0] + ' and ' + second_child.split(' ')[0] + ' Parent'
+		} else {
+			parent_nickname = e.target.value + ' Parent'
+		}
+		callApi()
 	}
 </script>
 
 <div class="w-full container py-4">
 	<div class="text-sm text-gray-400 mb-2">
 		<p class="mb-1">Parent mobile no</p>
-		<input bind:value={parent_mobile} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
+		<input on:input={callApi2} bind:value={parent_mobile} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
 	</div>
 	<div class="mt-4">
 		<div class="grid grid-cols-2 gap-4 mb-4">
@@ -191,7 +202,7 @@
 							{/if}
 						</div>
 					</div>
-					<input on:input={callApi2} bind:value={parent_username} type="text" class="border border-gray-200 rounded px-4 py-2 w-full bg-gray-100">
+					<input bind:value={parent_username} type="text" class="border border-gray-200 rounded px-4 py-2 w-full bg-gray-100">
 				</div>
 				<div class="text-sm text-gray-400 mb-2">
 					<p class="mb-1">Parent Nickname</p>
@@ -199,8 +210,31 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="border border-gray-300 p-2 py-4 rounded mb-2">
+			<div class="grid grid-cols-2 gap-4">
+				<div>
+					<label>Lesson fee</label>
+					<input class="input block mb-2 w-full" type="number" placeholder="Lesson fee" on:input={e => {ticket_amt = e.target.value}} bind:value={lesson_fee}/>
+				</div>
+				<div>
+					<label>App fee</label>
+					<input class="input block mb-2 w-full" type="number" placeholder="App fee" bind:value={app_fee}/>
+				</div>
+			</div>
+			<label>Payment method</label>
+			<SelectionBox simple_array options={['Alipay', 'Bank Transfer', 'Payme']} selected_value={payment_method} on:input={e => {payment_method = e.detail}}/>
+			<label>Remark</label>
+			<textarea class="input block mb-2 w-full" placeholder="Remark" bind:value={remark}/>
+		</div>
 	</div>
 	<div>
 		<Button button_class="w-full py-2" disabled={disabled || $is_loading} on:click={onConfirm}>建立用戶</Button>
 	</div>
 </div>
+
+<style>
+	label {
+		@apply text-sm text-gray-400 mb-2;
+	}
+</style>
