@@ -23,9 +23,10 @@
 	const CLASSROOM = 'classroom'
 
 	onMount(() => {
-		document.addEventListener('refresh-calendar', e => {
-			fetchAndReRender()
-		})
+		document.addEventListener('refresh-calendar', fetchAndReRender)
+		return () => {
+			document.removeEventListener('refresh-calendar', fetchAndReRender)
+		}
 	})
 
 	const init = async (node) => {
@@ -95,8 +96,6 @@
 	}
 
 	const fetchAndReRender = async () => {
-		const source = calendar.getEventSourceById(CLASSROOM)
-		if (source) source.remove()
 		big_class_store.clear()
 		await big_class_store.callIfNoCache(fetch, {
 			month: dayjs(calendar.getDate()).format('YYYY-MM')
