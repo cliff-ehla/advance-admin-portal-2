@@ -31,7 +31,7 @@
 		gender: undefined,
 		is_username_valid: false,
 		tutor_group_ids: undefined,
-		is_eng_school: true // TODO
+		is_eng_school: false
 	}
 	let childs = [
 		{...child_obj}
@@ -190,6 +190,10 @@
 						<div class="text-sm text-gray-400 mb-2">
 							<p class="mb-1">Child nickname</p>
 							<input on:input={(e) => {onNicknameInput(e, c)}} bind:value={c.nickname} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
+						</div>
+						<div class="text-sm text-gray-400 my-4 flex items-center items-center">
+							<p class="">Eng school</p>
+							<input bind:checked={c.is_eng_school} type="checkbox" class="ml-2">
 						</div>
 						<div class="text-sm text-gray-400 mb-2">
 							<p class="mb-1">Gender</p>
