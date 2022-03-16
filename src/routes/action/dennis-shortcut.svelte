@@ -16,26 +16,29 @@
 
 	dayjs.extend(utc)
 
+	let errors = null
+	let results =  null
 	let parent_mobile = undefined
 	let parent_nickname = undefined
 	$: parent_username = parent_mobile
 	let is_parent_username_valid = false
 	const PASSWORD = '12345678'
 	const child_obj = {
-		username: '',
-		nickname: '',
+		username: undefined,
+		nickname: undefined,
 		password: PASSWORD,
-		level: '',
-		gender: '',
+		level: undefined,
+		gender: undefined,
 		is_username_valid: false,
-		tutor_group_ids: ''
+		tutor_group_ids: undefined,
+		is_eng_school: true // TODO
 	}
 	let childs = [
 		{...child_obj}
 	]
-	let lesson_fee, app_fee = 0, remark
-	let ticket_amt
-	let payment_method
+	let lesson_fee = 0, app_fee = 0, remark
+	let ticket_amt = 0
+	let payment_method = undefined
 	let is_vip = true
 
 	let gender_options = [
@@ -57,6 +60,11 @@
 		if (ticket_amt > 900) {
 			is_vip = false
 			notifications.info('多過900蚊就不需特別關注，自動off左先')
+		}
+	}
+	$: {
+		if (lesson_fee) {
+			ticket_amt = lesson_fee
 		}
 	}
 
@@ -87,18 +95,37 @@
 	}, 500)
 
 	const onConfirm = async  () => {
-		let {data} = await http.post(fetch, '/adminApi/create_parent_students', {
-			students: childs,
-			parent_username: parent_username,
+		let {success, data} = await http.post(fetch, '/adminApi/process_acc_shortcut_creation', {
+			parent_username,
 			parent_nickname,
 			parent_password: PASSWORD,
-			parent_mobile
+			parent_mobile,
+			is_trial_vip: is_vip,
+			lesson_fee,
+			app_fee,
+			voucher_date: dayjs().format('YYYY-MM-DD'),
+			payment_method,
+			ticket_amt,
+			ticket_expiry_date: dayjs().add(6, 'month').format('YYYY-MM-DD 00:00:00'),
+			remark,
+			students: childs.map(c => {
+				return {
+					...c,
+					...{
+						tutor_group_ids: c.tutor_group_ids.split(',')
+					}
+				}
+			})
 		}, {
-			notification: '成功創建用戶'
+			notifications: 'ok!'
 		})
-		dispatch('created', {
-			childs: data.childs
-		})
+		if (success) {
+			if (data.accounts) {
+				results = data
+			} else {
+				errors = data.error_msg
+			}
+		}
 		await student_store.fetchData(fetch)
 	}
 
@@ -113,7 +140,7 @@
 	}
 
 	const onNicknameInput = (e, child) => {
-		child.username = e.target.value.toLowerCase().replace(' ', '')
+		child.username = e.target.value.toLowerCase().replaceAll(' ', '')
 		if (parent_mobile) {
 			child.username += parent_mobile.substring(0,4)
 		}
@@ -125,6 +152,19 @@
 			parent_nickname = e.target.value + ' Parent'
 		}
 		callApi()
+	}
+
+	const onReset = () => {
+		results = null
+		parent_mobile = ''
+		lesson_fee = ''
+		app_fee = ''
+		is_vip = false
+		remark = ''
+		payment_method = ''
+		parent_nickname = ''
+		ticket_amt = ''
+		childs = [{...child_obj}]
 	}
 </script>
 
@@ -219,10 +259,14 @@
 		</div>
 
 		<div class="border border-gray-300 p-2 py-4 rounded mb-2">
-			<div class="grid grid-cols-2 gap-4">
+			<div class="grid grid-cols-3 gap-4">
 				<div>
 					<label>Lesson fee</label>
-					<input class="input block mb-2 w-full" type="number" placeholder="Lesson fee" on:input={e => {ticket_amt = e.target.value}} bind:value={lesson_fee}/>
+					<input class="input block mb-2 w-full" type="number" placeholder="Lesson fee" on:input={e => {lesson_fee = e.target.value}} bind:value={lesson_fee}/>
+				</div>
+				<div>
+					<label>Ticket amount</label>
+					<input class="input block mb-2 w-full" type="number" placeholder="Lesson fee" on:input={e => {ticket_amt = e.target.value}} bind:value={ticket_amt}/>
 				</div>
 				<div>
 					<label>App fee</label>
@@ -243,6 +287,36 @@
 		<Button button_class="w-full py-2" disabled={disabled || $is_loading} on:click={onConfirm}>建立用戶</Button>
 	</div>
 </div>
+
+{#if results}
+	<div class="fixed top-1/2 left-1/2 -ml-48 -mt-48 w-96 rounded shadow-lg p-4 bg-white z-10">
+		<div class="mb-4">
+			<p class="text-gray-500 underline">Created child accounts</p>
+			{#each results.accounts.childs as c}
+				<p>{c.nickname}</p>
+				<p class="text-sm text-gray-500">{c.username} <span class="text-white bg-gray-400 text-xs px-2 rounded">ID: {c.user_id}</span></p>
+			{/each}
+		</div>
+		<div class="mb-4">
+			<p class="text-gray-500 underline">Created parent accounts</p>
+			<p>{results.accounts.parent.nickname}</p>
+			<p class="text-sm text-gray-500">{results.accounts.parent.username} <span class="text-white bg-gray-400 text-xs px-2 rounded">ID: {results.accounts.parent.user_id}</span></p>
+		</div>
+		<div class="mb-4">
+			<p class="text-gray-500 underline">Created voucher</p>
+			<p>{results.voucher_data.voucher_number}</p>
+		</div>
+		<button on:click={onReset} class="mt-4 button">Close</button>
+	</div>
+{:else if errors}
+	<div class="fixed top-1/2 left-1/2 -ml-48 -mt-48 w-96 rounded h-96 shadow-lg p-4 bg-white z-10">
+		<p class="mb-4">Errors:</p>
+		{#each errors as e}
+			<p>{e.e_msg}</p>
+		{/each}
+		<button class="button mt-4" on:click={() => {errors = null}}>Close</button>
+	</div>
+{/if}
 
 <style>
 	label {

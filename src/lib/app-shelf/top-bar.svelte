@@ -83,6 +83,10 @@
 				{
 					label: 'Membership',
 					href: '/students/membership'
+				},
+				{
+					label: 'Shortcut',
+					href: '/action/dennis-shortcut'
 				}
 			]
 		},
