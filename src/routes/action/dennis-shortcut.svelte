@@ -30,7 +30,7 @@
 		level: undefined,
 		gender: undefined,
 		is_username_valid: false,
-		tutor_group_ids: undefined,
+		zoom_ids: undefined,
 		is_eng_school: false
 	}
 	let childs = [
@@ -112,7 +112,7 @@
 				return {
 					...c,
 					...{
-						tutor_group_ids: c.tutor_group_ids.split(',')
+						zoom_ids: c.zoom_ids.split(',')
 					}
 				}
 			})
@@ -208,8 +208,8 @@
 							              on:input={e => {c.level = e.detail}}/>
 						</div>
 						<div class="text-sm text-gray-400 mb-2">
-							<p class="mb-1">tutor_group_ids</p>
-							<input bind:value={c.tutor_group_ids} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
+							<p class="mb-1">zoom_ids</p>
+							<input bind:value={c.zoom_ids} type="text" class="border border-gray-300 rounded px-4 py-2 w-full">
 						</div>
 
 						<div class="text-sm text-gray-400 mb-2">
