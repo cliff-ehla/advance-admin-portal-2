@@ -1,16 +1,17 @@
 <script>
 	import {student_store} from "../../store/student-store.js";
 	import Icon from '$lib/ui-elements/icon.svelte'
+	import Dropdown from '$lib/ui-elements/dropdown3.svelte'
 	import {debounce} from "debounce";
 	import {createEventDispatcher} from "svelte";
 	const dispatch = createEventDispatcher()
 	import {fly} from "svelte/transition";
 
+	export let placeholder
 	export let wrapper_class = undefined
 	export let search = undefined
 
 	const onSelect = r => {
-		console.log(r)
 		search = r.student_nickname
 		dispatch('input', r)
 	}
@@ -27,7 +28,7 @@
 	</div>
 	<input on:focus={() => {focused = true}}
 	       on:blur={debounce(onBlur, 200)}
-	       placeholder="Search user"
+	       {placeholder}
 	       type="text"
 	       bind:value={search}
 	       class="px-1 flex-1 max-w-full focus:outline-none"/>

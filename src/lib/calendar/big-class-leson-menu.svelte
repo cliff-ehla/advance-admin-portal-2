@@ -37,6 +37,7 @@
 	$: is_full = res ? max_students === students.length : false
 
 	onMount(() => {
+		console.log('cliff: ', tutor_course_id)
 		fetchData()
 		fetchWaitingList()
 	})
@@ -47,6 +48,7 @@
 		})
 		if (success) {
 			waiting_list = data[0].user_ids
+			console.log('cliff: ', waiting_list)
 		}
 	}
 
@@ -71,7 +73,6 @@
 			}
 			return s.student
 		})
-		console.log(students)
 	}
 
 	const onReg = async (student_id, is_reg) => {
@@ -121,6 +122,8 @@
 					student_id,
 					tutor_course_id,
 					remark: text_input
+				}, {
+					notification: 'Added to waiting list'
 				})
 			},
 			onSuccess: fetchWaitingList
@@ -134,6 +137,8 @@
 				return http.post(fetch, '/adminApi/remove_user_from_waiting_list', {
 					student_id: student.student_id,
 					tutor_course_id
+				}, {
+					notification: "Removed from waiting list"
 				})
 			},
 			onSuccess: fetchWaitingList
@@ -187,7 +192,7 @@
 				<div class="p-4 overflow-auto mb-4" style="max-height: calc(100vh - 200px); min-height: 200px">
 					{#if students.length}
 						{#each students as student}
-							<div use:tooltip={`Remaining ticket: ${student.student.r_t_amt}`} class="inline-flex items-center mr-2 bg-gray-50 border border-blue-300 hover:border-blue-500 hover:bg-white rounded-full mt-1 relative">
+							<div use:tooltip={student.student.student_username} class="inline-flex items-center mr-2 bg-gray-50 border border-blue-300 hover:border-blue-500 hover:bg-white rounded-full mt-1 relative">
 								<div class="w-8 h-8 rounded-full border-1 border-gray-300 relative shadow flex-shrink-0">
 									<img src="/student-{student.student.gender}-icon.png" alt="gender" class="rounded-full border border-blue-500">
 									<div class="absolute shadow font-bold border border-white -bottom-2 -right-4 ml-2 w-7 h-7 bg-blue-500 rounded-full text-sm cc text-white">{capitalize(student.student.level)}</div>
@@ -207,7 +212,7 @@
 				</div>
 				{#if !is_full}
 					<div class="px-4 pb-4 mt-auto">
-						<StudentWithTickerSelectionBox on:input={e => {onReg(e.detail.student_id, true)}}/>
+						<StudentWithTickerSelectionBox placeholder="Register student to lesson" on:input={e => {onReg(e.detail.student_id, true)}}/>
 					</div>
 				{/if}
 			{:else}
@@ -240,8 +245,19 @@
 										<div class="absolute shadow font-bold border border-white -bottom-2 -right-4 ml-2 w-7 h-7 bg-blue-500 rounded-full text-sm cc text-white">{capitalize(student.level)}</div>
 									</div>
 									<div class="ml-6">
-										<p>{student.nickname}</p>
-										<p class="text-xs leading-none text-gray-500">32 ticket</p>
+										<div class="flex items-center">
+											<p>{student.nickname}</p>
+											{#if student.remark}
+												<div class="ml-2" use:tooltip={student.remark}>
+													<Icon className="w-4 text-blue-500" name="message"/>
+												</div>
+											{/if}
+										</div>
+										{#if student.t_amt === 0}
+											<p class="text-xs leading-none text-red-500">No ticket</p>
+										{:else}
+											<p class="text-xs leading-none text-gray-500">{student.t_amt} ticket</p>
+										{/if}
 									</div>
 									<div class="ml-auto flex">
 										{#if edit_mode}
@@ -249,10 +265,12 @@
 												<Icon name="trash" className="w-4 text-red-500"/>
 											</button>
 										{:else}
-											{#if (students || waiting_list) ? isSelected(student.student_id): false}
-												<button class="text-xs bg-gray-300 text-white rounded-full px-2 py-0.5">Registered</button>
-											{:else}
-												<button disabled on:input={e => {onReg(student.student_id, true)}} class="text-xs bg-green-500 text-white hover:bg-green-400 rounded-full px-2 py-0.5">Register</button>
+											{#if student.t_amt > 0}
+												{#if (students || waiting_list) ? isSelected(student.student_id) : false}
+													<button disabled class="cursor-not-allowed text-xs bg-gray-300 text-white rounded-full px-2 py-0.5">Registered</button>
+												{:else}
+													<button on:click={e => {onReg(student.student_id, true)}} class="text-xs bg-green-500 text-white hover:bg-green-400 rounded-full px-2 py-0.5">Register</button>
+												{/if}
 											{/if}
 										{/if}
 									</div>
@@ -266,7 +284,7 @@
 			{/if}
 			{#if edit_mode}
 				<div class="px-4 mt-auto pb-4">
-					<StudentWithTickerSelectionBox on:input={e => {onRegWaitingList(e.detail.student_id, true)}}/>
+					<StudentWithTickerSelectionBox placeholder="Add student to waiting list" on:input={e => {onRegWaitingList(e.detail.student_id, true)}}/>
 				</div>
 			{/if}
 		</div>
