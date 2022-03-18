@@ -15,7 +15,7 @@
 <script>
 	export let item_list
 	import dayjs from "dayjs";
-	import relativeTime from 'dayjs/plugin/relativeTime'
+	import relativeTime from 'dayjs/plugin/relativeTime.js'
 	dayjs.extend(relativeTime)
 </script>
 
