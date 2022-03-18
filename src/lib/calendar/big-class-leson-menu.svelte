@@ -30,13 +30,24 @@
 	const {openModal, closeModal} = getContext('simple-modal')
 
 	let students
+	let waiting_list
 	let max_students
 	let res
 	$: is_full = res ? max_students === students.length : false
 
 	onMount(() => {
 		fetchData()
+		fetchWaitingList()
 	})
+
+	const fetchWaitingList = async () => {
+		const {success, data} = await http.get(fetch, '/adminApi/show_waiting_list', {
+			tutor_course_id
+		})
+		if (success) {
+			waiting_list = data[0].user_ids
+		}
+	}
 
 	const fetchData = async () => {
 		const {data} = await http.post(fetch, '/zoomApi/zoom_detail', {
@@ -64,7 +75,7 @@
 
 	const onReg = async (student_id, is_reg) => {
 		let message = is_reg ? '係咪Reg?' : '係咪UnReg?'
-		let notification = is_reg ? '成功幫佢Reg堂?' : '成功幫佢UnReg堂?'
+		let notification = is_reg ? '成功幫佢Reg堂' : '成功幫佢UnReg堂'
 		const url = is_reg ? '/courseApi/reg_registrable_classroom' : '/courseApi/unreg_registrable_classroom'
 		dialog.confirm({
 			message,
@@ -95,6 +106,24 @@
 		}
 		onToggle()
 		closeModal()
+	}
+
+	const onRegWaitingList = (student_id) => {
+		dialog.confirm({
+			message: 'Add this student to waiting list',
+			text_input: {
+				placeholder: 'Remark',
+				value: ''
+			},
+			onConfirm: ({text_input}) => {
+				return http.post(fetch, '/adminApi/mark_user_in_waiting_list', {
+					student_id,
+					tutor_course_id,
+					remark: text_input
+				})
+			},
+			onSuccess: fetchWaitingList
+		})
 	}
 </script>
 
@@ -133,7 +162,7 @@
 				<div class="p-4 overflow-auto mb-4" style="max-height: 400px">
 					{#if students.length}
 						{#each students as student}
-							<a use:tooltip={`Remaining ticket: ${student.student.r_t_amt}`} href="/students/{student.student.user_id}" class="inline-flex items-center mr-2 bg-gray-50 border border-blue-300 hover:border-blue-500 hover:bg-white rounded-full mt-1">
+							<div use:tooltip={`Remaining ticket: ${student.student.r_t_amt}`} class="inline-flex items-center mr-2 bg-gray-50 border border-blue-300 hover:border-blue-500 hover:bg-white rounded-full mt-1 relative">
 								<div class="w-8 h-8 rounded-full border-1 border-gray-300 relative shadow flex-shrink-0">
 									<img src="/student-{student.student.gender}-icon.png" alt="gender" class="rounded-full border border-blue-500">
 									<div class="absolute shadow font-bold border border-white -bottom-2 -right-4 ml-2 w-7 h-7 bg-blue-500 rounded-full text-sm cc text-white">{capitalize(student.student.level)}</div>
@@ -142,7 +171,10 @@
 									<div class="text-sm whitespace-nowrap">{student.student.student_nickname}</div>
 									<div class="text-xs leading-none text-gray-500">{student.duration} days before</div>
 								</div>
-							</a>
+								<button on:click|stopPropagation={() => {onReg(student.student.student_id, false)}} class="absolute -top-1.5 -right-1 bg-white cc rounded-full w-5 h-5 border border-blue-500 hover:text-red-500 hover:bg-red-50">
+									<Icon name="close" className="w-2"/>
+								</button>
+							</div>
 						{/each}
 					{:else}
 						冇人報
@@ -163,6 +195,30 @@
 					<Icon name="edit" className="w-3 text-blue-500"/>
 				</a>
 			</div>
+			{#if waiting_list}
+				{#each waiting_list as student}
+					<div class="p-4">
+						{#if waiting_list.length}
+							<div class="flex items-center">
+								<div class="w-8 h-8 rounded-full border-1 border-gray-300 relative shadow flex-shrink-0">
+									<img src="/student-{student.gender}-icon.png" alt="gender" class="rounded-full border border-blue-500">
+									<div class="absolute shadow font-bold border border-white -bottom-2 -right-4 ml-2 w-7 h-7 bg-blue-500 rounded-full text-sm cc text-white">{capitalize(student.level)}</div>
+								</div>
+								<div class="ml-6">
+									<p>{student.nickname}</p>
+									<p class="text-xs leading-none text-gray-500">32 ticket</p>
+								</div>
+								<div class="ml-auto flex">
+									<input type="checkbox" class="w-5 h-5">
+								</div>
+							</div>
+						{:else}
+							no
+						{/if}
+					</div>
+				{/each}
+			{/if}
+			<StudentWithTickerSelectionBox on:input={e => {onRegWaitingList(e.detail.student_id, true)}}/>
 		</div>
 	</div>
 	<button on:click={closeModal}>closeModal</button>
