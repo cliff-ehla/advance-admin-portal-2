@@ -24,12 +24,15 @@
 	import {big_class_events} from "$lib/store/big-class-store.js";
 	import {sentry} from "$lib/sentry.js";
 	import {tutor_store} from "../../store/tutor-store.js";
+	import {capitalize} from '$lib/helper/capitalize.js'
 
 	dayjs.extend(utc)
 	const {openModal, closeModal} = getContext('simple-modal')
 
 	let students
+	let max_students
 	let res
+	$: is_full = res ? max_students === students.length : false
 
 	onMount(() => {
 		fetchData()
@@ -41,6 +44,7 @@
 		})
 		students = data.students
 		res = data
+		max_students = data.big_classroom_type === 'SMALL' ? 4 : data.big_classroom_type === 'BIG' ? 20 : 9999
 		students = students.map(s => {
 			return {
 				date: dayjs.utc(s.reg_date).local().format('DD MMM YYYY'),
@@ -55,6 +59,7 @@
 			}
 			return s.student
 		})
+		console.log(students)
 	}
 
 	const onReg = async (student_id, is_reg) => {
@@ -99,10 +104,15 @@
 		<div class="ml-4">
 			<div class="flex items-center">
 				<p class="text-xl">{tutor_store.getTutorName(tutor_id)}</p>
-				<p class="bg-purple-500 text-white px-2 py-1 rounded ml-2">{description_code_short_id}</p>
-				<p class="border-purple-500 text-purple-500 px-2 py-1 border bg-purple-50 rounded ml-2">{level}</p>
+				<p class="bg-purple-500 text-white px-2 text-sm py-0.5 rounded ml-2">{description_code_short_id}</p>
+				<p class="border-purple-500 text-purple-500 px-2 text-sm py-0.5 border bg-purple-50 rounded ml-2">{level}</p>
 			</div>
-			<p class="text-sm text-gray-500">{res && res.sub_cat_hk}</p>
+			{#if res}
+				<div class="flex mt-0.5">
+					<p class="text-sm text-gray-500">{res.sub_cat_hk}</p>
+					<p class="text-sm text-gray-500 ml-2">{dayjs(res.start_date).format('DD MMM@HH:mm')}</p>
+				</div>
+			{/if}
 		</div>
 		<div class="ml-auto">
 			<p class="text-xs mb-0.5">推介</p>
@@ -112,35 +122,36 @@
 <!--	<p class="text-xs text-gray-500 mb-2">Zoom ID: {zoom_id}</p>-->
 <!--	<p class="text-xs text-gray-500 mb-2">Tutor group ID: {tutor_group_id}</p>-->
 	<div class="flex">
-		<div class="flex-1 p-4">
+		<div class="flex-1">
 			{#if students}
-				<h1 class="font-bold mb-4">Registered students：</h1>
-				<div class="overflow-auto mb-4" style="max-height: 400px">
+				<div class="flex items-center border-gray-300 border-b px-4 py-3">
+					<div>Registered students： <span class="bg-blue-50 rounded px-1 text-sm py-0.5 text-blue-500">{students.length}/{max_students}</span></div>
+					{#if is_full}
+						<span class="ml-2 px-2 py-0.5 text-xs bg-red-500 text-white rounded">Full</span>
+					{/if}
+				</div>
+				<div class="p-4 overflow-auto mb-4" style="max-height: 400px">
 					{#if students.length}
-						{#each students as s}
-							<div class="my-4">
-								<div class="flex items-center">
-									<Preview s={s.student}/>
-									<Dropdown placement="bottom-end">
-										<button slot="activator" class="w-10 h-10 flex items-center justify-center">
-											<Icon className="w-4" name="more"/>
-										</button>
-										<div class="dropdown">
-											<div on:click={() => {onReg(s.student.student_id, false)}} class="px-4 py-2 hover:text-gray-100 hover:text-red-500 cursor-pointer">Un-Reg</div>
-										</div>
-									</Dropdown>
+						{#each students as student}
+							<a use:tooltip={`Remaining ticket: ${student.student.r_t_amt}`} href="/students/{student.student.user_id}" class="inline-flex items-center mr-2 bg-gray-50 border border-blue-300 hover:border-blue-500 hover:bg-white rounded-full mt-1">
+								<div class="w-8 h-8 rounded-full border-1 border-gray-300 relative shadow flex-shrink-0">
+									<img src="/student-{student.student.gender}-icon.png" alt="gender" class="rounded-full border border-blue-500">
+									<div class="absolute shadow font-bold border border-white -bottom-2 -right-4 ml-2 w-7 h-7 bg-blue-500 rounded-full text-sm cc text-white">{capitalize(student.student.level)}</div>
 								</div>
-								<div class="-mt-4">
-									<div class="inline-block text-sm" use:tooltip={s.date}>Registered {s.duration} days before</div>
+								<div class="pl-5 pr-2 py-1">
+									<div class="text-sm whitespace-nowrap">{student.student.student_nickname}</div>
+									<div class="text-xs leading-none text-gray-500">{student.duration} days before</div>
 								</div>
-							</div>
+							</a>
 						{/each}
 					{:else}
 						冇人報
 					{/if}
 				</div>
-				<h1 class="font-bold mb-2">加入學生：</h1>
-				<StudentWithTickerSelectionBox on:input={e => {onReg(e.detail.student_id, true)}}/>
+				<div class="px-4 py-2">
+					<h1 class="font-bold mb-2">加入學生：</h1>
+					<StudentWithTickerSelectionBox on:input={e => {onReg(e.detail.student_id, true)}}/>
+				</div>
 			{:else}
 				<Spinner/>
 			{/if}
