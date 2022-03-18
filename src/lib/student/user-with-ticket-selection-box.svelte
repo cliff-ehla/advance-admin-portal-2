@@ -2,38 +2,30 @@
 	import {student_store} from "../../store/student-store.js";
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import Dropdown from '$lib/ui-elements/dropdown3.svelte'
-	import {debounce} from "debounce";
 	import {createEventDispatcher} from "svelte";
 	const dispatch = createEventDispatcher()
-	import {fly} from "svelte/transition";
 
 	export let placeholder
-	export let wrapper_class = undefined
+	export let placement
 	export let search = undefined
 
 	const onSelect = r => {
 		search = r.student_nickname
 		dispatch('input', r)
 	}
-	const onBlur = () => {
-		focused = false
-	}
 	let focused
 	$: filtered_result = student_store.searchUsers(search)
 </script>
 
-<div class:border-blue-500={focused} class="h-10 flex items-stretch relative border border-gray-300 rounded {wrapper_class}">
-	<div class="cc w-8 flex-shrink-0">
-		<Icon name="search" className="w-5 text-gray-400"/>
-	</div>
-	<input on:focus={() => {focused = true}}
-	       on:blur={debounce(onBlur, 200)}
-	       {placeholder}
-	       type="text"
-	       bind:value={search}
-	       class="px-1 flex-1 max-w-full focus:outline-none"/>
-	{#if focused}
-		<div transition:fly class="absolute shadow border border-gray-300 bg-white p-2 top-full left-0 overflow-y-auto rounded" style="max-height: 400px">
+<div class:border-blue-500={focused} class="">
+	<Dropdown activator_style="button" open_on_hover={false} {placement}>
+		<button slot="activator">{placeholder}</button>
+		<div class="dropdown overflow-y-scroll" style="max-height: 400px">
+			<input on:click|stopPropagation
+			       placeholder="Search..."
+			       type="text"
+			       bind:value={search}
+			       class="input"/>
 			{#if search}
 				{#if filtered_result.length}
 					{#each filtered_result as s}
@@ -80,5 +72,5 @@
 				</div>
 			{/if}
 		</div>
-	{/if}
+	</Dropdown>
 </div>

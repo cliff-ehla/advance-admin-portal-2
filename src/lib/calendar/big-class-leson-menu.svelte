@@ -212,7 +212,7 @@
 				</div>
 				{#if !is_full}
 					<div class="px-4 pb-4 mt-auto">
-						<StudentWithTickerSelectionBox placeholder="Register student to lesson" on:input={e => {onReg(e.detail.student_id, true)}}/>
+						<StudentWithTickerSelectionBox placement="top-start" placeholder="Register student to lesson" on:input={e => {onReg(e.detail.student_id, true)}}/>
 					</div>
 				{/if}
 			{:else}
@@ -284,7 +284,7 @@
 			{/if}
 			{#if edit_mode}
 				<div class="px-4 mt-auto pb-4">
-					<StudentWithTickerSelectionBox placeholder="Add student to waiting list" on:input={e => {onRegWaitingList(e.detail.student_id, true)}}/>
+					<StudentWithTickerSelectionBox placement="top-end" placeholder="Add student to waiting list" on:input={e => {onRegWaitingList(e.detail.student_id, true)}}/>
 				</div>
 			{/if}
 		</div>
