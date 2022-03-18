@@ -205,6 +205,9 @@
 					{:else}
 						<p>no students</p>
 					{/if}
+<!--					<div class="mt-4">-->
+<!--						<button>Add student to waiting list</button>-->
+<!--					</div>-->
 				</div>
 			</div>
 		</Dropdown>
