@@ -5,6 +5,7 @@
 	const { debounce } = pkg;
 	import SelectionBox from '$lib/ui-elements/selection-box.svelte'
 	import Button from '$lib/ui-elements/button.svelte'
+	import CopyText from '$lib/ui-elements/copy-text.svelte'
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import {http} from "$lib/http";
 	import {createEventDispatcher} from 'svelte'
@@ -60,6 +61,8 @@
 		if (ticket_amt > 900) {
 			is_vip = false
 			notifications.info('多過900蚊就不需特別關注，自動off左先')
+		} else if (ticket_amt <= 900) {
+			is_vip = true
 		}
 	}
 	$: {
@@ -282,7 +285,7 @@
 				<label for="extra_option" class="cursor-pointer ml-2">特別關注</label>
 			</div>
 			<label>Payment method</label>
-			<SelectionBox simple_array options={['Alipay', 'Bank Transfer', 'Payme']} selected_value={payment_method} on:input={e => {payment_method = e.detail}}/>
+			<SelectionBox simple_array options={['Alipay', 'Bank Transfer', 'Payme', 'Free']} selected_value={payment_method} on:input={e => {payment_method = e.detail}}/>
 			<label>Remark</label>
 			<textarea class="input block mb-2 w-full" placeholder="Remark" bind:value={remark}/>
 		</div>
@@ -298,17 +301,19 @@
 			<p class="text-gray-500 underline">Created child accounts</p>
 			{#each results.accounts.childs as c}
 				<p>{c.nickname}</p>
-				<p class="text-sm text-gray-500">{c.username} <span class="text-white bg-gray-400 text-xs px-2 rounded">ID: {c.user_id}</span></p>
+				<p class="text-sm text-gray-500">{c.username}</p>
+				<CopyText value={c.user_id}/>
 			{/each}
 		</div>
 		<div class="mb-4">
 			<p class="text-gray-500 underline">Created parent accounts</p>
 			<p>{results.accounts.parent.nickname}</p>
-			<p class="text-sm text-gray-500">{results.accounts.parent.username} <span class="text-white bg-gray-400 text-xs px-2 rounded">ID: {results.accounts.parent.user_id}</span></p>
+			<p class="text-sm text-gray-500">{results.accounts.parent.username}</p>
+			<CopyText value={results.accounts.parent.user_id}/>
 		</div>
 		<div class="mb-4">
 			<p class="text-gray-500 underline">Created voucher</p>
-			<p>{results.voucher_data.voucher_number}</p>
+			<CopyText value={results.voucher_data.voucher_number}/>
 		</div>
 		<button on:click={onReset} class="mt-4 button">Close</button>
 	</div>
