@@ -139,6 +139,10 @@
 			onSuccess: fetchWaitingList
 		})
 	}
+
+	const isSelected = (student_id) => {
+		return students.map(s => s.user_id).includes(student_id)
+	}
 </script>
 
 <div>
@@ -172,7 +176,7 @@
 <!--	<p class="text-xs text-gray-500 mb-2">Zoom ID: {zoom_id}</p>-->
 <!--	<p class="text-xs text-gray-500 mb-2">Tutor group ID: {tutor_group_id}</p>-->
 	<div class="flex">
-		<div class="flex-1">
+		<div class="flex-1 flex flex-col">
 			{#if students}
 				<div class="flex items-center border-gray-300 border-b px-4 py-3">
 					<div>Registered students： <span class="bg-blue-50 rounded px-1 text-sm py-0.5 text-blue-500">{students.length}/{max_students}</span></div>
@@ -180,7 +184,7 @@
 						<span class="ml-2 px-2 py-0.5 text-xs bg-red-500 text-white rounded">Full</span>
 					{/if}
 				</div>
-				<div class="p-4 overflow-auto mb-4" style="max-height: 400px; min-height: 200px">
+				<div class="p-4 overflow-auto mb-4" style="max-height: calc(100vh - 200px); min-height: 200px">
 					{#if students.length}
 						{#each students as student}
 							<div use:tooltip={`Remaining ticket: ${student.student.r_t_amt}`} class="inline-flex items-center mr-2 bg-gray-50 border border-blue-300 hover:border-blue-500 hover:bg-white rounded-full mt-1 relative">
@@ -201,15 +205,16 @@
 						冇人報
 					{/if}
 				</div>
-				<div class="px-4 py-2">
-					<h1 class="font-bold mb-2">加入學生：</h1>
-					<StudentWithTickerSelectionBox on:input={e => {onReg(e.detail.student_id, true)}}/>
-				</div>
+				{#if !is_full}
+					<div class="px-4 pb-4 mt-auto">
+						<StudentWithTickerSelectionBox on:input={e => {onReg(e.detail.student_id, true)}}/>
+					</div>
+				{/if}
 			{:else}
 				<Spinner/>
 			{/if}
 		</div>
-		<div class="w-72 border-l border-gray-300">
+		<div class="w-72 border-l border-gray-300 flex flex-col">
 			<div class="flex items-center border-gray-300 border-b px-4 py-3">
 				<p>{edit_mode ? 'Editing waiting list' : 'Waiting list'}</p>
 				<div class="ml-auto">
@@ -224,12 +229,12 @@
 					{/if}
 				</div>
 			</div>
-			{#if waiting_list}
-				{#each waiting_list as student}
-					<div class="py-2">
-						<div class="px-4 my-2">
+			{#if waiting_list && students}
+				<div class="overflow-y-scroll mb-4" style="max-height: calc(100vh - 200px); min-height: 200px">
+					{#each waiting_list as student}
+						<div class="py-2 px-4">
 							{#if waiting_list.length}
-								<div class="flex items-center">
+								<div class="flex items-center my-0">
 									<div class="w-8 h-8 rounded-full border-1 border-gray-300 relative shadow flex-shrink-0">
 										<img src="/student-{student.gender}-icon.png" alt="gender" class="rounded-full border border-blue-500">
 										<div class="absolute shadow font-bold border border-white -bottom-2 -right-4 ml-2 w-7 h-7 bg-blue-500 rounded-full text-sm cc text-white">{capitalize(student.level)}</div>
@@ -244,7 +249,11 @@
 												<Icon name="trash" className="w-4 text-red-500"/>
 											</button>
 										{:else}
-											<input type="checkbox" class="w-5 h-5">
+											{#if (students || waiting_list) ? isSelected(student.student_id): false}
+												<button class="text-xs bg-gray-300 text-white rounded-full px-2 py-0.5">Registered</button>
+											{:else}
+												<button disabled on:input={e => {onReg(student.student_id, true)}} class="text-xs bg-green-500 text-white hover:bg-green-400 rounded-full px-2 py-0.5">Register</button>
+											{/if}
 										{/if}
 									</div>
 								</div>
@@ -252,11 +261,11 @@
 								no
 							{/if}
 						</div>
-					</div>
-				{/each}
+					{/each}
+				</div>
 			{/if}
 			{#if edit_mode}
-				<div class="p-4">
+				<div class="px-4 mt-auto pb-4">
 					<StudentWithTickerSelectionBox on:input={e => {onRegWaitingList(e.detail.student_id, true)}}/>
 				</div>
 			{/if}
