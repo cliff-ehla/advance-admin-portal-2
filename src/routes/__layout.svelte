@@ -75,7 +75,7 @@
 <Notification>
 	<Modal>
 		<Popper>
-			{#if $authorized && !$page.path.startsWith('/item')}
+			{#if $authorized && $page.path !== '/item'}
 				<TopBar/>
 			{/if}
 			<slot></slot>

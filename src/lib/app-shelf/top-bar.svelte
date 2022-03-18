@@ -123,7 +123,17 @@
 		{
 			segment: 'syllabus',
 			name: 'Syllabus',
-			href: '/syllabus'
+			href: '/syllabus',
+			children: [
+				{
+					label: 'Syllabus',
+					href: '/syllabus'
+				},
+				{
+					label: '未完成item',
+					href: '/item/incomplete'
+				}
+			]
 		}
 	]
 </script>
