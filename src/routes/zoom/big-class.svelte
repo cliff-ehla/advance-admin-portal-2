@@ -35,13 +35,21 @@
 			headerToolbar: false,
 			eventContent,
 			eventClick: async ({el, event}) => {
+				console.log('cliff: ', event.extendedProps)
 				openModal(BigClassLessonMenu, {
 					selected: event.extendedProps.selected,
 					zoom_id: event.extendedProps.zoom_id,
 					tutor_group_id: event.extendedProps.tutor_group_id,
+					tutor_course_id: event.extendedProps.tutor_course_id,
+					description_code_short_id: event.extendedProps.description_code_short_id,
+					level: event.extendedProps.level,
+					tutor_id: event.extendedProps.tutor_id,
 					onToggle: reRenderEvents
 				}, {
-					overflow: 'initial'
+					overflow: 'initial',
+					width: '900px',
+					padding: '0',
+					closeButton: false
 				})
 			},
 			eventSources: [
