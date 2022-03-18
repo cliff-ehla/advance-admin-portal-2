@@ -5,9 +5,13 @@ const usermodel = async (request, resource, data) => {
 	if (request.method === 'POST' && data) {
 		data = { params: data }
 	}
-	const query = {
+	let query = {
 		'encode': 1,
 		'access-token': request.locals.access_token
+	}
+	if (request.method === 'GET' && data) {
+		query = {...query, ...data}
+		data = null
 	}
 	let url = `${base}${resource}`
 	for (const property in query) {
