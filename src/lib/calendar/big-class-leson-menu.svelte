@@ -33,6 +33,7 @@
 	let waiting_list
 	let max_students
 	let res
+	let edit_mode = false
 	$: is_full = res ? max_students === students.length : false
 
 	onMount(() => {
@@ -125,6 +126,19 @@
 			onSuccess: fetchWaitingList
 		})
 	}
+	
+	const onRemoveFromWaitingList = (student) => {
+		dialog.confirm({
+			message: 'Remove this student from waiting list?',
+			onConfirm: () => {
+				return http.post(fetch, '/adminApi/remove_user_from_waiting_list', {
+					student_id: student.student_id,
+					tutor_course_id
+				})
+			},
+			onSuccess: fetchWaitingList
+		})
+	}
 </script>
 
 <div>
@@ -143,9 +157,16 @@
 				</div>
 			{/if}
 		</div>
-		<div class="ml-auto">
-			<p class="text-xs mb-0.5">推介</p>
-			<input type="checkbox" on:input={toggleSelection} checked={selected} class="w-6 h-6">
+		<div class="ml-auto flex items-center">
+			<div>
+				<p class="text-xs mb-0.5">推介</p>
+				<input type="checkbox" on:input={toggleSelection} checked={selected} class="w-6 h-6">
+			</div>
+			<div class="ml-4">
+				<button on:click={closeModal} class="w-8 h-8 rounded-full bg-blue-50 cc hover:bg-blue-100 group">
+					<Icon name="close" className="w-3 text-gray-500 group-hover:text-blue-500"/>
+				</button>
+			</div>
 		</div>
 	</div>
 <!--	<p class="text-xs text-gray-500 mb-2">Zoom ID: {zoom_id}</p>-->
@@ -159,7 +180,7 @@
 						<span class="ml-2 px-2 py-0.5 text-xs bg-red-500 text-white rounded">Full</span>
 					{/if}
 				</div>
-				<div class="p-4 overflow-auto mb-4" style="max-height: 400px">
+				<div class="p-4 overflow-auto mb-4" style="max-height: 400px; min-height: 200px">
 					{#if students.length}
 						{#each students as student}
 							<div use:tooltip={`Remaining ticket: ${student.student.r_t_amt}`} class="inline-flex items-center mr-2 bg-gray-50 border border-blue-300 hover:border-blue-500 hover:bg-white rounded-full mt-1 relative">
@@ -190,38 +211,57 @@
 		</div>
 		<div class="w-72 border-l border-gray-300">
 			<div class="flex items-center border-gray-300 border-b px-4 py-3">
-				<p>Waiting list</p>
-				<a href="/tutor/{tutor_id}/tutor-course/{tutor_group_id}" use:tooltip={'Manage'} class="ml-auto bg-blue-50 rounded-full w-6 h-6 cc">
-					<Icon name="edit" className="w-3 text-blue-500"/>
-				</a>
+				<p>{edit_mode ? 'Editing waiting list' : 'Waiting list'}</p>
+				<div class="ml-auto">
+					{#if edit_mode}
+						<button on:click={() => {edit_mode = !edit_mode}} use:tooltip={'Exit edit mode'} class="ml-auto bg-red-50 rounded-full w-6 h-6 cc">
+							<Icon name="close" className="w-3 text-red-500"/>
+						</button>
+					{:else}
+						<button on:click={() => {edit_mode = !edit_mode}} use:tooltip={'Edit waiting list'} class="ml-auto bg-blue-50 rounded-full w-6 h-6 cc">
+							<Icon name="edit" className="w-3 text-blue-500"/>
+						</button>
+					{/if}
+				</div>
 			</div>
 			{#if waiting_list}
 				{#each waiting_list as student}
-					<div class="p-4">
-						{#if waiting_list.length}
-							<div class="flex items-center">
-								<div class="w-8 h-8 rounded-full border-1 border-gray-300 relative shadow flex-shrink-0">
-									<img src="/student-{student.gender}-icon.png" alt="gender" class="rounded-full border border-blue-500">
-									<div class="absolute shadow font-bold border border-white -bottom-2 -right-4 ml-2 w-7 h-7 bg-blue-500 rounded-full text-sm cc text-white">{capitalize(student.level)}</div>
+					<div class="py-2">
+						<div class="px-4 my-2">
+							{#if waiting_list.length}
+								<div class="flex items-center">
+									<div class="w-8 h-8 rounded-full border-1 border-gray-300 relative shadow flex-shrink-0">
+										<img src="/student-{student.gender}-icon.png" alt="gender" class="rounded-full border border-blue-500">
+										<div class="absolute shadow font-bold border border-white -bottom-2 -right-4 ml-2 w-7 h-7 bg-blue-500 rounded-full text-sm cc text-white">{capitalize(student.level)}</div>
+									</div>
+									<div class="ml-6">
+										<p>{student.nickname}</p>
+										<p class="text-xs leading-none text-gray-500">32 ticket</p>
+									</div>
+									<div class="ml-auto flex">
+										{#if edit_mode}
+											<button on:click={() => {onRemoveFromWaitingList(student)}} class="w-8 h-8 transition-all rounded-full rounded-full cc hover:bg-red-100">
+												<Icon name="trash" className="w-4 text-red-500"/>
+											</button>
+										{:else}
+											<input type="checkbox" class="w-5 h-5">
+										{/if}
+									</div>
 								</div>
-								<div class="ml-6">
-									<p>{student.nickname}</p>
-									<p class="text-xs leading-none text-gray-500">32 ticket</p>
-								</div>
-								<div class="ml-auto flex">
-									<input type="checkbox" class="w-5 h-5">
-								</div>
-							</div>
-						{:else}
-							no
-						{/if}
+							{:else}
+								no
+							{/if}
+						</div>
 					</div>
 				{/each}
 			{/if}
-			<StudentWithTickerSelectionBox on:input={e => {onRegWaitingList(e.detail.student_id, true)}}/>
+			{#if edit_mode}
+				<div class="p-4">
+					<StudentWithTickerSelectionBox on:input={e => {onRegWaitingList(e.detail.student_id, true)}}/>
+				</div>
+			{/if}
 		</div>
 	</div>
-	<button on:click={closeModal}>closeModal</button>
 </div>
 
 
