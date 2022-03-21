@@ -190,7 +190,7 @@
 				<div class="p-4 overflow-auto mb-4" style="max-height: calc(100vh - 200px); min-height: 200px">
 					{#if students.length}
 						{#each students as student}
-							<div use:tooltip={student.student.student_username} class="inline-flex items-center mr-2 bg-gray-50 border border-blue-300 hover:border-blue-500 hover:bg-white rounded-full mt-1 relative">
+							<div use:tooltip={student.student.student_username} class="inline-flex items-center mr-2 bg-gray-50 border border-blue-300 hover:border-blue-500 hover:bg-white rounded-full mt-2 relative">
 								<div class="w-8 h-8 rounded-full border-1 border-gray-300 relative shadow flex-shrink-0">
 									<img src="/student-{student.student.gender}-icon.png" alt="gender" class="rounded-full border border-blue-500">
 									<div class="absolute shadow font-bold border border-white -bottom-2 -right-4 ml-2 w-7 h-7 bg-blue-500 rounded-full text-sm cc text-white">{capitalize(student.student.level)}</div>
@@ -199,7 +199,18 @@
 									<div class="text-sm whitespace-nowrap">{student.student.student_nickname}</div>
 									<div class="text-xs leading-none text-gray-500">{student.duration} days before</div>
 								</div>
-								<button on:click|stopPropagation={() => {onReg(student.student.student_id, false)}} class="absolute -top-1.5 -right-1 bg-white cc rounded-full w-5 h-5 border border-blue-500 hover:text-red-500 hover:bg-red-50">
+								<div class="pl-2 mr-4 py-1 border-l border-gray-400 text-xs leading-none text-gray-500" style="font-size: 10px;">
+									{#if student.student.tt_t_amt <= 6 * 49}
+										<div class="bg-yellow-500 rounded text-white inline-block px-1 leading-tight mb-0.5">新用戶</div>
+									{:else if student.student.r_t_amt < 6 *49}
+										<div class="bg-red-500 rounded text-white inline-block px-1 leading-tight mb-0.5">要跟進大戶</div>
+									{:else}
+										<div class="bg-blue-500 rounded text-white inline-block px-1 leading-tight mb-0.5">大戶</div>
+									{/if}
+									<p>總共 ${student.student.tt_t_amt}</p>
+									<p class="text-black mt-0.5">結餘 ${student.student.r_t_amt}</p>
+								</div>
+								<button on:click|stopPropagation={() => {onReg(student.student.student_id, false)}} class="absolute -top-1.5 -right-2 bg-white cc rounded-full w-5 h-5 border border-blue-500 hover:text-red-500 hover:bg-red-50">
 									<Icon name="close" className="w-2"/>
 								</button>
 							</div>
@@ -245,7 +256,7 @@
 										</div>
 										<div class="ml-6">
 											<div class="flex items-center">
-												<p>{student.nickname}</p>
+												<p class="leading-none mb-0.5">{student.nickname}</p>
 												{#if student.remark}
 													<div class="ml-2" use:tooltip={student.remark}>
 														<Icon className="w-4 text-blue-500" name="message"/>
@@ -270,6 +281,11 @@
 													{:else}
 														<button on:click={e => {onReg(student.student_id, true)}} class="text-xs bg-green-500 text-white hover:bg-green-400 rounded-full px-2 py-0.5">Register</button>
 													{/if}
+												{:else if student.t_amt < 0}
+													<div>
+														<p class="text-xs text-red-500">唔應該係負數‌！</p>
+														<button on:click={e => {onReg(student.student_id, true)}} class="text-xs bg-green-500 text-white hover:bg-green-400 rounded-full px-2 py-0.5">Register</button>
+													</div>
 												{/if}
 											{/if}
 										</div>
