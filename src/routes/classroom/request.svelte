@@ -3,7 +3,6 @@
 
 	export const load = async ({page, fetch}) => {
 		const {data, success, debug} = await http.get(fetch, '/courseApi/list_request_classroom')
-		console.log(123)
 		if (!success) return onFail(debug)
 		return {
 			props: {
@@ -16,7 +15,6 @@
 <script>
 	export let request_list
 	import dayjs from "dayjs";
-	console.log(request_list)
 </script>
 
 <div class="grid grid-cols-3 gap-2">

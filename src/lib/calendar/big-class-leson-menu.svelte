@@ -35,7 +35,6 @@
 	$: is_full = res ? max_students === students.length : false
 
 	onMount(() => {
-		console.log('cliff: ', tutor_course_id)
 		fetchData()
 		fetchWaitingList()
 	})
@@ -45,8 +44,7 @@
 			tutor_course_id
 		})
 		if (success) {
-			waiting_list = data[0].user_ids
-			console.log('cliff: ', waiting_list)
+			waiting_list = data[0] ? data[0].waiting_users : []
 		}
 	}
 
@@ -248,55 +246,51 @@
 					{#if waiting_list.length}
 						{#each waiting_list as student}
 							<div class="py-2 px-4">
-								{#if waiting_list.length}
-									<div class="flex items-center my-0">
-										<div class="w-8 h-8 rounded-full border-1 border-gray-300 relative shadow flex-shrink-0">
-											<img src="/student-{student.gender}-icon.png" alt="gender" class="rounded-full border border-blue-500">
-											<div class="absolute shadow font-bold border border-white -bottom-2 -right-4 ml-2 w-7 h-7 bg-blue-500 rounded-full text-sm cc text-white">{capitalize(student.level)}</div>
-										</div>
-										<div class="ml-6">
-											<div class="flex items-center">
-												<p class="leading-none mb-0.5">{student.nickname}</p>
-												{#if student.remark}
-													<div class="ml-2" use:tooltip={student.remark}>
-														<Icon className="w-4 text-blue-500" name="message"/>
-													</div>
-												{/if}
-											</div>
-											{#if student.t_amt === 0}
-												<p class="text-xs leading-none text-red-500">No ticket</p>
-											{:else}
-												<p class="text-xs leading-none text-gray-500">{student.t_amt} ticket</p>
-											{/if}
-										</div>
-										<div class="ml-auto flex">
-											{#if edit_mode}
-												<button on:click={() => {onRemoveFromWaitingList(student)}} class="w-8 h-8 transition-all rounded-full rounded-full cc hover:bg-red-100">
-													<Icon name="trash" className="w-4 text-red-500"/>
-												</button>
-											{:else}
-												{#if student.t_amt > 0}
-													{#if (students || waiting_list) ? isSelected(student.student_id) : false}
-														<button disabled class="cursor-not-allowed text-xs bg-gray-300 text-white rounded-full px-2 py-0.5">Registered</button>
-													{:else}
-														<button on:click={e => {onReg(student.student_id, true)}} class="text-xs bg-green-500 text-white hover:bg-green-400 rounded-full px-2 py-0.5">Register</button>
-													{/if}
-												{:else if student.t_amt < 0}
-													<div>
-														<p class="text-xs text-red-500">唔應該係負數‌！</p>
-														<button on:click={e => {onReg(student.student_id, true)}} class="text-xs bg-green-500 text-white hover:bg-green-400 rounded-full px-2 py-0.5">Register</button>
-													</div>
-												{/if}
-											{/if}
-										</div>
+								<div class="flex items-center my-0">
+									<div class="w-8 h-8 rounded-full border-1 border-gray-300 relative shadow flex-shrink-0">
+										<img src="/student-{student.gender}-icon.png" alt="gender" class="rounded-full border border-blue-500">
+										<div class="absolute shadow font-bold border border-white -bottom-2 -right-4 ml-2 w-7 h-7 bg-blue-500 rounded-full text-sm cc text-white">{capitalize(student.level)}</div>
 									</div>
-								{:else}
-									no
-								{/if}
+									<div class="ml-6">
+										<div class="flex items-center">
+											<p class="leading-none mb-0.5">{student.nickname}</p>
+											{#if student.remark}
+												<div class="ml-2" use:tooltip={student.remark}>
+													<Icon className="w-4 text-blue-500" name="message"/>
+												</div>
+											{/if}
+										</div>
+										{#if student.t_amt === 0}
+											<p class="text-xs leading-none text-red-500">No ticket</p>
+										{:else}
+											<p class="text-xs leading-none text-gray-500">{student.t_amt} ticket</p>
+										{/if}
+									</div>
+									<div class="ml-auto flex">
+										{#if edit_mode}
+											<button on:click={() => {onRemoveFromWaitingList(student)}} class="w-8 h-8 transition-all rounded-full rounded-full cc hover:bg-red-100">
+												<Icon name="trash" className="w-4 text-red-500"/>
+											</button>
+										{:else}
+											{#if student.t_amt > 0}
+												{#if (students || waiting_list) ? isSelected(student.student_id) : false}
+													<button disabled class="cursor-not-allowed text-xs bg-gray-300 text-white rounded-full px-2 py-0.5">Registered</button>
+												{:else}
+													<button on:click={e => {onReg(student.student_id, true)}} class="text-xs bg-green-500 text-white hover:bg-green-400 rounded-full px-2 py-0.5">Register</button>
+												{/if}
+											{:else if student.t_amt < 0}
+												<div>
+													<p class="text-xs text-red-500">唔應該係負數‌！</p>
+													<button on:click={e => {onReg(student.student_id, true)}} class="text-xs bg-green-500 text-white hover:bg-green-400 rounded-full px-2 py-0.5">Register</button>
+												</div>
+											{/if}
+										{/if}
+									</div>
+								</div>
 							</div>
 						{/each}
 					{:else}
-						<p class="text-gray-500 text-sm">No students in waiting list</p>
+						<p class="text-gray-500 text-sm p-4">No students in waiting list</p>
 					{/if}
 				</div>
 			{/if}

@@ -90,7 +90,7 @@
 		const {data, success} = await http.get(fetch, '/adminApi/show_waiting_list', {
 			tutor_course_id
 		})
-		if (success) waiting_list = data.length ? data[0].user_ids : null
+		if (success) waiting_list = data.length ? data[0].waiting_users : null
 	}
 
 	$: {
