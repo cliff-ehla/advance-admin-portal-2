@@ -55,7 +55,10 @@
 					<Icon name="trash" className="w-3 text-red-500"/>
 				</button>
 				<img src={item.thumbnail_path} class="w-20" alt={item.name}>
-				<p class="px-4 py-2 leading-tight text-gray-600">{item.name}</p>
+				<div class="px-4 py-2">
+					<p class="leading-tight text-gray-600">{item.name}</p>
+					<p class="text-xs text-gray-500">ID: {item.item_id}</p>
+				</div>
 			</div>
 		{/each}
 	</div>

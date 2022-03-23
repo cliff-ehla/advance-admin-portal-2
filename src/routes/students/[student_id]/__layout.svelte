@@ -14,6 +14,11 @@
 			label: 'Notes',
 			href: `/students/${$page.params.student_id}/note`,
 			segment: 'notes',
+		},
+		{
+			label: 'Billing',
+			href: `/students/${$page.params.student_id}/billing`,
+			segment: 'billing',
 		}
 	]
 </script>

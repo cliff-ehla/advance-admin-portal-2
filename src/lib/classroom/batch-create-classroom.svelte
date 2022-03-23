@@ -133,7 +133,8 @@
 				tutor_course_id,
 				ticket,
 				student_size,
-				is_always_open
+				is_always_open,
+				student_ids: selected_users[i] ? selected_users[i].map(s => s.student_id) : []
 			}
 		})
 		const {data} = await http.post(fetch, '/courseApi/batch_reg_course', {
