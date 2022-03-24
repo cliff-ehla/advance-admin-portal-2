@@ -1,28 +1,6 @@
 import {http} from "../helpers/http";
 import {reservation_store} from "../store/reservation-store";
 
-export async function fetchZoomDetails (wrapper_id, _fetch) {
-	try {
-		const {data} = await http.post('zoomApi/zoom_detail', {
-			wrapper_id
-		}, _fetch)
-		return data
-	} catch (e) {
-		console.log(e)
-	}
-}
-
-export async function fetchTutorSalary (teacher_id, _fetch) {
-	try {
-		const {data} = await http.post('zoomApi/list_tutor_salary', {
-			teacher_id
-		}, _fetch)
-		return data
-	} catch (e) {
-		console.log(e)
-	}
-}
-
 export async function setZoomActualDuration ({wrapper_id, actual_duration}, _fetch) {
 	try {
 		const {data} = await http.post('zoomApi/set_actual_duration', {

@@ -1,32 +1,23 @@
-<script>
-	import TutorStatement from '../../../lib/statement/index.svelte'
-	import {fetchTutorSalary} from "../../../api/zoom-api";
-	import {page} from '$app/stores'
+<script context="module">
+	import {http, onFail} from "$lib/http";
 
-	let statements
-	let loading
-
-	$: tutor_id = $page.params.user_id
-
-	$: {
-		if (tutor_id) {
-			fetchData()
+	export const load = async ({page, fetch}) => {
+		const {data, success, debug} = await http.post(fetch, '/zoomApi/list_tutor_salary', {
+			teacher_id: page.params.user_id
+		})
+		if (!success) return onFail(debug)
+		return {
+			props: {
+				statements: data
+			}
 		}
-	}
-
-	const fetchData = async (t) => {
-		loading = true
-		statements = await fetchTutorSalary(tutor_id)
-		loading = false
 	}
 </script>
 
-<div class="flex-1">
-	{#if loading}
-		<div class="p-8">loading....</div>
-	{:else if statements && statements.length}
-		<TutorStatement {statements}/>
-	{:else}
-		<div class="p-8">No data</div>
-	{/if}
-</div>
+<script>
+	import TutorStatement from '$lib/statement/index.svelte'
+	export let statements = []
+	let loading
+</script>
+
+<TutorStatement {statements}/>
