@@ -42,7 +42,7 @@
 			<td>
 				{b.rc_type === 'big' ? '大班課' : b.rc_type === 'small' ? '小班課' : '大班課'}
 			</td>
-			<td>{b.used_ticket}</td>
+			<td>{b.ticket}</td>
 		</tr>
 	{/each}
 </table>
