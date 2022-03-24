@@ -1,8 +1,3 @@
-<script context="module">
-	export const load = async () => {
-		return {
-			status: 302,
-			redirect: '/dashboard'
-		}
-	}
-</script>
+<div class="p-4">
+	Welcome to admin portal
+</div>
