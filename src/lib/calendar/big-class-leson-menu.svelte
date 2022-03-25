@@ -24,6 +24,7 @@
 	import {sentry} from "$lib/sentry.js";
 	import {tutor_store} from "../../store/tutor-store.js";
 	import {capitalize} from '$lib/helper/capitalize.js'
+	import {notifications} from "$lib/store/notification.js";
 
 	dayjs.extend(utc)
 	const {openModal, closeModal} = getContext('simple-modal')
@@ -43,6 +44,7 @@
 	})
 
 	const fetchWaitingList = async () => {
+		if (!tutor_group_id) return notifications.alert('ask backend: no tutor group id')
 		const {success, data} = await http.get(fetch, '/adminApi/show_waiting_list', {
 			tutor_course_id
 		})

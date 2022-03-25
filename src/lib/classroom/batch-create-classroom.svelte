@@ -16,6 +16,8 @@
 	import {action_status} from "../../store/calendar-action-status-store.js";
 	import {capitalize} from "$lib/helper/capitalize.js";
 	import {tooltip} from "$lib/aciton/tooltip.js";
+	import {notifications} from "$lib/store/notification.js";
+	import {tutor_group_id} from "$lib/calendar/big-class-leson-menu.svelte";
 
 	const {closeModal} = getContext('simple-modal')
 
@@ -87,6 +89,7 @@
 	}
 
 	const getTutorCourseWaitingList = async () => {
+		if (!tutor_group_id) return notifications.alert('ask backend: no tutor group id')
 		const {data, success} = await http.get(fetch, '/adminApi/show_waiting_list', {
 			tutor_course_id
 		})
