@@ -14,6 +14,7 @@
 	import {tooltip} from "$lib/aciton/tooltip.js";
 	import Icon from '$lib/ui-elements/icon.svelte'
 	import Spinner from '$lib/ui-elements/spinner.svelte'
+	import Dropdown from '$lib/ui-elements/dropdown3.svelte'
 	import StudentWithTickerSelectionBox from '$lib/student/user-with-ticket-selection-box.svelte'
 	import {getContext} from 'svelte'
 	import {dialog} from "$lib/store/dialog.js";
@@ -32,7 +33,9 @@
 	let max_students
 	let res
 	let edit_mode = false
+	let multi_selected_student_ids = []
 	$: is_full = res ? max_students === students.length : false
+	$: is_multiple_mode = multi_selected_student_ids.length > 0
 
 	onMount(() => {
 		fetchData()
@@ -86,6 +89,33 @@
 				})
 			},
 			onSuccess: async () => {
+				document.dispatchEvent(new CustomEvent('refresh-calendar', {
+					bubbles: true,
+					cancelable: true
+				}))
+				await student_store.fetchData(fetch)
+				await fetchData()
+			}
+		})
+	}
+
+	const onBatchReg = () => {
+		dialog.confirm({
+			message: 'Batch register',
+			onConfirm: async () => {
+				const promises = multi_selected_student_ids.map(id => {
+					return http.post(fetch, '/courseApi/reg_registrable_classroom', {
+						tutor_group_id,
+						child_id: id
+					}, {
+						notification: `Added student id: ${id}`
+					})
+				})
+				const results = await Promise.all(promises)
+				return true
+			},
+			onSuccess: async () => {
+				multi_selected_student_ids = []
 				document.dispatchEvent(new CustomEvent('refresh-calendar', {
 					bubbles: true,
 					cancelable: true
@@ -276,7 +306,25 @@
 												{#if (students || waiting_list) ? isSelected(student.student_id) : false}
 													<button disabled class="cursor-not-allowed text-xs bg-gray-300 text-white rounded-full px-2 py-0.5">Registered</button>
 												{:else}
-													<button on:click={e => {onReg(student.student_id, true)}} class="text-xs bg-green-500 text-white hover:bg-green-400 rounded-full px-2 py-0.5">Register</button>
+													{#if !is_multiple_mode}
+														<div class="div flex items-stretch bg-green-500 rounded">
+															<button on:click={e => {onReg(student.student_id, true)}} class="text-xs bg-green-500 text-white hover:bg-green-400 rounded-l px-2 py-0.5">
+																Register
+															</button>
+															<Dropdown placement="bottom-end" activator_style="py-1 bg-green-400 rounded-r text-white" activator_active_style="bg-green-300">
+																<div slot="activator">
+																	<Icon name="more" className="w-3"/>
+																</div>
+																<div class="dropdown">
+																	<div on:click={() => {multi_selected_student_ids = [student.student_id]}} class="item">Select</div>
+																</div>
+															</Dropdown>
+														</div>
+													{:else}
+														{#if (students || waiting_list) ? !isSelected(student.student_id) : false}
+															<input type="checkbox" bind:group={multi_selected_student_ids} value={student.student_id} class="w-5 h-5">
+														{/if}
+													{/if}
 												{/if}
 											{:else if student.t_amt < 0}
 												<div>
@@ -297,6 +345,11 @@
 			{#if edit_mode}
 				<div class="px-4 mt-auto pb-4">
 					<StudentWithTickerSelectionBox placement="top-end" placeholder="Add student to waiting list" on:input={e => {onRegWaitingList(e.detail.student_id, true)}}/>
+				</div>
+			{/if}
+			{#if is_multiple_mode}
+				<div class="p-4">
+					<button on:click={onBatchReg} class="w-full button">Batch register ({multi_selected_student_ids.length})</button>
 				</div>
 			{/if}
 		</div>
