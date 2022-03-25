@@ -27,7 +27,7 @@
 				username: data.username,
 				nickname: data.nickname
 			})
-			goto('/dashboard')
+			goto('/')
 		} else {
 			error = true
 		}

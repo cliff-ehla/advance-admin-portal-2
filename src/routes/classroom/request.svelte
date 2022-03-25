@@ -2,7 +2,7 @@
 	import {http, onFail} from "$lib/http";
 
 	export const load = async ({page, fetch}) => {
-		const {data, success, debug} = await http.get(fetch, '/courseApi/list_request_classroom')
+		const {data, success, debug} = await http.get(fetch, '/adminApi/show_requested_list')
 		if (!success) return onFail(debug)
 		return {
 			props: {
@@ -14,6 +14,7 @@
 
 <script>
 	export let request_list
+	console.log('cliff: ', request_list)
 	import dayjs from "dayjs";
 </script>
 

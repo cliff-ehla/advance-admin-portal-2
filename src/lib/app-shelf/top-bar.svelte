@@ -56,6 +56,10 @@
 				{
 					label: 'Requested class',
 					href: '/classroom/request'
+				},
+				{
+					label: 'Search by ID',
+					href: '/zoom'
 				}
 			]
 		},
