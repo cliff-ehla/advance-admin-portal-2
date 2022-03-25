@@ -17,6 +17,7 @@
 <script>
 	export let billing_list
 	import dayjs from "dayjs";
+	import utc from "dayjs/plugin/utc.js";
 </script>
 
 <table class="text-sm w-full border border-gray-200">
@@ -29,7 +30,7 @@
 	</tr>
 	{#each billing_list as b}
 		<tr>
-			<td>{dayjs(b.start_date).format('DD MMM YYYY')}</td>
+			<td>{dayjs.utc(b.start_date).local().format('DD MMM YYYY h:mma')}</td>
 			<td>
 				<div class="text-sm">{b.name}</div>
 				{#if b.sub_cat_alter}
