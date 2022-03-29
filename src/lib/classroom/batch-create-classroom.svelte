@@ -17,7 +17,6 @@
 	import {capitalize} from "$lib/helper/capitalize.js";
 	import {tooltip} from "$lib/aciton/tooltip.js";
 	import {notifications} from "$lib/store/notification.js";
-	import {tutor_group_id} from "$lib/calendar/big-class-leson-menu.svelte";
 
 	const {closeModal} = getContext('simple-modal')
 
