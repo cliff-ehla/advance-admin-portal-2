@@ -14,28 +14,27 @@
 
 <script>
 	export let request_list
-	console.log('cliff: ', request_list)
 	import dayjs from "dayjs";
+	import relativeTime from "dayjs/plugin/relativeTime.js";
+	dayjs.extend(relativeTime)
 </script>
 
-<div class="grid grid-cols-3 gap-2">
+<div class="grid">
 	{#each request_list as req}
 		<div class="p-4">
-			<div class="flex items-center">
-				<img src={req.thumbnail_path} alt={req.name} class="w-40 rounded">
-				<div class="ml-4">
-					<p class="mb-2">{dayjs(req.create_ts).format('DD MMM, YYYY')}</p>
-					<p class="text-blue-500 text-xl ">{req.name}</p>
-					<div class="flex">
-						<p class="text-xs text-gray-500">{req.level}</p>
-						<p class="text-xs text-gray-400 ml-2">{req.class_code}</p>
+			<a href="/syllabus/{req.syllabus_id}" class="text-xl mb-1 text-blue-500">{req.code_id}</a>
+			{#each req.users as u}
+				<div class="grid grid-cols-5 gap-2 items-center border-gray-200 border-b py-1">
+					<div>
+						<p>{u.nickname}</p>
+						<p class="text-sm text-gray-500">{u.username}</p>
 					</div>
-					<div class="rounded-full inline-block mt-2">
-						<p class="font-bold">{req.username}</p>
-						<p class="text-sm">Tel: {req.phone}  <span class="text-gray-500">(ID: {req.user_id})</span></p>
-					</div>
+					<p>{dayjs(u.request_ts).fromNow()}</p>
+					<p>{u.level}</p>
+					<p>{u.request_level}</p>
+					<p>{u.gender}</p>
 				</div>
-			</div>
+			{/each}
 		</div>
 	{/each}
 </div>
