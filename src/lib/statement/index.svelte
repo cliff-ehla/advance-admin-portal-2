@@ -73,6 +73,9 @@
 						{#if t.is_trial}
 							<p class="text-xs leading-none">Trail</p>
 						{/if}
+						{#if t.admin_remark}
+							<p class="text-xs">{t.admin_remark}</p>
+						{/if}
 					</td>
 					<td>
 						${t.salary}
