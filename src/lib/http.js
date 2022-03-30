@@ -14,13 +14,11 @@ const onRes = async (res, notification) => {
 		}
 		const actually_not_success = data ? data.status === 'failure' : false
 		is_loading.set(false)
-		if (!!notification) {
-			if (!success || actually_not_success) {
-				const message = actually_not_success ? data.debug_msg : debug.debug_msg
-				notifications.alert('Oops...' + message)
-			} else {
-				notifications.success(notification)
-			}
+		if (!success || actually_not_success) {
+			const message = actually_not_success ? data.debug_msg : debug.debug_msg
+			notifications.alert('Oops...' + message)
+		} else {
+			if (!!notification) notifications.success(notification)
 		}
 		return {success, data, metadata, debug, status}
 	} catch (e) {

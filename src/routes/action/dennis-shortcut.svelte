@@ -58,7 +58,7 @@
 			value: 'na'
 		}
 	]
-	$: disabled = !(ticket_amt && payment_method && parent_mobile && parent_nickname && parent_username)
+	$: disabled = !(payment_method && parent_mobile && parent_nickname && parent_username)
 	$: {
 		if (ticket_amt > 900) {
 			is_vip = false
@@ -195,13 +195,13 @@
 	const onReset = () => {
 		results = null
 		parent_mobile = ''
-		lesson_fee = ''
-		app_fee = ''
+		lesson_fee = 0
+		app_fee = 0
 		is_vip = false
 		remark = ''
 		payment_method = ''
 		parent_nickname = ''
-		ticket_amt = ''
+		ticket_amt = 0
 		childs = [{...child_obj}]
 		msg = ''
 	}
