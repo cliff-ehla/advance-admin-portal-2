@@ -7,6 +7,7 @@
 	import Button from '$lib/ui-elements/button.svelte'
 	import CopyText from '$lib/ui-elements/copy-text.svelte'
 	import Icon from '$lib/ui-elements/icon.svelte'
+	import CopyMessageTextBox from "$lib/option/copy-message-textbox.svelte";
 	import {http} from "$lib/http";
 	import {createEventDispatcher} from 'svelte'
 	const dispatch = createEventDispatcher()
@@ -41,6 +42,7 @@
 	let ticket_amt = 0
 	let payment_method = undefined
 	let is_vip = true
+	let msg
 
 	let gender_options = [
 		{
@@ -125,11 +127,44 @@
 		if (success) {
 			if (data.accounts) {
 				results = data
+				msg = genMessage()
 			} else {
 				errors = data.error_msg
 			}
 		}
 		await student_store.fetchData(fetch)
+	}
+
+	function genMessage () {
+		let msg = '以下是家長/學生帳號，登入EHLA English APP：\n' +
+		'\n' +
+		`家長登入名稱: ${parent_username}\n` +
+		'Password: 12345678\n' +
+		'\n'
+		childs.forEach(c => {
+			msg += `學生登入名稱: ${c.username}\n` +
+					'Password: 12345678\n' +
+					'\n'
+		})
+		msg += '家長及學生密碼相同，建議家長登入後自行更改密碼。\n' +
+				'\n' +
+				'一個App，只要用唔同帳號登入，系統就可以識別是家長還是學生帳號。\n' +
+				'\n' +
+				'Apple Store (iOS)\n' +
+				'https://apps.apple.com/hk/app/ehla-english/id1201035933\n' +
+				'\n' +
+				'Google Play (Android)\n' +
+				'https://play.google.com/store/apps/details?id=org.ehlacademy.app.hk\n' +
+				'\n' +
+				'\n' +
+				'家長帳號十分重要❗\n' +
+				'1. 看到所有課堂時間表\n' +
+				'2. 自動提示課堂（開課前24小時及1小時提醒）\n' +
+				'3. 查看到小朋友課後鞏固學習完成情況（如有訂閲課後鞏固套裝）\n' +
+				'4. 雙語支援快速發送/接收Zoom堂登入問題訊息（十分重要！）\n' +
+				'\n' +
+				'家長登入後，請先檢查時間表是否正確。謝謝！'
+		return msg
 	}
 
 	const onAddChild = () => {
@@ -168,6 +203,7 @@
 		parent_nickname = ''
 		ticket_amt = ''
 		childs = [{...child_obj}]
+		msg = ''
 	}
 </script>
 
@@ -296,7 +332,7 @@
 </div>
 
 {#if results}
-	<div class="fixed top-1/2 left-1/2 -ml-48 -mt-48 w-96 rounded shadow-lg p-4 bg-white z-10">
+	<div class="fixed top-1/2 left-1/2 -ml-48 transform -translate-y-1/2 w-96 rounded shadow-lg p-4 bg-white z-10">
 		<div class="mb-4">
 			<p class="text-gray-500 underline">Created child accounts</p>
 			{#each results.accounts.childs as c}
@@ -314,6 +350,9 @@
 		<div class="mb-4">
 			<p class="text-gray-500 underline">Created voucher</p>
 			<CopyText value={results.voucher_data.voucher_number}/>
+		</div>
+		<div class="my-4">
+			<CopyMessageTextBox {msg}/>
 		</div>
 		<button on:click={onReset} class="mt-4 button">Close</button>
 	</div>
