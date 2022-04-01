@@ -2,7 +2,9 @@
 	import {http, onFail} from "$lib/http";
 
 	export const load = async ({page, fetch}) => {
-		const {data, success, debug} = await http.get(fetch, '/aiMembershipForceOpen/list_all')
+		const {data, success, debug} = await http.get(fetch, '/aiMembershipForceOpen/list_all', {
+			is_member: page.params.is_member
+		})
 		if (!success) return onFail(debug)
 		return {
 			props: {
