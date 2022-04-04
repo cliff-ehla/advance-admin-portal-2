@@ -1,5 +1,5 @@
 import {readable, get} from "svelte/store";
-import {sentry} from "$lib/sentry.js";
+import {notifications} from "$lib/store/notification.js";
 
 export const createLevelMapper = () => {
 	let course_code_store = readable({
@@ -56,7 +56,7 @@ export const createLevelMapper = () => {
 		if (levels) {
 			return levels
 		} else {
-			sentry.log('Cannot map this rc_level:' + rc_level)
+			notifications.alert('Cannot map this rc_level:' + rc_level, 400)
 			return ['na']
 		}
 	}
