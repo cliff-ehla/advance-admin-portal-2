@@ -9,6 +9,7 @@
 	import 'dayjs/locale/zh-hk.js';
 	import updateLocale from 'dayjs/plugin/updateLocale.js'
 	import localizedFormat from 'dayjs/plugin/localizedFormat.js'
+	import {sentry} from "$lib/sentry.js";
 	dayjs.extend(updateLocale)
 	dayjs.extend(localizedFormat)
 	dayjs.updateLocale('zh-hk', {
@@ -24,6 +25,11 @@
 	export const load = async ({fetch, session, page}) => {
 		if (!get(authorized)) {
 			user_info.set(session.user_info)
+		} else {
+			sentry.setUser({
+				username: session.username,
+				nickname: session.nickname
+			})
 		}
 		const {data, success, debug} = await http.get(fetch, '/organizationApi/tutor_list')
 		if (success) {
