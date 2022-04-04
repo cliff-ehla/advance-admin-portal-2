@@ -62,7 +62,6 @@
 	import Dialog from '../lib/app-shelf/dialog.svelte'
 	import TopBar from '../lib/app-shelf/top-bar.svelte'
 	import {onMount} from "svelte";
-	import {sentry} from "$lib/sentry";
 	import {navigating} from "$app/stores";
 	import {page} from "$app/stores";
 
