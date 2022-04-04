@@ -88,7 +88,7 @@
 	}
 
 	const getTutorCourseWaitingList = async () => {
-		if (!tutor_group_id) return notifications.alert('ask backend: no tutor group id')
+		if (!tutor_course_id) return notifications.alert('ask backend: no tutor_course_id')
 		const {data, success} = await http.get(fetch, '/adminApi/show_waiting_list', {
 			tutor_course_id
 		})
