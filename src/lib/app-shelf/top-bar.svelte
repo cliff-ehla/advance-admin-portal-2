@@ -86,7 +86,7 @@
 				},
 				{
 					label: 'Membership',
-					href: '/students/membership'
+					href: '/students/membership/1'
 				},
 				{
 					label: 'Shortcut',
