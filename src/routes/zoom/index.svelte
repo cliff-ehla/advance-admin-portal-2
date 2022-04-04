@@ -5,6 +5,7 @@
 	import {getContext} from 'svelte'
 	const {openModal, closeModal} = getContext('simple-modal')
 	import BigClassLessonMenu from "$lib/calendar/big-class-leson-menu.svelte";
+	import {notifications} from "$lib/store/notification.js";
 	dayjs.extend(utc)
 
 	let zoom_id
@@ -26,7 +27,10 @@
 	}
 
 	const onReg = () => {
+		const item_id = result.days[0] && result.days[0].item_ids[0]
+		if (!item_id) return notifications.alert('No material (冇 item id)')
 		openModal(BigClassLessonMenu, {
+			item_id,
 			zoom_id: result.wrapper_id,
 			tutor_group_id: result.tutor_group_id,
 			tutor_course_id: result.tutor_course_id,

@@ -3,6 +3,7 @@
 	import {student_store} from "../../store/student-store.js";
 
 	export let zoom_id
+	export let item_id
 	export let tutor_group_id
 	export let tutor_course_id
 	export let tutor_id
@@ -83,6 +84,15 @@
 		dialog.confirm({
 			message,
 			onConfirm: async () => {
+				if (is_reg) {
+					const {success, data} = await http.post(fetch, '/courseApi/check_bought_status', {
+						item_ids: [item_id],
+						student_id
+					})
+					if (success && data.purchased.length > 0) {
+						return notifications.alert(`${student_id} 已經玩過呢個material ${item_id}`)
+					}
+				}
 				await http.post(fetch, url, {
 					tutor_group_id,
 					child_id: student_id
@@ -105,7 +115,16 @@
 		dialog.confirm({
 			message: 'Batch register',
 			onConfirm: async () => {
-				const promises = multi_selected_student_ids.map(id => {
+				const promises = multi_selected_student_ids.map(async id => {
+					const {success, data} = await http.post(fetch, '/courseApi/check_bought_status', {
+						item_ids: [item_id],
+						student_id: id
+					})
+					if (id == 30120 || success && data.purchased.length > 0) {
+						let msg = `${id} 已經玩過呢個material ${item_id}`
+						notifications.alert(msg)
+						return Promise.resolve(msg)
+					}
 					return http.post(fetch, '/courseApi/reg_registrable_classroom', {
 						tutor_group_id,
 						child_id: id

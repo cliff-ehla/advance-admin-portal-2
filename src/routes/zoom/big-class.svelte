@@ -35,8 +35,8 @@
 			headerToolbar: false,
 			eventContent,
 			eventClick: async ({el, event}) => {
-				console.log('cliff: ', event.extendedProps)
 				openModal(BigClassLessonMenu, {
+					item_id: event.extendedProps.item_id,
 					selected: event.extendedProps.selected,
 					zoom_id: event.extendedProps.zoom_id,
 					tutor_group_id: event.extendedProps.tutor_group_id,
