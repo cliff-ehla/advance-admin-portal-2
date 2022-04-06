@@ -11,7 +11,7 @@
     "build": "yarn run tailwind:build && yarn run build:only"
   },
   "devDependencies": {
-    "@sveltejs/adapter-auto": "^0.0.1",
+    "@sveltejs/adapter-cloudflare": "^0.0.1",
     "@sveltejs/kit": "next",
     "autoprefixer": "^10.4.0",
     "concurrently": "^6.4.0",
