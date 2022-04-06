@@ -3,7 +3,7 @@
 
 	export const load = async ({page, fetch}) => {
 		const {data, success, debug} = await http.get(fetch, '/aiMembershipForceOpen/list_all', {
-			is_member: page.params.is_member
+			is_member: 1
 		})
 		if (!success) return onFail(debug)
 		return {
