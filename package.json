@@ -12,6 +12,7 @@
   },
   "devDependencies": {
     "@sveltejs/adapter-vercel": "^1.0.0-next.31",
+    "@sveltejs/adapter-cloudflare": "^0.0.1",
     "@sveltejs/kit": "next",
     "autoprefixer": "^10.4.0",
     "concurrently": "^6.4.0",
