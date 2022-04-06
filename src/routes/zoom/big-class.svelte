@@ -1,8 +1,10 @@
 <script context="module">
 	import {big_class_store, big_class_events, classroom_analytic} from "$lib/store/big-class-store.js";
+	import {big_class_mapper} from "$lib/store/big-class-mapper.js";
 	import dayjs from "dayjs";
 
 	export const load = async ({fetch}) => {
+		await big_class_mapper.fetchRcLevelMapping(fetch)
 		await big_class_store.callIfNoCache(fetch, {
 			month: dayjs().format('YYYY-MM')
 		})
