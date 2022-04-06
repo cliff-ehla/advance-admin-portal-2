@@ -10,7 +10,7 @@
 				on:click
 				disabled={computed_disabled}
 				class:active={!computed_disabled}
-				class="{button_class} rounded relative transition-shadow transition-transform hover:shadow-lg transform hover:-translate-y-0.5">
+				class="{button_class} rounded relative transition-shadow transition-transform hover:shadow-lg transform hover:-translate-y-0.5 whitespace-nowrap">
 	{#if $is_loading}
 		<div class="absolute inset-0 cc">
 			<Spinner/>

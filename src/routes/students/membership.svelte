@@ -1,30 +1,20 @@
-<script context="module">
-	import {http, onFail} from "$lib/http";
-
-	export const load = async ({page, fetch}) => {
-		const {data, success, debug} = await http.get(fetch, '/aiMembershipForceOpen/list_all', {
-			is_member: 1
-		})
-		if (!success) return onFail(debug)
-		return {
-			props: {
-				list: data
-			}
-		}
-	}
-</script>
-
 <script>
 	import dayjs from "dayjs";
 	import {getContext} from 'svelte'
 	const {openModal, closeModal} = getContext('simple-modal')
 	import SetMembershipDate from '$lib/student/set-membership-date.svelte'
 	import Button from "$lib/ui-elements/button.svelte";
-	import Spinner from "$lib/ui-elements/spinner.svelte";
-	import {is_loading} from "$lib/store/is_loading.js";
+	import {http} from "$lib/http.js";
 
-	export let list
+	let list
 	let search
+
+	const onShowAll = async () => {
+		const {data, success, debug} = await http.get(fetch, '/aiMembershipForceOpen/list_all', {
+			is_member: 1
+		})
+		if (success) list = data
+	}
 
 	const onSearch = async () => {
 		const {data, success, debug} = await http.get(fetch, '/aiMembershipForceOpen/list_all', {
@@ -58,12 +48,13 @@
 <div class="container py-4">
 	<h1 class="text-xl mb-4">Membership</h1>
 	<div class="flex my-4">
-		<input class="input w-full mr-2" bind:value={search} type="text" placeholder="Search by username, nickname or phone">
+		<input class="input w-full" bind:value={search} type="text" placeholder="Search by username, nickname or phone">
 		<Button on:click={onSearch}>Search</Button>
+		<div class="ml-4 pl-4 border-gray-300 border-l">
+			<Button on:click={onShowAll}>Show all member</Button>
+		</div>
 	</div>
-	{#if $is_loading}
-		<Spinner></Spinner>
-	{:else}
+	{#if list}
 		{#each list as s}
 			<div class="p-4 flex items-center border-b border-gray-200">
 				<div class="mr-4">
