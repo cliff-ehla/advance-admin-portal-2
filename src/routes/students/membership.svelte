@@ -11,7 +11,7 @@
 
 	const onShowAll = async () => {
 		const {data, success, debug} = await http.get(fetch, '/aiMembershipForceOpen/list_all', {
-			is_member: 1
+			is_member: 0
 		})
 		if (success) list = data
 	}
