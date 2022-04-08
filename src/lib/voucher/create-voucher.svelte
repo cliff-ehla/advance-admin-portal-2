@@ -36,14 +36,6 @@
 		}, {
 			notification: `成功起左張 Voucher 俾呢個電話 ${phone}`
 		})
-		try {
-			let total_fee = app_fee + lesson_fee
-			if (variables.env === 'production') {
-				slack.send(`新入賬記錄：#${data.voucher_number}，來自☎${phone}，共HKD${total_fee}`)
-			}
-		} catch (e) {
-			console.log('cliff: ', e)
-		}
 		closeModal()
 		onSuccess()
 	}
